@@ -16,8 +16,13 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-# Las pruebas pasan su propia URL en config.attributes; si no, se usa la de .env
-url_bd = config.attributes.get("url_bd") or obtener_configuracion().database_url
+# Orden de prioridad de la URL: la que pasan las pruebas en config.attributes, la de la línea
+# de comandos (alembic -x url_bd=...) y, si no hay ninguna, DATABASE_URL de .env
+url_bd = (
+    config.attributes.get("url_bd")
+    or context.get_x_argument(as_dictionary=True).get("url_bd")
+    or obtener_configuracion().database_url
+)
 
 
 def run_migrations_offline() -> None:

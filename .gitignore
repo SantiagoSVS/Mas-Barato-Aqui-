@@ -1,0 +1,27 @@
+# Variables de entorno y claves: nunca al repositorio (RNF-07)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / frontend
+node_modules/
+dist/
+frontend/cypress/videos/
+frontend/cypress/screenshots/
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*

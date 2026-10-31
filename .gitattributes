@@ -1,0 +1,2 @@
+# Los scripts de shell corren dentro de Linux (contenedor): siempre con fin de línea LF
+*.sh text eol=lf

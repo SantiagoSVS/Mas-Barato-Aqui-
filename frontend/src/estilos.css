@@ -1,0 +1,143 @@
+/* Paleta y tipografía de la marca (CLAUDE.md, "Diseño de la interfaz") */
+:root {
+  --azul-principal: #0b2d6b;
+  --azul-secundario: #2563eb;
+  --amarillo-acento: #f59e0b;
+  --gris-neutro: #e5e7eb;
+  --fondo: #f4f7fc;
+  --texto-secundario: #4b5b7a;
+  --blanco: #ffffff;
+  --verde-ok: #15803d;
+  --rojo-error: #b91c1c;
+
+  --radio: 12px;
+  --fuente: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--azul-principal);
+  font-family: var(--fuente);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--azul-secundario);
+}
+
+a:hover {
+  color: var(--azul-principal);
+}
+
+/* Encabezado con el logo */
+.encabezado {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--gris-neutro);
+}
+
+.encabezado__contenido,
+.contenido {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 20px;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.marca__icono {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radio);
+  background: var(--azul-secundario);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marca__texto {
+  display: flex;
+  flex-direction: column;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  line-height: 1.05;
+}
+
+.marca__aqui {
+  color: var(--azul-secundario);
+  font-style: italic;
+}
+
+/* Contenido */
+.contenido {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.subtitulo {
+  margin: 0 0 24px;
+  color: var(--texto-secundario);
+}
+
+.tarjeta {
+  background: var(--blanco);
+  border: 1px solid var(--gris-neutro);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.estado__punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gris-neutro);
+  flex-shrink: 0;
+}
+
+.estado--ok .estado__punto {
+  background: var(--verde-ok);
+}
+
+.estado--error .estado__punto {
+  background: var(--rojo-error);
+}
+
+.estado__detalle {
+  margin: 8px 0 0;
+  color: var(--texto-secundario);
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+}

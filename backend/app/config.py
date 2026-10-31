@@ -18,6 +18,15 @@ class Configuracion(BaseSettings):
     database_url: str
     test_database_url: str | None = None
 
+    # Extracción (valores iniciales de operación; se ajustan según lo que acepte cada tienda)
+    captura_intervalo_horas: float = 12
+    extraccion_intervalo_minimo_s: float = 5
+    extraccion_timeout_s: float = 20
+    extraccion_user_agent: str = (
+        "MasBaratoAquiBot/0.1 (proyecto de grado; +https://github.com/SantiagoSVS/Mas-Barato-Aqui-)"
+    )
+    catalogo_path: Path = RAIZ_PROYECTO / "backend" / "catalogo.toml"
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

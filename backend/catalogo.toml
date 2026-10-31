@@ -1,0 +1,24 @@
+# Catálogo inicial: términos que el worker busca en cada tienda en cada captura periódica.
+# Las consultas del usuario se responden sobre lo que este catálogo haya capturado (sección 5.1).
+#
+# PENDIENTE: definir el catálogo real. Estos términos son los ejemplos de los mockups (P1),
+# agrupados en las categorías que menciona el documento de arquitectura.
+
+[[categoria]]
+nombre = "tecnologia"
+terminos = [
+  "celular Samsung gama media",
+  "portátil para estudiantes",
+]
+
+[[categoria]]
+nombre = "hogar"
+terminos = [
+  "freidora de aire 5 litros",
+]
+
+[[categoria]]
+nombre = "moda"
+terminos = [
+  "tenis Adidas para correr",
+]

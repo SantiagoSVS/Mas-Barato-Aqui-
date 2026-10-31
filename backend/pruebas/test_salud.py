@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.db import obtener_sesion
 from app.main import app
-from app.modelos import Captura, Oferta, Plataforma
+from app.modelos import Captura, EjecucionCaptura, Oferta, Plataforma
 
 
 def test_sin_plataformas_responde_ok_con_lista_vacia(cliente: TestClient) -> None:
@@ -45,6 +45,28 @@ def test_muestra_la_ultima_captura_de_cada_plataforma(
     assert [p["nombre"] for p in plataformas] == ["Tienda A", "Tienda B"]
     assert datetime.fromisoformat(plataformas[0]["ultima_captura"]) == reciente
     assert plataformas[1]["ultima_captura"] is None
+
+
+def test_muestra_el_estado_de_la_ultima_ejecucion(cliente: TestClient, sesion: Session) -> None:
+    tienda = Plataforma(nombre="Tienda A", tipo_acceso="api", url_base="https://a.example", moneda="COP")
+    for dia, estado, mensaje in ((30, "exitosa", None), (31, "fallida", "la tienda no respondió")):
+        momento = datetime(2026, 10, dia, 10, 0, tzinfo=UTC)
+        sesion.add(
+            EjecucionCaptura(
+                plataforma=tienda,
+                iniciada_en=momento,
+                terminada_en=momento,
+                estado=estado,
+                errores=0 if mensaje is None else 1,
+                mensaje_error=mensaje,
+            )
+        )
+    sesion.flush()
+
+    ejecucion = cliente.get("/salud").json()["plataformas"][0]["ultima_ejecucion"]
+
+    assert ejecucion["estado"] == "fallida"
+    assert ejecucion["mensaje_error"] == "la tienda no respondió"
 
 
 def test_sin_base_de_datos_responde_503(cliente: TestClient) -> None:

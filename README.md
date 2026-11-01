@@ -132,7 +132,7 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 | Tienda | Acceso | Configuración en `.env` |
 |---|---|---|
 | Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
-| Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna. Queda inactiva hasta revisar sus términos (ver abajo) |
+| Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna |
 | Amazon | Pendiente | — |
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
@@ -149,12 +149,8 @@ los días de entrega quedan como desconocidos: Falabella los calcula en el naveg
 ubicación del comprador. En su lugar, la plataforma guarda el aviso de envío gratis que publica
 la página (`nota_envio`, visible en `GET /salud`).
 
-La migración la registra **inactiva**, porque el documento de arquitectura exige revisar los
-términos de cada tienda antes de integrarla. Después de revisarlos:
-
-```powershell
-docker exec mas-barato-db psql -U mas_barato -d mas_barato_aqui -c "UPDATE plataforma SET activa = true WHERE nombre = 'Falabella'"
-```
+Como exige el documento de arquitectura, la tienda se registró inactiva y se activó (migración
+`activa_falabella`) después de revisar sus términos y condiciones, el 1 de noviembre de 2026.
 
 ## Agregar una tienda
 

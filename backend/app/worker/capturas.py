@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.extraccion.conector import Conector
 from app.extraccion.servicio_captura import LARGO_MAXIMO_MENSAJE, capturar_plataforma
 from app.extraccion.tasa_cambio import ProveedorTasaCambio
+from app.extraccion.tipos import ProductoCatalogo
 from app.modelos import EjecucionCaptura, Plataforma
 
 log = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ log = logging.getLogger(__name__)
 def ejecutar_capturas(
     sesion: Session,
     conectores: dict[str, Conector],
-    terminos: list[str],
+    productos: list[ProductoCatalogo],
     proveedor_tasa: ProveedorTasaCambio,
     ahora: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> list[EjecucionCaptura]:
@@ -38,7 +39,7 @@ def ejecutar_capturas(
             continue
 
         try:
-            ejecucion = capturar_plataforma(sesion, plataforma, conector, terminos, proveedor_tasa, ahora)
+            ejecucion = capturar_plataforma(sesion, plataforma, conector, productos, proveedor_tasa, ahora)
             sesion.commit()
         except Exception as error:  # noqa: BLE001  (cualquier falla de una tienda se aísla)
             sesion.rollback()

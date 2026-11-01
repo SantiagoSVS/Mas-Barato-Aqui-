@@ -1,23 +1,26 @@
 """Conector de Mercado Libre Colombia (API oficial, sitio MCO).
 
-Cómo obtiene cada dato:
+Trabaja con los identificadores de producto del catálogo de Mercado Libre que se anotan en
+catalogo.toml (ids.mercadolibre = ["MCO..."]). Por cada uno:
 
-1. /products/search: productos del catálogo de Mercado Libre que coinciden con el término.
-2. /products/{id}/items: publicaciones (vendedores) de cada producto, con precio y moneda.
+1. /products/{id}: nombre del producto en Mercado Libre.
+2. /products/{id}/items: publicaciones (vendedores) del producto, con precio y moneda.
 3. /items/{id}/shipping_options: costo de envío y fecha estimada de entrega hasta la ciudad
    de destino configurada.
 
 Autenticación: token de aplicación (client_credentials) con el client id y el secret de la
 app de desarrollador. El token dura 6 horas y se renueva solo.
 
-Limitaciones conocidas de la API (noviembre de 2026):
-- /sites/MCO/search y /items/{id} responden 403 para tokens de aplicación, por eso se busca en
-  el catálogo y no se puede actualizar una publicación suelta.
-- Los productos sin publicaciones activas responden 404 en /products/{id}/items y se omiten.
+Por qué identificadores y no búsqueda por texto (pruebas del 1 de noviembre de 2026):
+- /sites/MCO/search y /items/{id} responden 403 para tokens de aplicación.
+- /products/search sí responde, pero solo 1 de cada 20 productos que devuelve tiene
+  publicaciones activas, y muchos no tienen relación con lo buscado. Para encontrar los
+  identificadores está la herramienta: python -m app.herramientas.buscar_mercadolibre "texto"
 """
 
 import time
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Any
@@ -25,7 +28,7 @@ from zoneinfo import ZoneInfo
 
 from app.extraccion.cliente_http import ClienteHttp, ErrorHttp
 from app.extraccion.conector import Conector, ErrorConector
-from app.extraccion.tipos import OfertaCapturada
+from app.extraccion.tipos import OfertaCapturada, ProductoCatalogo
 
 URL_API = "https://api.mercadolibre.com"
 SITIO = "MCO"
@@ -39,8 +42,18 @@ def url_publicacion(item_id: str) -> str:
     return f"https://articulo.mercadolibre.com.co/{item_id[:3]}-{item_id[3:]}"
 
 
+@dataclass(frozen=True)
+class ProductoEncontrado:
+    """Resultado de buscar_en_catalogo, para elegir identificadores del catálogo."""
+
+    id: str
+    nombre: str
+    publicaciones: int
+
+
 class ConectorMercadoLibre(Conector):
     nombre_plataforma = "Mercado Libre"
+    clave_catalogo = "mercadolibre"
 
     def __init__(
         self,
@@ -48,7 +61,6 @@ class ConectorMercadoLibre(Conector):
         client_id: str,
         client_secret: str,
         ciudad_destino: str,
-        productos_por_termino: int,
         ofertas_por_producto: int,
         hoy: Callable[[], date] = lambda: datetime.now(ZONA_COLOMBIA).date(),
         reloj: Callable[[], float] = time.monotonic,
@@ -57,23 +69,18 @@ class ConectorMercadoLibre(Conector):
         self._client_id = client_id
         self._client_secret = client_secret
         self._ciudad_destino = ciudad_destino
-        self._productos_por_termino = productos_por_termino
         self._ofertas_por_producto = ofertas_por_producto
         self._hoy = hoy
         self._reloj = reloj
         self._token: str | None = None
         self._token_vence: float = 0
 
-    def buscar(self, termino: str) -> list[OfertaCapturada]:
-        productos = self._get(
-            "/products/search",
-            {"status": "active", "site_id": SITIO, "q": termino, "limit": str(self._productos_por_termino)},
-        )["results"]
-
+    def buscar(self, producto: ProductoCatalogo) -> list[OfertaCapturada]:
         ofertas: list[OfertaCapturada] = []
-        for producto in productos:
-            for item in self._publicaciones(producto["id"]):
-                oferta = self._convertir(producto, item)
+        for producto_id in producto.ids.get(self.clave_catalogo, []):
+            nombre = self._get(f"/products/{producto_id}")["name"]
+            for item in self._publicaciones(producto_id):
+                oferta = self._convertir(nombre, item)
                 if oferta is not None:
                     ofertas.append(oferta)
         return ofertas
@@ -81,8 +88,26 @@ class ConectorMercadoLibre(Conector):
     def actualizar(self, url: str) -> OfertaCapturada | None:
         raise ErrorConector(
             "La API de Mercado Libre no permite consultar una publicación suelta con token de "
-            "aplicación (/items responde 403); las ofertas se actualizan al volver a buscar."
+            "aplicación (/items responde 403); las ofertas se actualizan con cada captura."
         )
+
+    def buscar_en_catalogo(self, texto: str, limite: int = 20) -> list[ProductoEncontrado]:
+        """Busca productos del catálogo de Mercado Libre y cuenta sus publicaciones activas.
+
+        Solo la usa la herramienta para armar catalogo.toml; el worker no la llama.
+        """
+        resultados = self._get(
+            "/products/search", {"status": "active", "site_id": SITIO, "q": texto, "limit": str(limite)}
+        )["results"]
+        return [
+            ProductoEncontrado(id=r["id"], nombre=r["name"], publicaciones=len(self._publicaciones(r["id"])))
+            for r in resultados
+        ]
+
+    def verificar_producto(self, producto_id: str) -> ProductoEncontrado:
+        """Nombre y publicaciones activas de un identificador, antes de anotarlo en el catálogo."""
+        nombre = self._get(f"/products/{producto_id}")["name"]
+        return ProductoEncontrado(id=producto_id, nombre=nombre, publicaciones=len(self._publicaciones(producto_id)))
 
     def _publicaciones(self, producto_id: str) -> list[dict[str, Any]]:
         try:
@@ -93,14 +118,14 @@ class ConectorMercadoLibre(Conector):
             raise
         return items[: self._ofertas_por_producto]
 
-    def _convertir(self, producto: dict[str, Any], item: dict[str, Any]) -> OfertaCapturada | None:
+    def _convertir(self, nombre: str, item: dict[str, Any]) -> OfertaCapturada | None:
         # Solo productos nuevos: un usado no es el mismo producto para comparar precios
         if item.get("condition") != "new" or item.get("currency_id") not in ("COP", "USD"):
             return None
 
         envio, dias = self._envio(item["item_id"])
         return OfertaCapturada(
-            titulo=producto["name"],
+            titulo=nombre,
             url=url_publicacion(item["item_id"]),
             vendedor=str(item["seller_id"]) if item.get("seller_id") is not None else None,
             precio=Decimal(str(item["price"])),

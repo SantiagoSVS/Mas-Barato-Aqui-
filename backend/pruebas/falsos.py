@@ -7,26 +7,28 @@ from decimal import Decimal
 
 from app.extraccion.conector import Conector, ErrorConector
 from app.extraccion.tasa_cambio import ErrorTasaCambio, ProveedorTasaCambio, TasaCambio
-from app.extraccion.tipos import OfertaCapturada
+from app.extraccion.tipos import OfertaCapturada, ProductoCatalogo
 
 
 class ConectorFalso(Conector):
-    """Devuelve ofertas fijas por término. Un término en `fallas` simula una tienda caída."""
+    """Devuelve ofertas fijas por nombre de producto. Un producto en `fallas` simula una
+    tienda caída."""
 
     nombre_plataforma = "Tienda falsa"
+    clave_catalogo = "falsa"
 
     def __init__(
         self,
-        ofertas_por_termino: dict[str, list[OfertaCapturada]],
+        ofertas_por_producto: dict[str, list[OfertaCapturada]],
         fallas: set[str] | None = None,
     ) -> None:
-        self.ofertas_por_termino = ofertas_por_termino
+        self.ofertas_por_producto = ofertas_por_producto
         self.fallas = fallas or set()
 
-    def buscar(self, termino: str) -> list[OfertaCapturada]:
-        if termino in self.fallas:
-            raise ErrorConector(f"la tienda no respondió a {termino!r}")
-        return self.ofertas_por_termino.get(termino, [])
+    def buscar(self, producto: ProductoCatalogo) -> list[OfertaCapturada]:
+        if producto.nombre in self.fallas:
+            raise ErrorConector(f"la tienda no respondió a {producto.nombre!r}")
+        return self.ofertas_por_producto.get(producto.nombre, [])
 
     def actualizar(self, url: str) -> OfertaCapturada | None:
         return None
@@ -36,8 +38,9 @@ class ConectorRoto(Conector):
     """Falla con un error inesperado (no ErrorConector), como un bug en un conector."""
 
     nombre_plataforma = "Tienda rota"
+    clave_catalogo = "rota"
 
-    def buscar(self, termino: str) -> list[OfertaCapturada]:
+    def buscar(self, producto: ProductoCatalogo) -> list[OfertaCapturada]:
         raise RuntimeError("error inesperado del conector")
 
     def actualizar(self, url: str) -> OfertaCapturada | None:
@@ -87,6 +90,10 @@ class SesionHttpFalsa:
     def post(self, url, data=None, headers=None, timeout=None):
         self.peticiones.append({"url": url, "data": data, "headers": headers, "timeout": timeout, "metodo": "POST"})
         return self.respuestas.get(url, RespuestaFalsa(status_code=404))
+
+
+def producto(nombre: str, categoria: str = "tecnologia", **ids: list[str]) -> ProductoCatalogo:
+    return ProductoCatalogo(nombre=nombre, categoria=categoria, ids=ids)
 
 
 def oferta(

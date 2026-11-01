@@ -11,13 +11,14 @@ import pytest
 from app.extraccion.cliente_http import ClienteHttp
 from app.extraccion.conector import ErrorConector
 from app.extraccion.conectores.mercadolibre import URL_API, ConectorMercadoLibre, url_publicacion
-from pruebas.falsos import RespuestaFalsa, SesionHttpFalsa
+from pruebas.falsos import RespuestaFalsa, SesionHttpFalsa, producto
 
 RESPUESTAS = Path(__file__).parent / "respuestas" / "mercadolibre"
 PRODUCTO_SIN_PUBLICACIONES = "MCO63264851"
 PRODUCTO = "MCO56570140"
 ITEM_1, ITEM_2 = "MCO4113792896", "MCO3540893672"
 TOKEN = RespuestaFalsa(200, datos={"access_token": "token-de-prueba", "expires_in": 21600})
+TABLET = producto("Samsung Galaxy Tab A11 128 GB", mercadolibre=[PRODUCTO])
 
 
 def guardada(nombre: str) -> RespuestaFalsa:
@@ -28,8 +29,10 @@ def respuestas_completas() -> dict:
     return {
         f"{URL_API}/oauth/token": TOKEN,
         f"{URL_API}/products/search": guardada("products_search.json"),
-        f"{URL_API}/products/{PRODUCTO_SIN_PUBLICACIONES}/items": RespuestaFalsa(404),
+        f"{URL_API}/products/{PRODUCTO}": guardada("product.json"),
         f"{URL_API}/products/{PRODUCTO}/items": guardada("product_items.json"),
+        f"{URL_API}/products/{PRODUCTO_SIN_PUBLICACIONES}": RespuestaFalsa(200, datos={"name": "Sin vendedores"}),
+        f"{URL_API}/products/{PRODUCTO_SIN_PUBLICACIONES}/items": RespuestaFalsa(404),
         f"{URL_API}/items/{ITEM_1}/shipping_options": guardada("shipping_options.json"),
         # ITEM_2 sin opciones de envío disponibles (404)
     }
@@ -51,7 +54,6 @@ def crear(respuestas: dict, reloj: Reloj | None = None) -> tuple[ConectorMercado
         client_id="id",
         client_secret="secreto",
         ciudad_destino="TUNPQ01FRGRjNjc4",
-        productos_por_termino=5,
         ofertas_por_producto=5,
         hoy=lambda: date(2026, 11, 1),
         reloj=reloj or Reloj(),
@@ -66,22 +68,35 @@ def test_url_publicacion() -> None:
 def test_buscar_devuelve_las_publicaciones_con_precio_envio_y_dias() -> None:
     conector, _ = crear(respuestas_completas())
 
-    ofertas = conector.buscar("Samsung Galaxy A55 128GB")
+    ofertas = conector.buscar(TABLET)
 
     assert [str(o.url) for o in ofertas] == [url_publicacion(ITEM_1), url_publicacion(ITEM_2)]
     primera = ofertas[0]
+    assert primera.titulo == "Samsung Galaxy Tab A11 128 Gb Gris"  # nombre en Mercado Libre
     assert primera.precio == Decimal("524900")
     assert primera.moneda == "COP"
     assert primera.envio == Decimal("0")
     assert primera.dias_entrega == 2  # entrega estimada el 3 de noviembre
     assert primera.vendedor == "162681369"
-    assert "Samsung" in primera.titulo
+
+
+def test_producto_sin_identificadores_de_mercado_libre_no_consulta_la_api() -> None:
+    conector, sesion = crear(respuestas_completas())
+
+    assert conector.buscar(producto("Solo en otra tienda", falabella=["123"])) == []
+    assert sesion.peticiones == []
+
+
+def test_producto_sin_publicaciones_devuelve_lista_vacia() -> None:
+    conector, _ = crear(respuestas_completas())
+
+    assert conector.buscar(producto("Sin vendedores", mercadolibre=[PRODUCTO_SIN_PUBLICACIONES])) == []
 
 
 def test_sin_opciones_de_envio_el_envio_y_los_dias_quedan_desconocidos() -> None:
     conector, _ = crear(respuestas_completas())
 
-    segunda = conector.buscar("Samsung Galaxy A55 128GB")[1]
+    segunda = conector.buscar(TABLET)[1]
 
     assert segunda.envio is None
     assert segunda.dias_entrega is None
@@ -90,13 +105,12 @@ def test_sin_opciones_de_envio_el_envio_y_los_dias_quedan_desconocidos() -> None
 def test_usa_el_token_y_la_ciudad_de_destino_sin_consultar_robots() -> None:
     conector, sesion = crear(respuestas_completas())
 
-    conector.buscar("Samsung Galaxy A55 128GB")
+    conector.buscar(TABLET)
 
     urls = [p["url"] for p in sesion.peticiones]
     assert not any(u.endswith("robots.txt") for u in urls)
-    busqueda = next(p for p in sesion.peticiones if p["url"].endswith("/products/search"))
-    assert busqueda["headers"]["Authorization"] == "Bearer token-de-prueba"
-    assert busqueda["params"]["site_id"] == "MCO"
+    detalle = next(p for p in sesion.peticiones if p["url"] == f"{URL_API}/products/{PRODUCTO}")
+    assert detalle["headers"]["Authorization"] == "Bearer token-de-prueba"
     envio = next(p for p in sesion.peticiones if "shipping_options" in p["url"])
     assert envio["params"] == {"city_to": "TUNPQ01FRGRjNjc4"}
 
@@ -105,10 +119,10 @@ def test_el_token_se_reutiliza_hasta_que_vence() -> None:
     reloj = Reloj()
     conector, sesion = crear(respuestas_completas(), reloj)
 
-    conector.buscar("a")
-    conector.buscar("b")
+    conector.buscar(TABLET)
+    conector.buscar(TABLET)
     reloj.ahora += 21600  # 6 horas después
-    conector.buscar("c")
+    conector.buscar(TABLET)
 
     pedidos_token = [p for p in sesion.peticiones if p["url"].endswith("/oauth/token")]
     assert len(pedidos_token) == 2
@@ -122,18 +136,18 @@ def test_omite_publicaciones_usadas() -> None:
     respuestas[f"{URL_API}/products/{PRODUCTO}/items"] = RespuestaFalsa(200, datos=items)
     conector, _ = crear(respuestas)
 
-    ofertas = conector.buscar("Samsung Galaxy A55 128GB")
+    ofertas = conector.buscar(TABLET)
 
     assert [str(o.url) for o in ofertas] == [url_publicacion(ITEM_2)]
 
 
-def test_si_la_busqueda_falla_lanza_error_de_conector() -> None:
+def test_si_la_api_falla_lanza_error_de_conector() -> None:
     respuestas = respuestas_completas()
-    respuestas[f"{URL_API}/products/search"] = RespuestaFalsa(500)
+    respuestas[f"{URL_API}/products/{PRODUCTO}/items"] = RespuestaFalsa(500)
     conector, _ = crear(respuestas)
 
     with pytest.raises(ErrorConector):
-        conector.buscar("celular")
+        conector.buscar(TABLET)
 
 
 def test_credenciales_invalidas_lanzan_error_de_conector() -> None:
@@ -142,4 +156,13 @@ def test_credenciales_invalidas_lanzan_error_de_conector() -> None:
     conector, _ = crear(respuestas)
 
     with pytest.raises(ErrorConector):
-        conector.buscar("celular")
+        conector.buscar(TABLET)
+
+
+def test_buscar_en_catalogo_cuenta_las_publicaciones_de_cada_producto() -> None:
+    conector, _ = crear(respuestas_completas())
+
+    encontrados = conector.buscar_en_catalogo("Samsung Galaxy A55 128GB")
+
+    publicaciones = {p.id: p.publicaciones for p in encontrados}
+    assert publicaciones == {PRODUCTO_SIN_PUBLICACIONES: 0, PRODUCTO: 2}

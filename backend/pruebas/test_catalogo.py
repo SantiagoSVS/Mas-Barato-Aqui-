@@ -2,20 +2,50 @@
 
 from pathlib import Path
 
+import pytest
+
 from app.config import obtener_configuracion
-from app.extraccion.catalogo import leer_terminos
+from app.extraccion.catalogo import ErrorCatalogo, leer_catalogo
 
 
-def test_lee_terminos_de_todas_las_categorias_sin_repetidos(tmp_path: Path) -> None:
+def escribir(tmp_path: Path, contenido: str) -> Path:
     archivo = tmp_path / "catalogo.toml"
-    archivo.write_text(
-        '[[categoria]]\nnombre = "a"\nterminos = ["celular", " portátil "]\n'
-        '[[categoria]]\nnombre = "b"\nterminos = ["celular", "freidora", ""]\n',
-        encoding="utf-8",
+    archivo.write_text(contenido, encoding="utf-8")
+    return archivo
+
+
+def test_lee_productos_con_sus_identificadores_por_tienda(tmp_path: Path) -> None:
+    archivo = escribir(
+        tmp_path,
+        '[[producto]]\nnombre = "Celular X 128 GB"\ncategoria = "tecnologia"\nmarca = "X"\n'
+        '[producto.ids]\nmercadolibre = ["MCO1", "MCO2"]\n\n'
+        '[[producto]]\nnombre = "Freidora Y"\ncategoria = "hogar"\n',
     )
 
-    assert leer_terminos(archivo) == ["celular", "portátil", "freidora"]
+    productos = leer_catalogo(archivo)
+
+    assert [p.nombre for p in productos] == ["Celular X 128 GB", "Freidora Y"]
+    assert productos[0].marca == "X"
+    assert productos[0].ids == {"mercadolibre": ["MCO1", "MCO2"]}
+    assert productos[1].ids == {}
+
+
+def test_rechaza_productos_repetidos(tmp_path: Path) -> None:
+    archivo = escribir(
+        tmp_path,
+        '[[producto]]\nnombre = "A"\ncategoria = "c"\n[[producto]]\nnombre = "A"\ncategoria = "c"\n',
+    )
+
+    with pytest.raises(ErrorCatalogo, match="repetido"):
+        leer_catalogo(archivo)
+
+
+def test_rechaza_productos_sin_categoria(tmp_path: Path) -> None:
+    archivo = escribir(tmp_path, '[[producto]]\nnombre = "A"\n')
+
+    with pytest.raises(ErrorCatalogo, match="#1"):
+        leer_catalogo(archivo)
 
 
 def test_el_catalogo_del_proyecto_se_puede_leer() -> None:
-    assert leer_terminos(obtener_configuracion().catalogo_path)
+    assert leer_catalogo(obtener_configuracion().catalogo_path)

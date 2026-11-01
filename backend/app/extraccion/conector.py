@@ -7,7 +7,7 @@ El resto del sistema (worker, normalización, base de datos) solo conoce esta in
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
-from app.extraccion.tipos import OfertaCapturada
+from app.extraccion.tipos import OfertaCapturada, ProductoCatalogo
 
 
 class ErrorConector(Exception):
@@ -17,10 +17,16 @@ class ErrorConector(Exception):
 class Conector(ABC):
     # Debe coincidir con plataforma.nombre en la base de datos
     nombre_plataforma: ClassVar[str]
+    # Nombre de la tienda en la sección ids de cada producto de catalogo.toml
+    clave_catalogo: ClassVar[str]
 
     @abstractmethod
-    def buscar(self, termino: str) -> list[OfertaCapturada]:
-        """Busca un término del catálogo y devuelve las ofertas encontradas."""
+    def buscar(self, producto: ProductoCatalogo) -> list[OfertaCapturada]:
+        """Devuelve las ofertas de un producto del catálogo en esta tienda.
+
+        Puede usar los identificadores de producto.ids[clave_catalogo] o buscar por nombre,
+        según lo que permita la tienda. Lista vacía si la tienda no tiene el producto.
+        """
 
     @abstractmethod
     def actualizar(self, url: str) -> OfertaCapturada | None:

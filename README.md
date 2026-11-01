@@ -77,8 +77,29 @@ python -m app.worker                         # captura ahora y luego cada CAPTUR
 ```
 
 El worker es el único proceso que consulta las tiendas. Recorre las plataformas activas que
-tienen conector, busca cada término de `catalogo.toml` y guarda una captura por oferta. El
-resultado de cada pasada (exitosa, parcial o fallida, con sus errores) se ve en `GET /salud`.
+tienen conector, pide las ofertas de cada producto de `catalogo.toml` y guarda una captura por
+oferta, vinculada a su producto. El resultado de cada pasada (exitosa, parcial o fallida, con
+sus errores) se ve en `GET /salud`.
+
+### Catálogo de productos
+
+`backend/catalogo.toml` define qué productos se capturan y sus identificadores en cada tienda:
+
+```toml
+[[producto]]
+nombre = "Samsung Galaxy Tab A11 128 GB"
+categoria = "tecnologia"
+marca = "Samsung"
+[producto.ids]
+mercadolibre = ["MCO56570140"]
+```
+
+Para Mercado Libre, el identificador es el `/p/MCO…` de la página del producto. Antes de
+agregarlo, verifica que tenga vendedores:
+
+```powershell
+python -m app.herramientas.buscar_mercadolibre --id MCO56570140
+```
 
 ### 5. Frontend (en otra terminal)
 
@@ -116,15 +137,17 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
 
-**Mercado Libre:** busca en el catálogo (`/products/search`), toma las publicaciones nuevas de
-cada producto (`/products/{id}/items`) y cotiza el envío y la fecha de entrega hacia la ciudad
+**Mercado Libre:** por cada identificador del catálogo toma las publicaciones nuevas del
+producto (`/products/{id}/items`) y cotiza el envío y la fecha de entrega hacia la ciudad
 `MERCADOLIBRE_CIUDAD_DESTINO` (`/items/{id}/shipping_options`). Si no logra cotizar el envío,
-lo deja como desconocido, nunca como gratis.
+lo deja como desconocido, nunca como gratis. No busca por texto: con token de aplicación,
+`/sites/MCO/search` responde 403 y `/products/search` casi no encuentra productos con vendedores.
 
 ## Agregar una tienda
 
 1. Escribe su conector en `backend/app/extraccion/conectores/`: una clase que hereda de
-   `Conector` e implementa `buscar(termino)` y `actualizar(url)`, devolviendo `OfertaCapturada`.
+   `Conector` e implementa `buscar(producto)` y `actualizar(url)`, devolviendo `OfertaCapturada`.
+   Define `clave_catalogo`, el nombre de la tienda en `[producto.ids]` del catálogo.
 2. Agrega su fábrica en `backend/app/extraccion/registro.py`.
 3. Registra la plataforma con una migración de datos (como `registra_mercado_libre`), con el
    mismo nombre que `nombre_plataforma`.

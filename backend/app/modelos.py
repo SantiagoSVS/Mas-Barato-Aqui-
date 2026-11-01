@@ -81,7 +81,7 @@ class Producto(Base):
     __tablename__ = "producto"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    nombre_canonico: Mapped[str] = mapped_column(String(255))
+    nombre_canonico: Mapped[str] = mapped_column(String(255), unique=True)
     marca: Mapped[str | None] = mapped_column(String(80))
     modelo: Mapped[str | None] = mapped_column(String(120))
     categoria: Mapped[str] = mapped_column(String(80))

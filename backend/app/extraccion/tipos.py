@@ -1,4 +1,4 @@
-"""Formato común en que todos los conectores entregan las ofertas."""
+"""Tipos compartidos por el catálogo, los conectores y el servicio de captura."""
 
 from decimal import Decimal
 from typing import Literal
@@ -6,6 +6,21 @@ from typing import Literal
 from pydantic import BaseModel, Field, HttpUrl
 
 MONEDAS_SOPORTADAS = ("COP", "USD")
+
+
+class ProductoCatalogo(BaseModel):
+    """Producto del catálogo inicial (backend/catalogo.toml).
+
+    ids guarda, por tienda, los identificadores del producto en esa tienda (por ejemplo,
+    {"mercadolibre": ["MCO56570140"]}). Como los elige una persona, las ofertas que salen de
+    esos identificadores se vinculan al producto sin necesidad de emparejarlas.
+    """
+
+    nombre: str = Field(min_length=1)
+    categoria: str = Field(min_length=1)
+    marca: str | None = None
+    modelo: str | None = None
+    ids: dict[str, list[str]] = Field(default_factory=dict)
 
 
 class OfertaCapturada(BaseModel):

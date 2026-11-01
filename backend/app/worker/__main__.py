@@ -11,7 +11,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 from app.config import obtener_configuracion
 from app.db import FabricaSesiones
-from app.extraccion.catalogo import leer_terminos
+from app.extraccion.catalogo import leer_catalogo
 from app.extraccion.cliente_http import ClienteHttp
 from app.extraccion.registro import CONECTORES, crear_conectores
 from app.extraccion.tasa_cambio import ProveedorTRM
@@ -30,11 +30,11 @@ def pasada_de_captura() -> None:
     conectores = crear_conectores(cliente, configuracion)
     for nombre in CONECTORES.keys() - conectores.keys():
         log.warning("%s no tiene configuración completa (credenciales); no se captura", nombre)
-    terminos = leer_terminos(configuracion.catalogo_path)
+    productos = leer_catalogo(configuracion.catalogo_path)
 
-    log.info("Inicia captura: %d conectores, %d términos", len(conectores), len(terminos))
+    log.info("Inicia captura: %d conectores, %d productos", len(conectores), len(productos))
     with FabricaSesiones() as sesion:
-        ejecutar_capturas(sesion, conectores, terminos, ProveedorTRM(cliente))
+        ejecutar_capturas(sesion, conectores, productos, ProveedorTRM(cliente))
     log.info("Termina captura")
 
 

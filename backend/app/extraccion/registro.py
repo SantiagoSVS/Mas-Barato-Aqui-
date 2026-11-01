@@ -25,7 +25,6 @@ def _mercadolibre(cliente: ClienteHttp, configuracion: Configuracion) -> Conecto
         client_id=configuracion.mercadolibre_client_id,
         client_secret=configuracion.mercadolibre_client_secret,
         ciudad_destino=configuracion.mercadolibre_ciudad_destino,
-        productos_por_termino=configuracion.mercadolibre_productos_por_termino,
         ofertas_por_producto=configuracion.mercadolibre_ofertas_por_producto,
     )
 

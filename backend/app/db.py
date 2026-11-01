@@ -21,7 +21,10 @@ class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=CONVENCION_NOMBRES)
 
 
-motor = create_engine(obtener_configuracion().database_url, pool_pre_ping=True)
+# connect_timeout: si PostgreSQL no está encendido, falla en segundos en vez de quedarse colgado
+motor = create_engine(
+    obtener_configuracion().database_url, pool_pre_ping=True, connect_args={"connect_timeout": 5}
+)
 FabricaSesiones = sessionmaker(bind=motor, autoflush=False, expire_on_commit=False)
 
 

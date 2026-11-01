@@ -39,7 +39,7 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Aplica las migraciones sobre la base de datos."""
-    motor = create_engine(url_bd)
+    motor = create_engine(url_bd, connect_args={"connect_timeout": 5})
     with motor.connect() as conexion:
         context.configure(connection=conexion, target_metadata=target_metadata)
         with context.begin_transaction():

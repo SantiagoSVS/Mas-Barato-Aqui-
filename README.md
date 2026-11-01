@@ -132,7 +132,7 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 | Tienda | Acceso | Configuración en `.env` |
 |---|---|---|
 | Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
-| Falabella | Pendiente | — |
+| Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna. Queda inactiva hasta revisar sus términos (ver abajo) |
 | Amazon | Pendiente | — |
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
@@ -142,6 +142,19 @@ producto (`/products/{id}/items`) y cotiza el envío y la fecha de entrega hacia
 `MERCADOLIBRE_CIUDAD_DESTINO` (`/items/{id}/shipping_options`). Si no logra cotizar el envío,
 lo deja como desconocido, nunca como gratis. No busca por texto: con token de aplicación,
 `/sites/MCO/search` responde 403 y `/products/search` casi no encuentra productos con vendedores.
+
+**Falabella:** lee la página de cada producto del catálogo (el JSON de `__NEXT_DATA__`) y
+toma el menor precio vigente, sin precios tachados ni el precio con tarjeta CMR. El envío y
+los días de entrega quedan como desconocidos: Falabella los calcula en el navegador según la
+ubicación del comprador. En su lugar, la plataforma guarda el aviso de envío gratis que publica
+la página (`nota_envio`, visible en `GET /salud`).
+
+La migración la registra **inactiva**, porque el documento de arquitectura exige revisar los
+términos de cada tienda antes de integrarla. Después de revisarlos:
+
+```powershell
+docker exec mas-barato-db psql -U mas_barato -d mas_barato_aqui -c "UPDATE plataforma SET activa = true WHERE nombre = 'Falabella'"
+```
 
 ## Agregar una tienda
 

@@ -12,6 +12,7 @@ from collections.abc import Callable
 from app.config import Configuracion
 from app.extraccion.cliente_http import ClienteHttp
 from app.extraccion.conector import Conector
+from app.extraccion.conectores.falabella import ConectorFalabella
 from app.extraccion.conectores.mercadolibre import ConectorMercadoLibre
 
 FabricaConector = Callable[[ClienteHttp, Configuracion], Conector | None]
@@ -29,9 +30,14 @@ def _mercadolibre(cliente: ClienteHttp, configuracion: Configuracion) -> Conecto
     )
 
 
-# PENDIENTE: Falabella y Amazon, cuando estén definidos sus accesos.
+def _falabella(cliente: ClienteHttp, configuracion: Configuracion) -> Conector | None:
+    return ConectorFalabella(cliente)  # no necesita credenciales
+
+
+# PENDIENTE: Amazon, cuando esté definido su acceso.
 CONECTORES: dict[str, FabricaConector] = {
     ConectorMercadoLibre.nombre_plataforma: _mercadolibre,
+    ConectorFalabella.nombre_plataforma: _falabella,
 }
 
 

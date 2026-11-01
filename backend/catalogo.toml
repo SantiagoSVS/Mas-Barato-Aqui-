@@ -8,6 +8,8 @@
 # agregarlo (solo sirven los que tienen publicaciones activas):
 #   python -m app.herramientas.buscar_mercadolibre --id MCO12345678
 #
+# Falabella: el identificador es el número de la dirección /falabella-co/product/73447854/...
+#
 # PENDIENTE: definir el catálogo real. Estos dos productos se verificaron el 1 de noviembre de
 # 2026 y sirven para probar la captura de punta a punta.
 
@@ -18,6 +20,7 @@ marca = "Samsung"
 modelo = "Galaxy Tab A11"
 [producto.ids]
 mercadolibre = ["MCO56570140"]
+falabella = ["73447854"]
 
 [[producto]]
 nombre = "Freidora de aire Kalley 6,3 litros"

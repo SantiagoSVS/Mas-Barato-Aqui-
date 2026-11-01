@@ -28,6 +28,7 @@ class UltimaEjecucion(BaseModel):
 class EstadoPlataforma(BaseModel):
     nombre: str
     activa: bool
+    nota_envio: str | None
     ultima_captura: datetime | None
     ultima_ejecucion: UltimaEjecucion | None
 
@@ -44,7 +45,13 @@ def consultar_salud(
 ) -> EstadoServicio:
     # Última captura de cada plataforma; las que aún no tienen capturas salen con None
     consulta_capturas = (
-        select(Plataforma.id, Plataforma.nombre, Plataforma.activa, func.max(Captura.capturado_en))
+        select(
+            Plataforma.id,
+            Plataforma.nombre,
+            Plataforma.activa,
+            Plataforma.nota_envio,
+            func.max(Captura.capturado_en),
+        )
         .outerjoin(Oferta, Oferta.plataforma_id == Plataforma.id)
         .outerjoin(Captura, Captura.oferta_id == Oferta.id)
         .group_by(Plataforma.id)
@@ -70,10 +77,11 @@ def consultar_salud(
             EstadoPlataforma(
                 nombre=nombre,
                 activa=activa,
+                nota_envio=nota_envio,
                 ultima_captura=ultima,
                 ultima_ejecucion=_resumir(ejecuciones.get(plataforma_id)),
             )
-            for plataforma_id, nombre, activa, ultima in filas
+            for plataforma_id, nombre, activa, nota_envio, ultima in filas
         ],
     )
 

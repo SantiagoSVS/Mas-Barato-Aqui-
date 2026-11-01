@@ -55,6 +55,16 @@ def test_las_ofertas_quedan_vinculadas_al_producto_del_catalogo(sesion: Session)
     assert (guardada.producto.categoria, guardada.producto.marca) == ("hogar", "Marca X")
 
 
+def test_guarda_el_aviso_de_envio_del_conector_en_la_plataforma(sesion: Session) -> None:
+    tienda = plataforma(sesion)
+    conector = ConectorFalso({})
+    conector.nota_envio = lambda: "Envío gratis desde $1"
+
+    capturar_plataforma(sesion, tienda, conector, [CELULAR], ProveedorTasaFalso(None))
+
+    assert tienda.nota_envio == "Envío gratis desde $1"
+
+
 def test_productos_sin_ofertas_en_la_tienda_no_se_crean(sesion: Session) -> None:
     tienda = plataforma(sesion)
 

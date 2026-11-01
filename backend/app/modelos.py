@@ -45,6 +45,8 @@ class Plataforma(Base):
     url_base: Mapped[str] = mapped_column(String(255))
     moneda: Mapped[str] = mapped_column(String(3))  # ISO 4217: COP, USD
     activa: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    # Aviso sobre el envío cuando la tienda no deja cotizarlo (lo actualiza el conector)
+    nota_envio: Mapped[str | None] = mapped_column(Text)
 
     ofertas: Mapped[list["Oferta"]] = relationship(back_populates="plataforma")
     ejecuciones: Mapped[list["EjecucionCaptura"]] = relationship(back_populates="plataforma")

@@ -67,6 +67,9 @@ def capturar_plataforma(
             ejecucion.ofertas_capturadas += 1
 
     ejecucion.errores += productos_fallidos
+    nota = conector.nota_envio()
+    if nota is not None:
+        plataforma.nota_envio = nota
     ejecucion.terminada_en = ahora()
     ejecucion.estado = _estado_final(len(productos), productos_fallidos, ejecucion.errores)
     ejecucion.mensaje_error = "\n".join(mensajes)[:LARGO_MAXIMO_MENSAJE] or None

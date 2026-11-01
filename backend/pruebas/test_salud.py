@@ -25,6 +25,7 @@ def test_responde_ok_con_las_plataformas_registradas(cliente: TestClient) -> Non
     assert por_nombre(cuerpo)["Mercado Libre"] == {
         "nombre": "Mercado Libre",
         "activa": True,
+        "nota_envio": None,
         "ultima_captura": None,
         "ultima_ejecucion": None,
     }

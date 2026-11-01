@@ -31,3 +31,7 @@ class Conector(ABC):
     @abstractmethod
     def actualizar(self, url: str) -> OfertaCapturada | None:
         """Vuelve a consultar una oferta ya conocida. None si ya no existe."""
+
+    def nota_envio(self) -> str | None:
+        """Aviso para el usuario cuando la tienda no deja cotizar el envío. Por defecto, ninguno."""
+        return None

@@ -3,6 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
@@ -15,8 +16,9 @@ class Configuracion(BaseSettings):
         extra="ignore",
     )
 
-    database_url: str
-    test_database_url: str | None = None
+    # repr=False: los valores con claves nunca se imprimen (logs, errores de pytest, CI)
+    database_url: str = Field(repr=False)
+    test_database_url: str | None = Field(default=None, repr=False)
 
     # Extracción (valores iniciales de operación; se ajustan según lo que acepte cada tienda)
     captura_intervalo_horas: float = 12
@@ -29,10 +31,9 @@ class Configuracion(BaseSettings):
 
     # Mercado Libre (API oficial). Sin credenciales, el conector no se activa.
     mercadolibre_client_id: str | None = None
-    mercadolibre_client_secret: str | None = None
+    mercadolibre_client_secret: str | None = Field(default=None, repr=False)
     # Ciudad a la que se cotiza el envío (id de /classified_locations). Por defecto, Medellín.
     mercadolibre_ciudad_destino: str = "TUNPQ01FRGRjNjc4"
-    mercadolibre_productos_por_termino: int = 5
     mercadolibre_ofertas_por_producto: int = 5
 
 

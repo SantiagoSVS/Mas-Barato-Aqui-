@@ -27,6 +27,14 @@ class Configuracion(BaseSettings):
     )
     catalogo_path: Path = RAIZ_PROYECTO / "backend" / "catalogo.toml"
 
+    # Mercado Libre (API oficial). Sin credenciales, el conector no se activa.
+    mercadolibre_client_id: str | None = None
+    mercadolibre_client_secret: str | None = None
+    # Ciudad a la que se cotiza el envío (id de /classified_locations). Por defecto, Medellín.
+    mercadolibre_ciudad_destino: str = "TUNPQ01FRGRjNjc4"
+    mercadolibre_productos_por_termino: int = 5
+    mercadolibre_ofertas_por_producto: int = 5
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

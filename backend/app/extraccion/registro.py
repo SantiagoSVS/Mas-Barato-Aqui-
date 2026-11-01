@@ -1,15 +1,45 @@
 """Registro de conectores disponibles, por nombre de plataforma.
 
 Para integrar una tienda se escribe su conector (una clase que hereda de Conector) y se
-agrega aquí una línea. Nada más del sistema cambia (RNF-06).
+agrega aquí su fábrica. Nada más del sistema cambia (RNF-06).
+
+Cada fábrica devuelve None si a la tienda le falta configuración (por ejemplo, credenciales);
+en ese caso el worker la omite y lo deja en el log.
 """
 
 from collections.abc import Callable
 
+from app.config import Configuracion
 from app.extraccion.cliente_http import ClienteHttp
 from app.extraccion.conector import Conector
+from app.extraccion.conectores.mercadolibre import ConectorMercadoLibre
 
-FabricaConector = Callable[[ClienteHttp], Conector]
+FabricaConector = Callable[[ClienteHttp, Configuracion], Conector | None]
 
-# PENDIENTE: Mercado Libre, Falabella y Amazon, cuando estén definidos sus accesos.
-CONECTORES: dict[str, FabricaConector] = {}
+
+def _mercadolibre(cliente: ClienteHttp, configuracion: Configuracion) -> Conector | None:
+    if not (configuracion.mercadolibre_client_id and configuracion.mercadolibre_client_secret):
+        return None
+    return ConectorMercadoLibre(
+        cliente,
+        client_id=configuracion.mercadolibre_client_id,
+        client_secret=configuracion.mercadolibre_client_secret,
+        ciudad_destino=configuracion.mercadolibre_ciudad_destino,
+        productos_por_termino=configuracion.mercadolibre_productos_por_termino,
+        ofertas_por_producto=configuracion.mercadolibre_ofertas_por_producto,
+    )
+
+
+# PENDIENTE: Falabella y Amazon, cuando estén definidos sus accesos.
+CONECTORES: dict[str, FabricaConector] = {
+    ConectorMercadoLibre.nombre_plataforma: _mercadolibre,
+}
+
+
+def crear_conectores(cliente: ClienteHttp, configuracion: Configuracion) -> dict[str, Conector]:
+    conectores = {}
+    for nombre, fabrica in CONECTORES.items():
+        conector = fabrica(cliente, configuracion)
+        if conector is not None:
+            conectores[nombre] = conector
+    return conectores

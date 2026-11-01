@@ -84,6 +84,10 @@ class SesionHttpFalsa:
             raise respuesta
         return respuesta
 
+    def post(self, url, data=None, headers=None, timeout=None):
+        self.peticiones.append({"url": url, "data": data, "headers": headers, "timeout": timeout, "metodo": "POST"})
+        return self.respuestas.get(url, RespuestaFalsa(status_code=404))
+
 
 def oferta(
     url: str,

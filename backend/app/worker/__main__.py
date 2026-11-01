@@ -13,7 +13,7 @@ from app.config import obtener_configuracion
 from app.db import FabricaSesiones
 from app.extraccion.catalogo import leer_terminos
 from app.extraccion.cliente_http import ClienteHttp
-from app.extraccion.registro import CONECTORES
+from app.extraccion.registro import CONECTORES, crear_conectores
 from app.extraccion.tasa_cambio import ProveedorTRM
 from app.worker.capturas import ejecutar_capturas
 
@@ -27,7 +27,9 @@ def pasada_de_captura() -> None:
         intervalo_minimo_s=configuracion.extraccion_intervalo_minimo_s,
         timeout_s=configuracion.extraccion_timeout_s,
     )
-    conectores = {nombre: fabrica(cliente) for nombre, fabrica in CONECTORES.items()}
+    conectores = crear_conectores(cliente, configuracion)
+    for nombre in CONECTORES.keys() - conectores.keys():
+        log.warning("%s no tiene configuración completa (credenciales); no se captura", nombre)
     terminos = leer_terminos(configuracion.catalogo_path)
 
     log.info("Inicia captura: %d conectores, %d términos", len(conectores), len(terminos))

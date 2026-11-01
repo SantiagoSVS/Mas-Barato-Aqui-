@@ -106,12 +106,28 @@ internet: las tiendas y la TRM se reemplazan por dobles de prueba y respuestas g
 En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 (`.github/workflows/pruebas.yml`).
 
+## Tiendas integradas
+
+| Tienda | Acceso | Configuración en `.env` |
+|---|---|---|
+| Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
+| Falabella | Pendiente | — |
+| Amazon | Pendiente | — |
+
+Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
+
+**Mercado Libre:** busca en el catálogo (`/products/search`), toma las publicaciones nuevas de
+cada producto (`/products/{id}/items`) y cotiza el envío y la fecha de entrega hacia la ciudad
+`MERCADOLIBRE_CIUDAD_DESTINO` (`/items/{id}/shipping_options`). Si no logra cotizar el envío,
+lo deja como desconocido, nunca como gratis.
+
 ## Agregar una tienda
 
-1. Escribe su conector en `backend/app/extraccion/`: una clase que hereda de `Conector` e
-   implementa `buscar(termino)` y `actualizar(url)`, devolviendo `OfertaCapturada`.
-2. Regístralo en `backend/app/extraccion/registro.py`.
-3. Registra la plataforma en la tabla `plataforma` con el mismo nombre.
+1. Escribe su conector en `backend/app/extraccion/conectores/`: una clase que hereda de
+   `Conector` e implementa `buscar(termino)` y `actualizar(url)`, devolviendo `OfertaCapturada`.
+2. Agrega su fábrica en `backend/app/extraccion/registro.py`.
+3. Registra la plataforma con una migración de datos (como `registra_mercado_libre`), con el
+   mismo nombre que `nombre_plataforma`.
 
 Nada más cambia (RNF-06).
 

@@ -1,0 +1,131 @@
+{
+ "destination": {
+  "zip_code": null,
+  "city": {
+   "id": "TUNPQ01FRGRjNjc4",
+   "name": "Medellín"
+  },
+  "state": {
+   "id": "CO-ANT",
+   "name": "Antioquia"
+  },
+  "country": {
+   "id": "CO",
+   "name": "Colombia"
+  }
+ },
+ "options": [
+  {
+   "id": 1225239830,
+   "option_hash": "4c26c4d87059463fae8d9a7b78405546",
+   "name": "",
+   "currency_id": "COP",
+   "base_cost": 14300,
+   "cost": 0,
+   "list_cost": 8100,
+   "display": "recommended",
+   "shipping_method_id": 512446,
+   "shipping_method_type": "express",
+   "shipping_option_type": "address",
+   "estimated_delivery_time": {
+    "type": "known_frame",
+    "date": "2026-11-03T00:00:00-05:00",
+    "unit": "hour",
+    "offset": {
+     "date": "2026-11-04T00:00:00-05:00",
+     "shipping": 24
+    },
+    "time_frame": {
+     "from": null,
+     "to": null
+    },
+    "pay_before": "2026-11-02T18:00:00-05:00",
+    "shipping": 24,
+    "handling": 0,
+    "schedule": null
+   },
+   "discount": {
+    "promoted_amount": 14300,
+    "rate": 1,
+    "type": "ratio",
+    "show_loyal_benefit": false
+   }
+  },
+  {
+   "id": 1853169290,
+   "option_hash": "421c257d4319968dc1b23c9a61eb2bf8",
+   "name": "",
+   "currency_id": "COP",
+   "base_cost": 14300,
+   "cost": 0,
+   "list_cost": 8100,
+   "display": "always",
+   "shipping_method_id": 515072,
+   "shipping_method_type": "express",
+   "shipping_option_type": "agency",
+   "estimated_delivery_time": {
+    "type": "known_frame",
+    "date": "2026-11-03T00:00:00-05:00",
+    "unit": "hour",
+    "offset": {
+     "date": "2026-11-04T00:00:00-05:00",
+     "shipping": 24
+    },
+    "time_frame": {
+     "from": null,
+     "to": null
+    },
+    "pay_before": "2026-11-02T18:00:00-05:00",
+    "shipping": 24,
+    "handling": 0,
+    "schedule": null
+   },
+   "discount": {
+    "promoted_amount": 14300,
+    "rate": 1,
+    "type": "ratio",
+    "show_loyal_benefit": false
+   }
+  },
+  {
+   "id": 3354863691,
+   "option_hash": "c0f11a9bed5b99b859d5543c4beb5326",
+   "name": "",
+   "currency_id": "COP",
+   "base_cost": 14300,
+   "cost": 0,
+   "list_cost": 8100,
+   "display": "optional",
+   "shipping_method_id": 512460,
+   "shipping_method_type": "slow_meli",
+   "shipping_option_type": "address",
+   "estimated_delivery_time": {
+    "type": "known_frame",
+    "date": "2026-11-09T00:00:00-05:00",
+    "unit": "hour",
+    "offset": {
+     "date": "2026-11-10T00:00:00-05:00",
+     "shipping": 24
+    },
+    "time_frame": {
+     "from": null,
+     "to": null
+    },
+    "pay_before": "2026-11-06T18:00:00-05:00",
+    "shipping": 72,
+    "handling": 0,
+    "schedule": null
+   },
+   "discount": {
+    "promoted_amount": 14300,
+    "rate": 1,
+    "type": "ratio",
+    "show_loyal_benefit": false
+   }
+  }
+ ],
+ "custom_message": {
+  "display_mode": null,
+  "reason": ""
+ }
+}

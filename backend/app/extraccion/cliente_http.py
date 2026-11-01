@@ -23,6 +23,14 @@ class AccesoNoPermitido(ErrorConector):
     """robots.txt no permite consultar esa URL."""
 
 
+class ErrorHttp(ErrorConector):
+    """El servidor respondió con un código de error (4xx o 5xx)."""
+
+    def __init__(self, url: str, status_code: int) -> None:
+        super().__init__(f"{url} respondió {status_code}")
+        self.status_code = status_code
+
+
 class ClienteHttp:
     def __init__(
         self,
@@ -54,7 +62,25 @@ class ClienteHttp:
 
         respuesta = self._pedir(url, params, encabezados)
         if respuesta.status_code >= 400:
-            raise ErrorConector(f"{url} respondió {respuesta.status_code}")
+            raise ErrorHttp(url, respuesta.status_code)
+        return respuesta
+
+    def post_api(
+        self, url: str, datos: dict[str, str], encabezados: dict[str, str] | None = None
+    ) -> requests.Response:
+        """POST solo para APIs oficiales (por ejemplo, pedir un token de acceso)."""
+        self._esperar_turno(urlsplit(url).netloc)
+        try:
+            respuesta = self._sesion.post(
+                url,
+                data=datos,
+                headers={**(encabezados or {}), "User-Agent": self.user_agent},
+                timeout=self.timeout_s,
+            )
+        except requests.RequestException as error:
+            raise ErrorConector(f"No se pudo consultar {url}: {error}") from error
+        if respuesta.status_code >= 400:
+            raise ErrorHttp(url, respuesta.status_code)
         return respuesta
 
     def _pedir(

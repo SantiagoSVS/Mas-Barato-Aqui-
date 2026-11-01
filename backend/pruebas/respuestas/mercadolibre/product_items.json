@@ -1,0 +1,151 @@
+{
+ "paging": {
+  "total": 2,
+  "offset": 0,
+  "limit": 100
+ },
+ "results": [
+  {
+   "item_id": "MCO4113792896",
+   "site_id": "MCO",
+   "seller_id": 162681369,
+   "accepts_mercadopago": true,
+   "price": 524900,
+   "category_id": "MCO82067",
+   "currency_id": "COP",
+   "warranty": "Garantía del vendedor: 12 meses",
+   "condition": "new",
+   "listing_type_id": "gold_special",
+   "international_delivery_mode": "none",
+   "tier": "",
+   "inventory_id": "",
+   "tags": [
+    "user_product_unify",
+    "kvs_primary",
+    "immediate_payment",
+    "cart_eligible"
+   ],
+   "deal_ids": [],
+   "official_store_id": null,
+   "original_price": 749858,
+   "shipping": {
+    "free_shipping": true,
+    "store_pick_up": false,
+    "local_pick_up": false,
+    "mode": "me2",
+    "logistic_type": "fulfillment",
+    "tags": [
+     "self_service_in",
+     "mandatory_free_shipping"
+    ],
+    "cost": 0
+   },
+   "seller_address": {
+    "city": {
+     "id": "TUNPQ1NBTjkyOTU1",
+     "name": "Santa Fe"
+    },
+    "state": {
+     "id": "TUNPUEJPR1gxMDljZA",
+     "name": "Bogotá D.C."
+    },
+    "neighborhood": {
+     "id": "",
+     "name": ""
+    }
+   },
+   "sale_terms": [
+    {
+     "value_struct": null,
+     "id": "WARRANTY_TYPE",
+     "name": "Tipo de garantía",
+     "value_name": "Garantía del vendedor",
+     "value_id": "2230280"
+    },
+    {
+     "value_struct": {
+      "number": 12,
+      "unit": "meses"
+     },
+     "id": "WARRANTY_TIME",
+     "name": "Tiempo de garantía",
+     "value_name": "12 meses",
+     "value_id": null
+    }
+   ],
+   "user_product_id": "MCOU4196037492",
+   "min_purchase_unit": 1
+  },
+  {
+   "item_id": "MCO3540893672",
+   "site_id": "MCO",
+   "seller_id": 406781619,
+   "accepts_mercadopago": true,
+   "price": 549945,
+   "category_id": "MCO82067",
+   "currency_id": "COP",
+   "warranty": "Garantía de fábrica: 12 meses",
+   "condition": "new",
+   "listing_type_id": "gold_special",
+   "international_delivery_mode": "none",
+   "tier": "",
+   "inventory_id": "",
+   "tags": [
+    "kvs_primary",
+    "immediate_payment",
+    "cart_eligible"
+   ],
+   "deal_ids": [],
+   "official_store_id": null,
+   "original_price": 999900,
+   "shipping": {
+    "free_shipping": true,
+    "store_pick_up": false,
+    "local_pick_up": false,
+    "mode": "me2",
+    "logistic_type": "cross_docking",
+    "tags": [
+     "self_service_in",
+     "mandatory_free_shipping"
+    ],
+    "cost": 0
+   },
+   "seller_address": {
+    "city": {
+     "id": "TUNPQ0NIQTk2OTI1",
+     "name": "Chapinero"
+    },
+    "state": {
+     "id": "TUNPUEJPR1gxMDljZA",
+     "name": "Bogotá D.C."
+    },
+    "neighborhood": {
+     "id": "TUNPQkxBRzg0NjU1",
+     "name": "Lago Gaitán"
+    }
+   },
+   "sale_terms": [
+    {
+     "value_struct": null,
+     "id": "WARRANTY_TYPE",
+     "name": "Tipo de garantía",
+     "value_name": "Garantía de fábrica",
+     "value_id": "2230279"
+    },
+    {
+     "value_struct": {
+      "number": 12,
+      "unit": "meses"
+     },
+     "id": "WARRANTY_TIME",
+     "name": "Tiempo de garantía",
+     "value_name": "12 meses",
+     "value_id": null
+    }
+   ],
+   "user_product_id": "MCOU3768366195",
+   "min_purchase_unit": 1
+  }
+ ],
+ "experiments": null
+}

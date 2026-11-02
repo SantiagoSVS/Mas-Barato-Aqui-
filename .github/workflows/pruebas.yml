@@ -76,14 +76,25 @@ jobs:
         run: npm run build
 
       # La API se simula con las respuestas de cypress/fixtures: no hace falta el backend.
-      # En el runner "localhost" puede resolver a IPv6 (::1); se fija 127.0.0.1 para Vite y Cypress.
+      # Se sirve la compilación con "vite preview" y se espera a que responda antes de Cypress.
+      - name: Servir la interfaz
+        run: |
+          npx vite preview --host 127.0.0.1 --port 5173 --strictPort > preview.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:5173 > /dev/null && exit 0
+            sleep 1
+          done
+          echo "La interfaz no respondió"; cat preview.log; exit 1
+
       - name: Pruebas E2E (Cypress)
-        uses: cypress-io/github-action@v6
+        run: npx cypress run
         env:
           CYPRESS_BASE_URL: http://127.0.0.1:5173
+
+      - name: Guardar capturas de las pruebas fallidas
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          working-directory: frontend
-          install: false
-          start: npm run dev -- --host 127.0.0.1 --strictPort
-          wait-on: http://127.0.0.1:5173
-          wait-on-timeout: 120
+          name: cypress-capturas
+          path: frontend/cypress/screenshots
+          if-no-files-found: ignore

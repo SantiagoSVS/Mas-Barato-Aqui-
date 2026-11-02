@@ -55,7 +55,7 @@ MODELOS = re.compile(
 
 URGENCIA = ["rapido", "urgente", "pronto", "ya mismo", "para manana", "para hoy", "lo antes posible", "express"]
 
-LIMITES = r"(?:menos de|maximo de|maximo|hasta|por debajo de|no mas de|que no pase de|no supere|tope de|presupuesto de|presupuesto)"
+LIMITES = r"(?:menos de|maximo de|maximo|hasta|por debajo de|no mas de|que no pasen? de|no supere|tope de|presupuesto de|presupuesto)"
 CANTIDAD = r"(\d+(?:[.,']\d+)*|un|medio)"
 UNIDAD = r"(millones|millon|palos|palo|mil|lucas|luca|k)?"
 

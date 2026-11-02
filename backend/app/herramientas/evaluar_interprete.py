@@ -16,7 +16,7 @@ from pathlib import Path
 
 from app.config import RAIZ_PROYECTO, obtener_configuracion
 from app.interpretacion.esquema import CriteriosConsulta
-from app.interpretacion.evaluacion import CAMPOS, Reporte, ResultadoConsulta, campos_distintos, intervalo_wilson
+from app.interpretacion.evaluacion import CAMPOS, Reporte, ResultadoConsulta, intervalo_wilson
 from app.interpretacion.registro import crear_interprete
 
 ARCHIVO_POR_DEFECTO = RAIZ_PROYECTO / "backend" / "evaluacion" / "consultas_anotadas.json"
@@ -41,13 +41,7 @@ def evaluar(consultas: list[dict]) -> Reporte:
     for c in consultas:
         obtenido = interprete.interpretar(c["consulta"]).criterios
         reporte.resultados.append(
-            ResultadoConsulta(
-                id=c["id"],
-                consulta=c["consulta"],
-                campos_distintos=campos_distintos(obtenido, c["esperado"]),
-                obtenido=obtenido,
-                esperado=c["esperado"],
-            )
+            ResultadoConsulta(id=c["id"], consulta=c["consulta"], obtenido=obtenido, esperado=c["esperado"])
         )
     return reporte
 
@@ -56,16 +50,18 @@ def imprimir(reporte: Reporte, detalle: bool) -> None:
     bajo, alto = intervalo_wilson(reporte.correctas, reporte.total)
     print(f"Proveedor: {obtener_configuracion().interprete_proveedor}")
     print(f"Consultas: {reporte.total}")
-    print(f"Correctas en todos los campos: {reporte.correctas} ({reporte.exactitud:.1%})")
+    print(f"Correctas en los campos relevantes (H2): {reporte.correctas} ({reporte.exactitud:.1%})")
     print(f"Intervalo de confianza 95 %: {bajo:.1%} – {alto:.1%}")
     cumple = "SÍ" if reporte.exactitud >= META_H2 else "NO"
     print(f"Meta H2 (≥ {META_H2:.0%}): {cumple}")
+    estricta = reporte.identicas / reporte.total if reporte.total else 0.0
+    print(f"Medida estricta (todos los campos y atributos idénticos): {reporte.identicas} ({estricta:.1%})")
     if reporte.total < 50:
         print(f"Aviso: H2 exige al menos 50 consultas; este archivo tiene {reporte.total}.")
 
     print("\nAciertos por campo:")
     for campo, aciertos in reporte.aciertos_por_campo().items():
-        print(f"  {campo:<20} {aciertos}/{reporte.total}")
+        print(f"  {campo:<25} {aciertos}/{reporte.total}")
 
     fallidas = [r for r in reporte.resultados if not r.correcta]
     if detalle and fallidas:
@@ -79,10 +75,14 @@ def imprimir(reporte: Reporte, detalle: bool) -> None:
 def guardar_csv(reporte: Reporte, ruta: Path) -> None:
     with ruta.open("w", newline="", encoding="utf-8-sig") as archivo:  # utf-8-sig: Excel lo abre bien
         escritor = csv.writer(archivo, delimiter=";")
-        escritor.writerow(["id", "consulta", "correcta", "campos_distintos", *[f"obtenido_{c}" for c in CAMPOS]])
+        escritor.writerow(
+            ["id", "consulta", "correcta_h2", "campos_distintos", "atributos_coinciden", "identica"]
+            + [f"obtenido_{c}" for c in CAMPOS]
+        )
         for r in reporte.resultados:
             escritor.writerow(
                 [r.id, r.consulta, "sí" if r.correcta else "no", ", ".join(r.campos_distintos)]
+                + ["sí" if r.atributos_coinciden else "no", "sí" if r.identica else "no"]
                 + [json.dumps(getattr(r.obtenido, c), ensure_ascii=False) for c in CAMPOS]
             )
 

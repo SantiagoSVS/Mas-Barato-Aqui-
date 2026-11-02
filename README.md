@@ -158,10 +158,21 @@ python -m app.herramientas.evaluar_interprete --detalle
 python -m app.herramientas.evaluar_interprete --csv resultados_h2.csv
 ```
 
-Lee `backend/evaluacion/consultas_anotadas.json`, compara cada interpretación con su anotación
-y reporta el porcentaje de consultas correctas en todos sus campos, con su intervalo de confianza
-del 95 % (Wilson), y los aciertos por campo. Las reglas de comparación están en
-`app/interpretacion/evaluacion.py`. El formato está en `evaluacion/consultas_ejemplo.json`.
+Lee `backend/evaluacion/consultas_anotadas.json` (las 50 consultas anotadas por Santiago) y
+compara cada interpretación con su anotación. Convención de H2 (2 de noviembre de 2026):
+
+- **Campos relevantes:** producto, marca, modelo, precio máximo, prioridad y si requiere
+  aclaración, que son los que usan la búsqueda y la recomendación. Una consulta es correcta si
+  coinciden todos.
+- **Producto y modelo:** equivalentes si las palabras de uno contienen las del otro, sin
+  importar mayúsculas, tildes ni plural ("monitor" = "monitor gamer"). **Marca:** el mismo texto.
+- **Atributos:** no entran en H2, porque sus claves dependen de cómo redacta quien anota. Se
+  reportan aparte, comparando solo sus valores. También se reporta la medida estricta (todo
+  idéntico) para transparencia.
+
+Reporta la exactitud con su intervalo de confianza del 95 % (Wilson) y los aciertos por campo.
+Las reglas están en `app/interpretacion/evaluacion.py`; el formato, en
+`evaluacion/consultas_ejemplo.json` (ejemplos que no cuentan para H2).
 
 Las 50 consultas deben recogerse de personas reales y anotarse a mano **sin mirar lo que
 responde el intérprete**; de lo contrario, el resultado de H2 quedaría sesgado.

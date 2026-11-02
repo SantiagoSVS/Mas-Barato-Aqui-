@@ -133,9 +133,13 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 |---|---|---|
 | Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
 | Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna |
-| Amazon | Pendiente | — |
+| Amazon | No se integra por ahora (ver abajo) | — |
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
+
+**Amazon** sigue en los documentos del proyecto, pero no se integra mientras sea un proyecto de
+grado y no un negocio: su acceso (API para afiliados) es complejo. La conversión de dólares a
+pesos con la TRM ya está lista por si se integra más adelante.
 
 **Mercado Libre:** por cada identificador del catálogo toma las publicaciones nuevas del
 producto (`/products/{id}/items`) y cotiza el envío y la fecha de entrega hacia la ciudad

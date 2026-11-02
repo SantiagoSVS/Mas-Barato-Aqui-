@@ -34,7 +34,8 @@ def _falabella(cliente: ClienteHttp, configuracion: Configuracion) -> Conector |
     return ConectorFalabella(cliente)  # no necesita credenciales
 
 
-# PENDIENTE: Amazon, cuando esté definido su acceso.
+# Amazon no se integra mientras el proyecto sea de grado (decisión del 1 de noviembre de 2026):
+# su acceso es complejo. Sigue en los documentos, y la conversión USD→COP (TRM) queda lista.
 CONECTORES: dict[str, FabricaConector] = {
     ConectorMercadoLibre.nombre_plataforma: _mercadolibre,
     ConectorFalabella.nombre_plataforma: _falabella,

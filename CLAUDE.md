@@ -35,7 +35,7 @@ Aplicación **web responsiva** (primero móvil) que:
 | Núcleo del MVP, se integran primero | **Amazon, Mercado Libre, Falabella** | Mínimo exigido: 3 tiendas funcionando. Si una bloquea el acceso, se reemplaza por una de las otras cuatro. |
 | Después, según acceso a datos | Éxito, Alkosto, Alkomprar, Homecenter | |
 
-**Amazon** despacha desde EE. UU.: el precio viene en dólares y se convierte a pesos con la tasa de cambio del día de la captura (guardar la tasa usada). Su envío `E` incluye el envío internacional y el depósito estimado de impuestos de importación cuando Amazon los muestra antes del pago. Amazon limita la extracción automatizada: intentar su API para afiliados.
+**Amazon queda por fuera mientras sea proyecto de grado** (decisión de Santiago, 1 nov 2026): su acceso es complejo. No se integra, pero tampoco se borra de los documentos. Datos para cuando se integre: **Amazon** despacha desde EE. UU.: el precio viene en dólares y se convierte a pesos con la tasa de cambio del día de la captura (guardar la tasa usada). Su envío `E` incluye el envío internacional y el depósito estimado de impuestos de importación cuando Amazon los muestra antes del pago. Amazon limita la extracción automatizada: intentar su API para afiliados.
 
 ## Fórmula de costo (sección 7 del documento de arquitectura)
 

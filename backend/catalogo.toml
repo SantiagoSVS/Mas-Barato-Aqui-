@@ -9,8 +9,11 @@
 #   python -m app.herramientas.buscar_mercadolibre --id MCO12345678
 #
 # Falabella: el identificador es el número de la dirección /falabella-co/product/73447854/...
+# Homecenter: igual, el número de /homecenter-co/product/733184/...
 #
-# PENDIENTE: definir el catálogo real. Estos dos productos se verificaron el 1 de noviembre de
+# Un producto puede tener varios identificadores en una tienda (varios vendedores).
+#
+# PENDIENTE: definir el catálogo real. Estos productos se verificaron el 1 de noviembre de
 # 2026 y sirven para probar la captura de punta a punta.
 
 [[producto]]
@@ -29,3 +32,23 @@ marca = "Kalley"
 [producto.ids]
 mercadolibre = ["MCO47798002"]
 falabella = ["127694748"]
+
+[[producto]]
+nombre = "Freidora de aire Oster DiamondForce 4 litros manual"
+categoria = "hogar"
+marca = "Oster"
+modelo = "CKSTAF401MDF"
+[producto.ids]
+mercadolibre = ["MCO44586784"]
+falabella = ["158476198", "158167576", "158167350"]
+homecenter = ["733184"]
+
+[[producto]]
+nombre = "Freidora de aire Imusa Easy Fry Max 5 litros mecánica"
+categoria = "hogar"
+marca = "Imusa"
+modelo = "Easy Fry Max"
+[producto.ids]
+mercadolibre = ["MCO51012616"]
+falabella = ["73338973"]
+homecenter = ["3002404"]

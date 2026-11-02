@@ -12,8 +12,10 @@ El contexto completo del proyecto está en [`CLAUDE.md`](CLAUDE.md) y en [`docs/
 backend/              API (FastAPI), worker, modelos, migraciones y pruebas (pytest)
   app/                código de la API
     extraccion/       conectores por tienda, cliente HTTP respetuoso, normalización, TRM
+    interpretacion/   intérprete de consultas: esquema, validación, proveedores, evaluación H2
     worker/           worker de captura programada (APScheduler)
-  catalogo.toml       términos que el worker busca en cada tienda
+  catalogo.toml       productos que el worker captura y sus identificadores por tienda
+  evaluacion/         consultas anotadas para medir la exactitud del intérprete (H2)
   migraciones/        migraciones de la base de datos (Alembic)
   pruebas/            pruebas unitarias y de integración
 frontend/             interfaz web (React + Vite)
@@ -127,6 +129,54 @@ internet: las tiendas y la TRM se reemplazan por dobles de prueba y respuestas g
 En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 (`.github/workflows/pruebas.yml`).
 
+## Interpretación de consultas
+
+El intérprete convierte una consulta en lenguaje coloquial en criterios estructurados
+(sección 5.3). Para verlo funcionar:
+
+```powershell
+python -m app.herramientas.interpretar "busco un celular Samsung gama media por menos de 800 mil"
+```
+
+- **Seguridad:** la consulta se limpia y se limita a 300 caracteres antes de llegar al modelo.
+  La respuesta se valida contra el esquema y se trata como dato, nunca se ejecuta.
+- **Si la respuesta no cumple el esquema,** se reintenta una vez; si vuelve a fallar, se pide
+  aclaración al usuario. También se pide aclaración, por reglas propias, cuando no hay producto
+  o la confianza es menor que `INTERPRETE_CONFIANZA_MINIMA`.
+- **Proveedores** (`INTERPRETE_PROVEEDOR`):
+  - `anthropic`: Claude, el proveedor real elegido el 1 de noviembre de 2026. Necesita
+    `ANTHROPIC_API_KEY` en `.env`. El modelo se elige con `INTERPRETE_MODELO` (por defecto
+    `claude-opus-5-5`; `claude-haiku-5-5` es mucho más barato) y se usa con esfuerzo bajo,
+    porque extraer criterios es una tarea simple.
+  - `falso` (por defecto): reglas simples, sin clave de API ni costo. Sirve para desarrollar y
+    probar; entiende pocas palabras (en las 50 consultas anotadas acierta 0 de 50).
+
+### Medir H2 (exactitud de la interpretación)
+
+```powershell
+python -m app.herramientas.evaluar_interprete --detalle
+python -m app.herramientas.evaluar_interprete --csv resultados_h2.csv
+```
+
+Lee `backend/evaluacion/consultas_anotadas.json` (las 50 consultas anotadas por Santiago) y
+compara cada interpretación con su anotación. Convención de H2 (2 de noviembre de 2026):
+
+- **Campos relevantes:** producto, marca, modelo, precio máximo, prioridad y si requiere
+  aclaración, que son los que usan la búsqueda y la recomendación. Una consulta es correcta si
+  coinciden todos.
+- **Producto y modelo:** equivalentes si las palabras de uno contienen las del otro, sin
+  importar mayúsculas, tildes ni plural ("monitor" = "monitor gamer"). **Marca:** el mismo texto.
+- **Atributos:** no entran en H2, porque sus claves dependen de cómo redacta quien anota. Se
+  reportan aparte, comparando solo sus valores. También se reporta la medida estricta (todo
+  idéntico) para transparencia.
+
+Reporta la exactitud con su intervalo de confianza del 95 % (Wilson) y los aciertos por campo.
+Las reglas están en `app/interpretacion/evaluacion.py`; el formato, en
+`evaluacion/consultas_ejemplo.json` (ejemplos que no cuentan para H2).
+
+Las 50 consultas deben recogerse de personas reales y anotarse a mano **sin mirar lo que
+responde el intérprete**; de lo contrario, el resultado de H2 quedaría sesgado.
+
 ## Tiendas integradas
 
 | Tienda | Acceso | Configuración en `.env` |
@@ -193,7 +243,7 @@ Nada más cambia (RNF-06).
 |---|---|---|
 | 0. Base del proyecto | 31 oct – 2 nov 2026 | Terminado (31 oct) |
 | 1. Extracción de datos | 31 oct – 13 nov | Terminado (1 nov): Mercado Libre, Falabella y Homecenter |
-| 2. Interpretación PLN | 7 – 20 nov | Pendiente |
+| 2. Interpretación PLN | 7 – 20 nov | En curso: falta medir H2 con el proveedor real |
 | 3. Costo total y recomendación | 14 – 27 nov | Pendiente |
 | 4. Historial de precios | 21 nov – 4 dic | Pendiente |
 | 5. Interfaz e integración | 28 nov – 11 dic | Pendiente |

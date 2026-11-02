@@ -52,3 +52,62 @@ modelo = "Easy Fry Max"
 mercadolibre = ["MCO51012616"]
 falabella = ["73338973"]
 homecenter = ["3002404"]
+
+# --- Productos de la lista de Santiago (2 de noviembre de 2026), verificados con los conectores.
+# Cada producto se define por modelo: los colores de un mismo modelo se agrupan.
+
+[[producto]]
+nombre = "Audífonos Xiaomi Redmi Buds 8 Lite"
+categoria = "tecnologia"
+marca = "Xiaomi"
+modelo = "Redmi Buds 8 Lite"
+[producto.ids]
+mercadolibre = ["MCO63135410", "MCO62995693"]
+falabella = ["73530552"]
+homecenter = ["3075293"]
+
+[[producto]]
+nombre = "Celular Xiaomi Redmi Note 15 4G 256 GB 8 GB RAM"
+categoria = "tecnologia"
+marca = "Xiaomi"
+modelo = "Redmi Note 15 4G"
+# Homecenter (3084005) no indica si es 4G o 5G: se omite hasta confirmarlo
+[producto.ids]
+mercadolibre = ["MCO69622520", "MCO64361840"]
+
+[[producto]]
+nombre = "Reloj inteligente Xiaomi Redmi Watch 6 Active"
+categoria = "tecnologia"
+marca = "Xiaomi"
+modelo = "Redmi Watch 6 Active"
+[producto.ids]
+mercadolibre = ["MCO76818379", "MCO78296359", "MCO77168313", "MCO78291260"]
+falabella = ["157087050", "158615248", "157017522"]
+homecenter = ["3117099"]
+
+[[producto]]
+nombre = "Protector solar ISDIN Fusion Water Magic SPF50 50 ml"
+categoria = "belleza"
+marca = "ISDIN"
+modelo = "Fusion Water Magic SPF50"
+[producto.ids]
+mercadolibre = ["MCO26916726"]
+falabella = ["72757444", "151926697"]
+
+[[producto]]
+nombre = "Power bank Xiaomi Magnetic Ultrathin 5000 mAh 15 W"
+categoria = "tecnologia"
+marca = "Xiaomi"
+modelo = "Magnetic Power Bank Ultrathin 5000 mAh"
+# Homecenter (3082610) no dice "Ultrathin" y su precio es muy distinto: se omite hasta confirmarlo
+[producto.ids]
+mercadolibre = ["MCO66567077", "MCO73011931"]
+
+[[producto]]
+nombre = "Robot aspirador Eureka NER650"
+categoria = "hogar"
+marca = "Eureka"
+modelo = "NER650"
+[producto.ids]
+mercadolibre = ["MCO28453977"]
+homecenter = ["3018343"]

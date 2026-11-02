@@ -1,0 +1,70 @@
+{
+  "descripcion": "EJEMPLO DE FORMATO, no es el conjunto de evaluación. Son las consultas de ejemplo de los mockups y del documento, anotadas para probar el script. Las 50 consultas de H2 deben recogerse de personas reales y anotarse a mano en evaluacion/consultas_anotadas.json, sin mirar lo que responde el intérprete.",
+  "consultas": [
+    {
+      "id": "E01",
+      "consulta": "Busco un celular Samsung gama media por menos de 800 mil pesos",
+      "esperado": {
+        "producto": "celular",
+        "marca": "Samsung",
+        "modelo": null,
+        "atributos": {"gama": "media"},
+        "precio_max_cop": 800000,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "E02",
+      "consulta": "Freidora de aire de 5 litros, que llegue rápido",
+      "esperado": {
+        "producto": "freidora de aire",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"capacidad": "5 L"},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "E03",
+      "consulta": "Tenis Adidas para correr talla 42",
+      "esperado": {
+        "producto": "tenis",
+        "marca": "Adidas",
+        "modelo": null,
+        "atributos": {"talla": "42", "uso": "correr"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "E04",
+      "consulta": "Portátil para la universidad, máximo 2 millones",
+      "esperado": {
+        "producto": "portátil",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"uso": "universidad"},
+        "precio_max_cop": 2000000,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "E05",
+      "consulta": "algo bueno y barato",
+      "esperado": {
+        "producto": null,
+        "marca": null,
+        "modelo": null,
+        "atributos": {},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    }
+  ]
+}

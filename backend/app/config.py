@@ -58,6 +58,9 @@ class Configuracion(BaseSettings):
     # esta proporción (0.05 = 5 %). Valor inicial: el documento no lo fija; ajustar con usuarios.
     historial_umbral_cercania: float = Field(default=0.05, ge=0, le=1)
 
+    # Seguridad (sección 9): consultas por minuto desde una misma IP. Valor inicial.
+    limite_consultas_por_minuto: int = Field(default=20, ge=1)
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

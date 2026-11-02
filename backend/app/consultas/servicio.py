@@ -21,7 +21,7 @@ from app.config import Configuracion
 from app.consultas.busqueda import buscar_productos, ofertas_vigentes, plataformas_activas
 from app.costo.motor import OfertaCalculada, explicar, ordenar, url_de_compra
 from app.interpretacion.esquema import CriteriosConsulta, Prioridad
-from app.interpretacion.interprete import Interprete
+from app.interpretacion.interprete import Interprete, limpiar_consulta
 from app.modelos import Consulta, Producto, Recomendacion
 
 AVISO_COSTO = (
@@ -148,10 +148,21 @@ def resolver_consulta(
     texto: str,
     prioridad_elegida: Prioridad | None,
     configuracion: Configuracion,
+    criterios_editados: CriteriosConsulta | None = None,
 ) -> RespuestaConsulta:
+    """Resuelve una consulta. Si el usuario corrigió los criterios en P2 (criterios_editados),
+    se usan esos y no se llama al modelo de lenguaje: no consume tokens."""
     inicio = time.perf_counter()
-    interpretacion = interprete.interpretar(texto)  # ErrorConsulta / ErrorProveedor suben a la API
-    criterios = interpretacion.criterios
+    if criterios_editados is None:
+        interpretacion = interprete.interpretar(texto)  # ErrorConsulta / ErrorProveedor suben a la API
+        texto_limpio, criterios = interpretacion.consulta, interpretacion.criterios
+        tokens = interpretacion.tokens_entrada + interpretacion.tokens_salida
+    else:
+        texto_limpio, tokens = limpiar_consulta(texto), 0
+        # Criterios confirmados por el usuario: solo falta aclarar si no dijo qué producto busca
+        criterios = criterios_editados.model_copy(
+            update={"confianza": 1.0, "requiere_aclaracion": not criterios_editados.producto}
+        )
     prioridad = prioridad_elegida or criterios.prioridad
 
     estado: Literal["resultados", "requiere_aclaracion", "sin_cobertura"]
@@ -171,11 +182,11 @@ def resolver_consulta(
             otros = [ProductoResumen(id=e.producto.id, nombre=e.producto.nombre_canonico) for e in encontrados[1:]]
 
     consulta = Consulta(
-        texto_original=interpretacion.consulta,
+        texto_original=texto_limpio,
         criterios=criterios.model_dump(),
         confianza=criterios.confianza,
         tiempo_respuesta_ms=round((time.perf_counter() - inicio) * 1000),
-        tokens_consumidos=interpretacion.tokens_entrada + interpretacion.tokens_salida,
+        tokens_consumidos=tokens,
         con_cobertura=con_cobertura,
     )
     sesion.add(consulta)

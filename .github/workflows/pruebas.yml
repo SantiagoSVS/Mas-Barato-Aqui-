@@ -1,5 +1,5 @@
-# Corre las pruebas del backend en cada Pull Request y en cada push a main.
-# Deja en GitHub la evidencia de que cada incremento pasa sus pruebas.
+# Corre las pruebas del backend (pytest) y de la interfaz (Cypress) en cada Pull Request y en
+# cada push a main. Deja en GitHub la evidencia de que cada incremento pasa sus pruebas.
 name: Pruebas
 
 on:
@@ -54,3 +54,47 @@ jobs:
 
       - name: Pruebas
         run: pytest
+
+  interfaz:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar
+        run: npm run build
+
+      # La API se simula con las respuestas de cypress/fixtures: no hace falta el backend.
+      # Se sirve la compilación con "vite preview" y se espera a que responda antes de Cypress.
+      - name: Servir la interfaz
+        run: |
+          npx vite preview --host 127.0.0.1 --port 5173 --strictPort > preview.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:5173 > /dev/null && exit 0
+            sleep 1
+          done
+          echo "La interfaz no respondió"; cat preview.log; exit 1
+
+      - name: Pruebas E2E (Cypress)
+        run: npx cypress run
+        env:
+          CYPRESS_BASE_URL: http://127.0.0.1:5173
+
+      - name: Guardar capturas de las pruebas fallidas
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-capturas
+          path: frontend/cypress/screenshots
+          if-no-files-found: ignore

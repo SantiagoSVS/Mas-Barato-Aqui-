@@ -30,6 +30,7 @@ def test_ejemplo_del_documento() -> None:
         ("portátil máximo 2 millones", 2_000_000),
         ("televisor hasta $1.500.000", 1_500_000),
         ("tenis que no pase de 250k", 250_000),
+        ("audífonos que no pasen de 150 mil", 150_000),
         ("celular hasta 1'200.000", 1_200_000),
         ("nevera presupuesto de 1,5 millones", 1_500_000),
         ("televisor máximo millón y medio", 1_500_000),

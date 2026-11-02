@@ -114,10 +114,34 @@ npm install                                  # solo la primera vez
 npm run dev
 ```
 
-Abre <http://localhost:5173>. Debe decir "Servicio funcionando". Las llamadas a `/api/...` se
-reenvían al backend del puerto 8000.
+Abre <http://localhost:5173>. Las llamadas a `/api/...` se reenvían al backend del puerto 8000,
+así que la API debe estar corriendo (paso 3).
+
+La interfaz sigue los mockups (`docs/mockups`), primero móvil:
+
+| Ruta | Pantalla |
+|---|---|
+| `/` | P1 Búsqueda |
+| `/criterios` | P2 Interpretación y aclaración (permite corregir los criterios) |
+| `/resultados` | P3 Resultados: recomendada, alternativas (tabla en escritorio) y ofertas con envío por confirmar |
+| `/productos/{id}/historial` | P4 Historial con gráfico (Recharts) |
+| `/sin-cobertura` | Producto fuera del catálogo (RF-13) |
 
 ## Pruebas
+
+### Interfaz (Cypress)
+
+```powershell
+cd frontend
+npm run dev          # en una terminal
+npm run e2e          # en otra: corre las pruebas sin abrir el navegador
+npm run e2e:abrir    # o ábrelas en el panel interactivo de Cypress
+```
+
+Las pruebas simulan la API con respuestas reales guardadas en `frontend/cypress/fixtures`, así
+no dependen de los precios del día ni de que el backend esté encendido.
+
+### Backend (pytest)
 
 ```powershell
 cd backend
@@ -287,4 +311,4 @@ Nada más cambia (RNF-06).
 | 2. Interpretación PLN | 7 – 20 nov | Terminado (2 nov); H2 con Claude en la Fase 4 |
 | 3. Costo total y recomendación | 14 – 27 nov | Terminado (2 nov) |
 | 4. Historial de precios | 21 nov – 4 dic | Terminado (2 nov) |
-| 5. Interfaz e integración | 28 nov – 11 dic | Pendiente |
+| 5. Interfaz e integración | 28 nov – 11 dic | En curso: P1–P4 y E2E listos |

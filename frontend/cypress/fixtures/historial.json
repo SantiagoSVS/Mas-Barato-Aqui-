@@ -1,0 +1,82 @@
+{
+  "producto_id": 3,
+  "producto": "Freidora de aire Oster DiamondForce 4 litros manual",
+  "periodo": "3M",
+  "desde": "2026-08-04",
+  "hasta": "2026-11-02",
+  "datos_desde": "2026-11-01",
+  "series": [
+    {
+      "plataforma": "Falabella",
+      "puntos": [
+        {
+          "fecha": "2026-11-01",
+          "precio_min_cop": 249900
+        },
+        {
+          "fecha": "2026-11-02",
+          "precio_min_cop": 249900
+        }
+      ]
+    },
+    {
+      "plataforma": "Homecenter",
+      "puntos": [
+        {
+          "fecha": "2026-11-01",
+          "precio_min_cop": 238900
+        },
+        {
+          "fecha": "2026-11-02",
+          "precio_min_cop": 238900
+        }
+      ]
+    },
+    {
+      "plataforma": "Mercado Libre",
+      "puntos": [
+        {
+          "fecha": "2026-11-01",
+          "precio_min_cop": 224175
+        },
+        {
+          "fecha": "2026-11-02",
+          "precio_min_cop": 224175
+        }
+      ]
+    }
+  ],
+  "resumen": [
+    {
+      "plataforma": "Falabella",
+      "precio_actual_cop": 249900,
+      "minimo_periodo_cop": 249900,
+      "fecha_minimo": "2026-11-01",
+      "en_su_minimo": true
+    },
+    {
+      "plataforma": "Homecenter",
+      "precio_actual_cop": 238900,
+      "minimo_periodo_cop": 238900,
+      "fecha_minimo": "2026-11-01",
+      "en_su_minimo": true
+    },
+    {
+      "plataforma": "Mercado Libre",
+      "precio_actual_cop": 224175,
+      "minimo_periodo_cop": 224175,
+      "fecha_minimo": "2026-11-01",
+      "en_su_minimo": true
+    }
+  ],
+  "indicador": {
+    "plataforma": "Mercado Libre",
+    "precio_actual_cop": 224175,
+    "minimo_periodo_cop": 224175,
+    "diferencia_cop": 0,
+    "cerca_del_minimo": true,
+    "mensaje": "En Mercado Libre, la opción recomendada, está en su precio más bajo desde el 1 de noviembre."
+  },
+  "ultima_captura": "2026-11-02T16:27:13.965835Z",
+  "nota": "Precio del producto sin envío."
+}

@@ -36,6 +36,13 @@ class Configuracion(BaseSettings):
     mercadolibre_ciudad_destino: str = "TUNPQ01FRGRjNjc4"
     mercadolibre_ofertas_por_producto: int = 5
 
+    # Interpretación de consultas. "falso" funciona con reglas, sin clave de API; el proveedor
+    # real del modelo de lenguaje se agrega cuando se elija (sección 4, decisión pendiente).
+    interprete_proveedor: str = "falso"
+    # Por debajo de esta confianza se pide aclaración. Valor inicial: calibrar con las 50
+    # consultas anotadas (H2).
+    interprete_confianza_minima: float = 0.5
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

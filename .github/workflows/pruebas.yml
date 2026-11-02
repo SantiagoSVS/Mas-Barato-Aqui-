@@ -75,11 +75,15 @@ jobs:
       - name: Compilar
         run: npm run build
 
-      # La API se simula con las respuestas de cypress/fixtures: no hace falta el backend
+      # La API se simula con las respuestas de cypress/fixtures: no hace falta el backend.
+      # En el runner "localhost" puede resolver a IPv6 (::1); se fija 127.0.0.1 para Vite y Cypress.
       - name: Pruebas E2E (Cypress)
         uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_BASE_URL: http://127.0.0.1:5173
         with:
           working-directory: frontend
           install: false
-          start: npm run dev
-          wait-on: http://localhost:5173
+          start: npm run dev -- --host 127.0.0.1 --strictPort
+          wait-on: http://127.0.0.1:5173
+          wait-on-timeout: 120

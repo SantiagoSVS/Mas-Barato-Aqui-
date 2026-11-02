@@ -142,6 +142,8 @@ Los cinco incrementos se terminaron y fusionaron en `main` entre el 31 oct y el 
 
 ## Fase 4 (pendiente)
 
+Materiales en `docs/fase4/` (protocolo, consentimiento, cuestionarios, auditoría H3); análisis en `backend/app/validacion/` con las herramientas `analizar_pruebas_usuarios` y `auditoria_precios`. Captura programada con `scripts/programar_captura.ps1`.
+
 - **H2:** medir el intérprete con Claude sobre `backend/evaluacion/consultas_anotadas.json` (necesita `ANTHROPIC_API_KEY`; cuesta tokens, pedir aprobación antes). Convención: campos relevantes producto, marca, modelo, precio_max_cop, prioridad y requiere_aclaracion; producto y modelo por contención de palabras; atributos aparte; se reporta también la medida estricta e intervalo de Wilson.
 - **H3:** auditoría manual de 100 pares producto–tienda contra la página real.
 - Dejar el worker capturando a diario para que el historial crezca.

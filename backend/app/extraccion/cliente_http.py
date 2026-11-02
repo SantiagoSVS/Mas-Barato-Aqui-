@@ -1,7 +1,8 @@
 """Cliente HTTP para extraer datos de forma respetuosa (sección 5.1 y marco legal).
 
 - Se identifica con un User-Agent propio.
-- Respeta robots.txt (RFC 9309) en las páginas web.
+- Respeta robots.txt (RFC 9309) en las páginas web, incluidos los comodines * y $. Se usa
+  Protego porque urllib.robotparser de Python no los entiende.
 - Espera un intervalo mínimo entre peticiones al mismo dominio.
 - No envía credenciales ni cookies de sesión: nunca accede a contenido detrás de autenticación.
 
@@ -12,11 +13,13 @@ peticiones se marcan con es_api_oficial=True.
 import time
 from collections.abc import Callable
 from urllib.parse import urlsplit
-from urllib.robotparser import RobotFileParser
 
 import requests
+from protego import Protego
 
 from app.extraccion.conector import ErrorConector
+
+_PROHIBIR_TODO = "User-agent: *\nDisallow: /\n"
 
 
 class AccesoNoPermitido(ErrorConector):
@@ -48,7 +51,7 @@ class ClienteHttp:
         self._reloj = reloj
         self._dormir = dormir
         self._ultima_peticion: dict[str, float] = {}
-        self._robots: dict[str, RobotFileParser] = {}
+        self._robots: dict[str, Protego] = {}
 
     def get(
         self,
@@ -115,26 +118,22 @@ class ClienteHttp:
         dominio = partes.netloc
         if dominio not in self._robots:
             self._robots[dominio] = self._leer_robots(f"{partes.scheme}://{dominio}/robots.txt")
-        return self._robots[dominio].can_fetch(self.user_agent, url)
+        return self._robots[dominio].can_fetch(url, self.user_agent)
 
-    def _leer_robots(self, url_robots: str) -> RobotFileParser:
+    def _leer_robots(self, url_robots: str) -> Protego:
         """Lee robots.txt siguiendo la RFC 9309, sección 2.3.1:
 
         - 2xx: se aplican sus reglas.
         - 4xx: no hay restricciones (el archivo no existe).
         - 5xx o sin respuesta: se asume que todo está prohibido.
         """
-        robots = RobotFileParser(url_robots)
         try:
             respuesta = self._pedir(url_robots)
         except ErrorConector:
-            robots.disallow_all = True
-            return robots
+            return Protego.parse(_PROHIBIR_TODO)
 
         if 200 <= respuesta.status_code < 300:
-            robots.parse(respuesta.text.splitlines())
-        elif 400 <= respuesta.status_code < 500:
-            robots.allow_all = True
-        else:
-            robots.disallow_all = True
-        return robots
+            return Protego.parse(respuesta.text)
+        if 400 <= respuesta.status_code < 500:
+            return Protego.parse("")
+        return Protego.parse(_PROHIBIR_TODO)

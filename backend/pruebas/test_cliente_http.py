@@ -103,3 +103,17 @@ def test_respuesta_de_error_se_convierte_en_error_de_conector() -> None:
 
     with pytest.raises(ErrorConector):
         cliente.get("https://api.example/a", es_api_oficial=True)
+
+
+def test_respeta_comodines_de_robots() -> None:
+    # urllib.robotparser no entiende * ni $; la RFC 9309 sí los exige
+    robots = "User-agent: *\nDisallow: */search?\nDisallow: /*.pdf$\n"
+    cliente, _ = crear_cliente(
+        {ROBOTS: RespuestaFalsa(200, robots), "https://tienda.example/producto/1": RespuestaFalsa(200, "ok")}
+    )
+
+    assert cliente.get("https://tienda.example/producto/1").text == "ok"
+    with pytest.raises(AccesoNoPermitido):
+        cliente.get("https://tienda.example/tienda-co/search?q=freidora")
+    with pytest.raises(AccesoNoPermitido):
+        cliente.get("https://tienda.example/manual.pdf")

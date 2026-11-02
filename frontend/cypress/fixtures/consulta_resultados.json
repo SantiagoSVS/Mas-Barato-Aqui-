@@ -1,0 +1,164 @@
+{
+  "consulta_id": 14,
+  "estado": "resultados",
+  "criterios": {
+    "producto": "freidora de aire",
+    "marca": "Oster",
+    "modelo": null,
+    "atributos": {},
+    "precio_max_cop": 230000,
+    "prioridad": "costo_total",
+    "confianza": 0.9,
+    "requiere_aclaracion": false
+  },
+  "comparacion": {
+    "producto": {
+      "id": 3,
+      "nombre": "Freidora de aire Oster DiamondForce 4 litros manual"
+    },
+    "prioridad": "costo_total",
+    "w": 0,
+    "recomendada": {
+      "plataforma": "Mercado Libre",
+      "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l Ckstaf401mdf",
+      "vendedor": "242115593",
+      "precio_cop": 224175,
+      "envio_cop": 0,
+      "dias_entrega": 1,
+      "costo_total_cop": 224175,
+      "costo_ajustado_cop": 224175,
+      "supera_presupuesto": false,
+      "capturado_en": "2026-11-02T16:27:13.961838Z",
+      "url": "https://articulo.mercadolibre.com.co/MCO-2837589210"
+    },
+    "explicacion": "es $24.625 más barata que la siguiente opción al sumar el envío.",
+    "alternativas": [
+      {
+        "plataforma": "Mercado Libre",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l Ckstaf401mdf",
+        "vendedor": "3227728534",
+        "precio_cop": 248800,
+        "envio_cop": 0,
+        "dias_entrega": 2,
+        "costo_total_cop": 248800,
+        "costo_ajustado_cop": 248800,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:27:13.962863Z",
+        "url": "https://articulo.mercadolibre.com.co/MCO-1843888887"
+      },
+      {
+        "plataforma": "Mercado Libre",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l Ckstaf401mdf",
+        "vendedor": "1852140037",
+        "precio_cop": 259900,
+        "envio_cop": 0,
+        "dias_entrega": 3,
+        "costo_total_cop": 259900,
+        "costo_ajustado_cop": 259900,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:27:13.963844Z",
+        "url": "https://articulo.mercadolibre.com.co/MCO-1700001951"
+      },
+      {
+        "plataforma": "Mercado Libre",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l Ckstaf401mdf",
+        "vendedor": "1791981504",
+        "precio_cop": 259920,
+        "envio_cop": 0,
+        "dias_entrega": 1,
+        "costo_total_cop": 259920,
+        "costo_ajustado_cop": 259920,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:27:13.964860Z",
+        "url": "https://articulo.mercadolibre.com.co/MCO-2765514434"
+      },
+      {
+        "plataforma": "Mercado Libre",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l Ckstaf401mdf",
+        "vendedor": "1365012555",
+        "precio_cop": 261300,
+        "envio_cop": 0,
+        "dias_entrega": 7,
+        "costo_total_cop": 261300,
+        "costo_ajustado_cop": 261300,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:27:13.965835Z",
+        "url": "https://articulo.mercadolibre.com.co/MCO-4449601116"
+      }
+    ],
+    "sin_costo_completo": [
+      {
+        "plataforma": "Homecenter",
+        "titulo": "Freidora de Aire Manual Oster Recubrimiento DiamondForce 4 Litros de Capacidad, con Controles de Tiempo y Temperatura",
+        "vendedor": "Homecenter",
+        "precio_cop": 238900,
+        "envio_cop": null,
+        "dias_entrega": null,
+        "costo_total_cop": null,
+        "costo_ajustado_cop": null,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:25:30.554949Z",
+        "url": "https://www.homecenter.com.co/homecenter-co/product/733184"
+      },
+      {
+        "plataforma": "Falabella",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l",
+        "vendedor": "AQUISHOPCO",
+        "precio_cop": 249900,
+        "envio_cop": null,
+        "dias_entrega": null,
+        "costo_total_cop": null,
+        "costo_ajustado_cop": null,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:24:48.493998Z",
+        "url": "https://www.falabella.com.co/falabella-co/product/158476198"
+      },
+      {
+        "plataforma": "Falabella",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l",
+        "vendedor": "AQUISHOPCO",
+        "precio_cop": 249900,
+        "envio_cop": null,
+        "dias_entrega": null,
+        "costo_total_cop": null,
+        "costo_ajustado_cop": null,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:24:48.493998Z",
+        "url": "https://www.falabella.com.co/falabella-co/product/158167576"
+      },
+      {
+        "plataforma": "Falabella",
+        "titulo": "Freidora De Aire Manual Oster, Diamondforce, 4l",
+        "vendedor": "AQUISHOP",
+        "precio_cop": 249900,
+        "envio_cop": null,
+        "dias_entrega": null,
+        "costo_total_cop": null,
+        "costo_ajustado_cop": null,
+        "supera_presupuesto": true,
+        "capturado_en": "2026-11-02T16:24:48.496044Z",
+        "url": "https://www.falabella.com.co/falabella-co/product/158167350"
+      }
+    ],
+    "tiendas": {
+      "consultadas": [
+        "Falabella",
+        "Homecenter",
+        "Mercado Libre"
+      ],
+      "con_resultados": [
+        "Falabella",
+        "Homecenter",
+        "Mercado Libre"
+      ],
+      "sin_producto": []
+    },
+    "notas_envio": {
+      "Falabella": "Falabella anuncia envío gratis desde $149.000, pero no aplica a todos los productos. El costo de envío se conoce al pagar en Falabella.",
+      "Homecenter": "Homecenter calcula el envío cuando eliges la dirección de entrega; algunos productos lo anuncian gratis. El costo de envío se conoce al pagar en Homecenter."
+    },
+    "avisos": [],
+    "aviso_costo": "Costo estimado: no incluye impuestos, descuentos por medio de pago ni promociones que la tienda aplica al pagar."
+  },
+  "otros_productos": []
+}

@@ -1,0 +1,16 @@
+{
+  "consulta_id": 16,
+  "estado": "requiere_aclaracion",
+  "criterios": {
+    "producto": null,
+    "marca": null,
+    "modelo": null,
+    "atributos": {},
+    "precio_max_cop": null,
+    "prioridad": "costo_total",
+    "confianza": 0.2,
+    "requiere_aclaracion": true
+  },
+  "comparacion": null,
+  "otros_productos": []
+}

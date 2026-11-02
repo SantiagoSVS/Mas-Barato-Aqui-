@@ -1,5 +1,5 @@
-# Corre las pruebas del backend en cada Pull Request y en cada push a main.
-# Deja en GitHub la evidencia de que cada incremento pasa sus pruebas.
+# Corre las pruebas del backend (pytest) y de la interfaz (Cypress) en cada Pull Request y en
+# cada push a main. Deja en GitHub la evidencia de que cada incremento pasa sus pruebas.
 name: Pruebas
 
 on:
@@ -54,3 +54,32 @@ jobs:
 
       - name: Pruebas
         run: pytest
+
+  interfaz:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar
+        run: npm run build
+
+      # La API se simula con las respuestas de cypress/fixtures: no hace falta el backend
+      - name: Pruebas E2E (Cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          install: false
+          start: npm run dev
+          wait-on: http://localhost:5173

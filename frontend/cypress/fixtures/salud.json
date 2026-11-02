@@ -1,0 +1,48 @@
+{
+  "estado": "ok",
+  "base_de_datos": "ok",
+  "plataformas": [
+    {
+      "nombre": "Falabella",
+      "activa": true,
+      "nota_envio": "Falabella anuncia envío gratis desde $149.000, pero no aplica a todos los productos. El costo de envío se conoce al pagar en Falabella.",
+      "ultima_captura": "2026-11-02T16:25:23.276680Z",
+      "ultima_ejecucion": {
+        "estado": "exitosa",
+        "iniciada_en": "2026-11-02T16:24:22.523619Z",
+        "terminada_en": "2026-11-02T16:25:23.281191Z",
+        "ofertas_capturadas": 12,
+        "errores": 0,
+        "mensaje_error": null
+      }
+    },
+    {
+      "nombre": "Homecenter",
+      "activa": true,
+      "nota_envio": "Homecenter calcula el envío cuando eliges la dirección de entrega; algunos productos lo anuncian gratis. El costo de envío se conoce al pagar en Homecenter.",
+      "ultima_captura": "2026-11-02T16:25:48.513313Z",
+      "ultima_ejecucion": {
+        "estado": "exitosa",
+        "iniciada_en": "2026-11-02T16:25:23.288035Z",
+        "terminada_en": "2026-11-02T16:25:48.515313Z",
+        "ofertas_capturadas": 5,
+        "errores": 0,
+        "mensaje_error": null
+      }
+    },
+    {
+      "nombre": "Mercado Libre",
+      "activa": true,
+      "nota_envio": null,
+      "ultima_captura": "2026-11-02T16:34:03.945436Z",
+      "ultima_ejecucion": {
+        "estado": "exitosa",
+        "iniciada_en": "2026-11-02T16:25:48.519312Z",
+        "terminada_en": "2026-11-02T16:34:03.948438Z",
+        "ofertas_capturadas": 67,
+        "errores": 0,
+        "mensaje_error": null
+      }
+    }
+  ]
+}

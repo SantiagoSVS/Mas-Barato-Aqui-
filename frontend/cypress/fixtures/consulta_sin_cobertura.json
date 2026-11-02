@@ -1,0 +1,18 @@
+{
+  "consulta_id": 15,
+  "estado": "sin_cobertura",
+  "criterios": {
+    "producto": "tenis",
+    "marca": "Adidas",
+    "modelo": null,
+    "atributos": {
+      "talla": "42"
+    },
+    "precio_max_cop": null,
+    "prioridad": "costo_total",
+    "confianza": 0.9,
+    "requiere_aclaracion": false
+  },
+  "comparacion": null,
+  "otros_productos": []
+}

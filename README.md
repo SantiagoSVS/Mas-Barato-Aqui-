@@ -15,6 +15,7 @@ backend/              API (FastAPI), worker, modelos, migraciones y pruebas (pyt
     interpretacion/   intérprete de consultas: esquema, validación, proveedores, evaluación H2
     costo/            motor de costo total CT/CA y recomendación (sección 7)
     consultas/        búsqueda en el catálogo y resolución de consultas (POST /consultas)
+    historial/        historial de precios y mínimo histórico (GET /productos/{id}/historial)
     worker/           worker de captura programada (APScheduler)
   catalogo.toml       productos que el worker captura y sus identificadores por tienda
   evaluacion/         consultas anotadas para medir la exactitud del intérprete (H2)
@@ -155,6 +156,20 @@ Motor de costo (`app/costo/motor.py`), determinístico y sin modelo de lenguaje:
   con su precio y el aviso de envío de la tienda, pero no se mezclan con las demás ni pueden ser
   la recomendada.
 
+## Historial de precios
+
+`GET /productos/{id}/historial?periodo=1M|3M|6M` (pantalla P4, RF-09 y RF-10):
+
+- **Series:** una por tienda, con el menor precio del producto cada día (hora de Colombia),
+  sin envío. Solo cuentan capturas disponibles de tiendas activas.
+- **Resumen:** precio actual y mínimo del periodo por tienda.
+- **Indicador "cerca de su mínimo":** para la tienda de la oferta recomendada, si el precio
+  actual no supera el mínimo en más de `HISTORIAL_UMBRAL_CERCANIA` (valor inicial 5 %).
+- **Sin exagerar:** si el historial empieza después del inicio del periodo (`datos_desde`), el
+  mensaje dice "desde el 1 de noviembre" en lugar de "de 3 meses".
+
+El historial crece solo: cada pasada del worker agrega capturas y nunca sobrescribe las anteriores.
+
 ## Interpretación de consultas
 
 El intérprete convierte una consulta en lenguaje coloquial en criterios estructurados
@@ -269,7 +284,7 @@ Nada más cambia (RNF-06).
 |---|---|---|
 | 0. Base del proyecto | 31 oct – 2 nov 2026 | Terminado (31 oct) |
 | 1. Extracción de datos | 31 oct – 13 nov | Terminado (1 nov): Mercado Libre, Falabella y Homecenter |
-| 2. Interpretación PLN | 7 – 20 nov | En curso: falta medir H2 con el proveedor real |
-| 3. Costo total y recomendación | 14 – 27 nov | En curso: motor CT/CA, búsqueda y POST /consultas listos |
-| 4. Historial de precios | 21 nov – 4 dic | Pendiente |
+| 2. Interpretación PLN | 7 – 20 nov | Terminado (2 nov); H2 con Claude en la Fase 4 |
+| 3. Costo total y recomendación | 14 – 27 nov | Terminado (2 nov) |
+| 4. Historial de precios | 21 nov – 4 dic | Terminado (2 nov) |
 | 5. Interfaz e integración | 28 nov – 11 dic | Pendiente |

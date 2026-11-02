@@ -13,6 +13,7 @@ from app.config import Configuracion
 from app.extraccion.cliente_http import ClienteHttp
 from app.extraccion.conector import Conector
 from app.extraccion.conectores.falabella import ConectorFalabella
+from app.extraccion.conectores.homecenter import ConectorHomecenter
 from app.extraccion.conectores.mercadolibre import ConectorMercadoLibre
 
 FabricaConector = Callable[[ClienteHttp, Configuracion], Conector | None]
@@ -34,11 +35,16 @@ def _falabella(cliente: ClienteHttp, configuracion: Configuracion) -> Conector |
     return ConectorFalabella(cliente)  # no necesita credenciales
 
 
+def _homecenter(cliente: ClienteHttp, configuracion: Configuracion) -> Conector | None:
+    return ConectorHomecenter(cliente)  # no necesita credenciales
+
+
 # Amazon no se integra mientras el proyecto sea de grado (decisión del 1 de noviembre de 2026):
 # su acceso es complejo. Sigue en los documentos, y la conversión USD→COP (TRM) queda lista.
 CONECTORES: dict[str, FabricaConector] = {
     ConectorMercadoLibre.nombre_plataforma: _mercadolibre,
     ConectorFalabella.nombre_plataforma: _falabella,
+    ConectorHomecenter.nombre_plataforma: _homecenter,
 }
 
 

@@ -133,6 +133,7 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 |---|---|---|
 | Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
 | Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna |
+| Homecenter | Extracción de la página de producto (robots.txt la permite; prohíbe la búsqueda) | Ninguna. Queda inactiva hasta revisar sus términos (ver abajo) |
 | Amazon | No se integra por ahora (ver abajo) | — |
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
@@ -155,6 +156,15 @@ la página (`nota_envio`, visible en `GET /salud`).
 
 Como exige el documento de arquitectura, la tienda se registró inactiva y se activó (migración
 `activa_falabella`) después de revisar sus términos y condiciones, el 1 de noviembre de 2026.
+
+**Homecenter:** reemplaza a Amazon como tercera tienda. Lee la página de cada producto del
+catálogo (`productProps` de `__NEXT_DATA__`) y toma el menor precio vigente (INTERNET frente a
+NORMAL), sin el precio con tarjeta CMR. Nunca usa la búsqueda, porque su `robots.txt` la
+prohíbe. El envío y los días quedan como desconocidos, con un aviso en `nota_envio`. Se
+registró inactiva; se activa con una migración después de revisar sus términos, como Falabella.
+
+`robots.txt` se interpreta con Protego, que entiende los comodines `*` y `$` de la RFC 9309
+(`urllib.robotparser` de Python no los entiende).
 
 ## Agregar una tienda
 

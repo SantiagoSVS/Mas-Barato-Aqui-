@@ -1,0 +1,56 @@
+# Corre las pruebas del backend en cada Pull Request y en cada push a main.
+# Deja en GitHub la evidencia de que cada incremento pasa sus pruebas.
+name: Pruebas
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: mas_barato
+          POSTGRES_PASSWORD: clave_solo_para_ci
+          POSTGRES_DB: mas_barato_aqui_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U mas_barato"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      # Base temporal del runner, se destruye al terminar: no es un secreto
+      DATABASE_URL: postgresql+psycopg://mas_barato:clave_solo_para_ci@localhost:5432/mas_barato_aqui
+      TEST_DATABASE_URL: postgresql+psycopg://mas_barato:clave_solo_para_ci@localhost:5432/mas_barato_aqui_test
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements*.txt
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-dev.txt
+
+      - name: Verificar que las migraciones coinciden con los modelos
+        run: |
+          alembic -x url_bd="$TEST_DATABASE_URL" upgrade head
+          alembic -x url_bd="$TEST_DATABASE_URL" check
+
+      - name: Pruebas
+        run: pytest

@@ -36,7 +36,7 @@ def motor_pruebas() -> Iterator[Engine]:
     command.downgrade(alembic_cfg, "base")
     command.upgrade(alembic_cfg, "head")
 
-    motor = create_engine(url)
+    motor = create_engine(url, connect_args={"connect_timeout": 5})
     yield motor
     motor.dispose()
 

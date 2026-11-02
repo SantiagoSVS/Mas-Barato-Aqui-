@@ -1,0 +1,698 @@
+{
+ "keywords": "Samsung Galaxy A55 128GB",
+ "paging": {
+  "total": 2,
+  "limit": 10,
+  "offset": 0,
+  "last": "MCO40379852"
+ },
+ "results": [
+  {
+   "id": "MCO63264851",
+   "catalog_product_id": "MCO63264851",
+   "domain_id": "MCO-CELLPHONES",
+   "name": "Smartphone Samsung Galaxy A55 5g 128 GB 8 GB Ram - Galaxy Fit3 azul oscuro/grafito",
+   "parent_id": "MCO63264850",
+   "settings": {
+    "content": "fixed",
+    "listing_strategy": "catalog_required",
+    "exclusive": false
+   },
+   "children_ids": [],
+   "attributes": [
+    {
+     "id": "BRAND",
+     "name": "Marca",
+     "value_id": "206",
+     "value_name": "Samsung",
+     "values": [
+      {
+       "id": "206",
+       "name": "Samsung"
+      }
+     ]
+    },
+    {
+     "id": "MODEL",
+     "name": "Modelo",
+     "value_id": "68059989",
+     "value_name": "A55-5G-128GB",
+     "values": [
+      {
+       "id": "68059989",
+       "name": "A55-5G-128GB"
+      }
+     ]
+    },
+    {
+     "id": "IS_DUAL_SIM",
+     "name": "Es Dual SIM",
+     "value_id": "242085",
+     "value_name": "Sí",
+     "values": [
+      {
+       "id": "242085",
+       "name": "Sí"
+      }
+     ],
+     "meta": {
+      "value": true
+     }
+    },
+    {
+     "id": "COLOR",
+     "name": "Color",
+     "value_id": "68059990",
+     "value_name": "Azul Oscuro/Grafito",
+     "values": [
+      {
+       "id": "68059990",
+       "name": "Azul Oscuro/Grafito"
+      }
+     ]
+    },
+    {
+     "id": "INTERNAL_MEMORY",
+     "name": "Memoria interna",
+     "value_id": "84611",
+     "value_name": "128 GB",
+     "values": [
+      {
+       "id": "84611",
+       "name": "128 GB"
+      }
+     ]
+    },
+    {
+     "id": "RAM",
+     "name": "Memoria RAM",
+     "value_id": "579564",
+     "value_name": "8 GB",
+     "values": [
+      {
+       "id": "579564",
+       "name": "8 GB"
+      }
+     ]
+    },
+    {
+     "id": "OPERATING_SYSTEM_NAME",
+     "name": "Nombre del sistema operativo",
+     "value_id": "43356684",
+     "value_name": "Android 14.0",
+     "values": [
+      {
+       "id": "43356684",
+       "name": "Android 14.0"
+      }
+     ]
+    },
+    {
+     "id": "PROCESSOR_MODEL",
+     "name": "Modelo del procesador",
+     "value_id": "35178472",
+     "value_name": "Exynos 1480",
+     "values": [
+      {
+       "id": "35178472",
+       "name": "Exynos 1480"
+      }
+     ]
+    },
+    {
+     "id": "ALPHANUMERIC_MODELS",
+     "name": "Modelo alfanumérico",
+     "value_id": "68059988",
+     "value_name": "A55-5G-128GB",
+     "values": [
+      {
+       "id": "68059988",
+       "name": "A55-5G-128GB"
+      }
+     ]
+    },
+    {
+     "id": "WITH_WIFI",
+     "name": "Con Wi-Fi",
+     "value_id": "242085",
+     "value_name": "Sí",
+     "values": [
+      {
+       "id": "242085",
+       "name": "Sí"
+      }
+     ],
+     "meta": {
+      "value": true
+     }
+    },
+    {
+     "id": "WITH_BLUETOOTH",
+     "name": "Con Bluetooth",
+     "value_id": "242085",
+     "value_name": "Sí",
+     "values": [
+      {
+       "id": "242085",
+       "name": "Sí"
+      }
+     ],
+     "meta": {
+      "value": true
+     }
+    },
+    {
+     "id": "WITH_RADIO",
+     "name": "Con radio",
+     "value_id": "242084",
+     "value_name": "No",
+     "values": [
+      {
+       "id": "242084",
+       "name": "No"
+      }
+     ],
+     "meta": {
+      "value": false
+     }
+    }
+   ],
+   "tags": [],
+   "status": "active",
+   "short_description": {
+    "type": "plaintext",
+    "content": "\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nCapacidad y eficiencia\\nCon su potente procesador y memoria RAM de 8 GB tu equipo alcanzará un alto rendimiento con gran velocidad de transmisión de contenidos y ejecutará múltiples aplicaciones a la vez sin demoras.\\n\\nGran capacidad de almacenamiento\\nCon su memoria interna de 128 GB podrás almacenar archivos y aplicaciones de gran tamaño sin necesidad de subirlos a la nube y aprovechar tus momentos sin conexión para darles el máximo uso. \\n\\n"
+   },
+   "pictures": [
+    {
+     "id": "628226-MLA101697098691_122025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_628226-MLA101697098691_122025-F.jpg",
+     "max_width": "1124",
+     "max_height": "1198"
+    },
+    {
+     "id": "993294-MLA101696991411_122025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_993294-MLA101696991411_122025-F.jpg",
+     "max_width": "1000",
+     "max_height": "1000"
+    },
+    {
+     "id": "943251-MLA101697138609_122025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_943251-MLA101697138609_122025-F.jpg",
+     "max_width": "698",
+     "max_height": "866"
+    }
+   ],
+   "authority_types": [
+    "COMMUNITY"
+   ],
+   "date_created": "2025-12-18T01:42:23Z",
+   "last_updated": "2026-10-08T07:23:27Z",
+   "quality_type": "COMPLETE",
+   "product_standard": false,
+   "search_type": "KEYWORD"
+  },
+  {
+   "id": "MCO56570140",
+   "catalog_product_id": "MCO56570140",
+   "domain_id": "MCO-TABLETS",
+   "name": "Samsung Galaxy Tab A11 128 Gb Gris",
+   "parent_id": "MCO56570097",
+   "settings": {
+    "content": "fixed",
+    "listing_strategy": "catalog_required",
+    "exclusive": false
+   },
+   "children_ids": [],
+   "attributes": [
+    {
+     "id": "BRAND",
+     "name": "Marca",
+     "value_id": "206",
+     "value_name": "Samsung",
+     "values": [
+      {
+       "id": "206",
+       "name": "Samsung"
+      }
+     ]
+    },
+    {
+     "id": "LINE",
+     "name": "Línea",
+     "value_id": "61736234",
+     "value_name": "Galaxy Tab A11",
+     "values": [
+      {
+       "id": "61736234",
+       "name": "Galaxy Tab A11"
+      }
+     ]
+    },
+    {
+     "id": "MODEL",
+     "name": "Modelo",
+     "value_id": "61736235",
+     "value_name": "Tab A11",
+     "values": [
+      {
+       "id": "61736235",
+       "name": "Tab A11"
+      }
+     ]
+    },
+    {
+     "id": "ALPHANUMERIC_MODEL",
+     "name": "Modelo alfanumérico",
+     "value_id": "61736228",
+     "value_name": "SM-X133NZAEMXO",
+     "values": [
+      {
+       "id": "61736228",
+       "name": "SM-X133NZAEMXO"
+      }
+     ]
+    },
+    {
+     "id": "COLOR",
+     "name": "Color",
+     "value_id": "283165",
+     "value_name": "Gris",
+     "values": [
+      {
+       "id": "283165",
+       "name": "Gris"
+      }
+     ]
+    },
+    {
+     "id": "RAM_MEMORY_MODULE_TOTAL_CAPACITY",
+     "name": "Capacidad total del módulo de memoria RAM",
+     "value_id": "579564",
+     "value_name": "8 GB",
+     "values": [
+      {
+       "id": "579564",
+       "name": "8 GB"
+      }
+     ]
+    },
+    {
+     "id": "CAPACITY",
+     "name": "Capacidad",
+     "value_id": "49456",
+     "value_name": "128 GB",
+     "values": [
+      {
+       "id": "49456",
+       "name": "128 GB"
+      }
+     ]
+    },
+    {
+     "id": "DISPLAY_SIZE",
+     "name": "Tamaño de la pantalla",
+     "value_id": "10827999",
+     "value_name": "8.7 \"",
+     "values": [
+      {
+       "id": "10827999",
+       "name": "8.7 \""
+      }
+     ]
+    },
+    {
+     "id": "OS_NAME",
+     "name": "Nombre del sistema operativo",
+     "value_id": "4743192",
+     "value_name": "Android",
+     "values": [
+      {
+       "id": "4743192",
+       "name": "Android"
+      }
+     ]
+    },
+    {
+     "id": "OS_VERSION",
+     "name": "Versión del sistema operativo",
+     "value_id": "66944181",
+     "value_name": "Android 16 , One UI 8",
+     "values": [
+      {
+       "id": "66944181",
+       "name": "Android 16 , One UI 8"
+      }
+     ]
+    },
+    {
+     "id": "CONNECTIVITY",
+     "name": "Conectividad",
+     "value_id": "81950",
+     "value_name": "Bluetooth",
+     "values": [
+      {
+       "id": "81950",
+       "name": "Bluetooth"
+      }
+     ]
+    },
+    {
+     "id": "REAR_CAMERAS_NUMBER",
+     "name": "Cantidad de cámaras traseras",
+     "value_id": "7477198",
+     "value_name": "1",
+     "values": [
+      {
+       "id": "7477198",
+       "name": "1"
+      }
+     ]
+    },
+    {
+     "id": "PACKAGE_DATA_SOURCE",
+     "name": "Orígen del dato del paquete de fábrica",
+     "value_id": "52228230",
+     "value_name": "CERTIFIED_MEASUREMENT",
+     "values": [
+      {
+       "id": "52228230",
+       "name": "CERTIFIED_MEASUREMENT"
+      }
+     ]
+    },
+    {
+     "id": "FRONT_CAMERAS_NUMBER",
+     "name": "Cantidad de cámaras frontales",
+     "value_id": "7477216",
+     "value_name": "1",
+     "values": [
+      {
+       "id": "7477216",
+       "name": "1"
+      }
+     ]
+    },
+    {
+     "id": "SCREEN_HEIGHT",
+     "name": "Altura de la pantalla",
+     "value_id": "85069466",
+     "value_name": "1.247 cm",
+     "values": [
+      {
+       "id": "85069466",
+       "name": "1.247 cm"
+      }
+     ]
+    },
+    {
+     "id": "SCREEN_WIDTH",
+     "name": "Ancho de la pantalla",
+     "value_id": "85069465",
+     "value_name": "2.109 cm",
+     "values": [
+      {
+       "id": "85069465",
+       "name": "2.109 cm"
+      }
+     ]
+    },
+    {
+     "id": "WITH_PARENTAL_CONTROL",
+     "name": "Con control parental",
+     "value_id": "242084",
+     "value_name": "No",
+     "values": [
+      {
+       "id": "242084",
+       "name": "No"
+      }
+     ],
+     "meta": {
+      "value": false
+     }
+    },
+    {
+     "id": "WITH_FACIAL_UNLOCK",
+     "name": "Con desbloqueo facial",
+     "value_id": "242084",
+     "value_name": "No",
+     "values": [
+      {
+       "id": "242084",
+       "name": "No"
+      }
+     ],
+     "meta": {
+      "value": false
+     }
+    },
+    {
+     "id": "BLUETOOTH_VERSION",
+     "name": "Versión de Bluetooth",
+     "value_id": "12080281",
+     "value_name": "5.3",
+     "values": [
+      {
+       "id": "12080281",
+       "name": "5.3"
+      }
+     ]
+    },
+    {
+     "id": "MAIN_COLOR",
+     "name": "Color principal",
+     "value_id": "2450294",
+     "value_name": "Gris",
+     "values": [
+      {
+       "id": "2450294",
+       "name": "Gris"
+      }
+     ],
+     "meta": {
+      "rgb": "E1E1E1"
+     }
+    },
+    {
+     "id": "GTIN",
+     "name": "Código universal de producto",
+     "value_id": "61736280",
+     "value_name": "8806097808046",
+     "values": [
+      {
+       "id": "61736280",
+       "name": "8806097808046"
+      }
+     ]
+    },
+    {
+     "id": "SIM_CARD_READERS",
+     "name": "Lectores de tarjetas SIM",
+     "value_id": "82831",
+     "value_name": "Micro-SIM",
+     "values": [
+      {
+       "id": "82831",
+       "name": "Micro-SIM"
+      }
+     ]
+    },
+    {
+     "id": "SENSORS",
+     "name": "Sensores",
+     "value_id": "82823",
+     "value_name": "Acelerómetro",
+     "values": [
+      {
+       "id": "82823",
+       "name": "Acelerómetro"
+      }
+     ]
+    },
+    {
+     "id": "GRAPHICS_PROCESSOR",
+     "name": "Procesador gráfico",
+     "value_id": "61729023",
+     "value_name": "Mediatek Helio G99 (6 nm)",
+     "values": [
+      {
+       "id": "61729023",
+       "name": "Mediatek Helio G99 (6 nm)"
+      }
+     ]
+    },
+    {
+     "id": "PROCESSORS",
+     "name": "Procesadores",
+     "value_id": "175147",
+     "value_name": "Octa-Core",
+     "values": [
+      {
+       "id": "175147",
+       "name": "Octa-Core"
+      }
+     ]
+    },
+    {
+     "id": "VIDEO_RESOLUTION_TYPE",
+     "name": "Tipo de resolución del video",
+     "value_id": "22254069",
+     "value_name": "1340 x 800",
+     "values": [
+      {
+       "id": "22254069",
+       "name": "1340 x 800"
+      }
+     ]
+    },
+    {
+     "id": "IS_MULTI_TOUCH",
+     "name": "Es multi-touch",
+     "value_id": "242085",
+     "value_name": "Sí",
+     "values": [
+      {
+       "id": "242085",
+       "name": "Sí"
+      }
+     ],
+     "meta": {
+      "value": true
+     }
+    },
+    {
+     "id": "IS_DUAL_SIM",
+     "name": "Es Dual SIM",
+     "value_id": "242084",
+     "value_name": "No",
+     "values": [
+      {
+       "id": "242084",
+       "name": "No"
+      }
+     ],
+     "meta": {
+      "value": false
+     }
+    },
+    {
+     "id": "WITH_HEADPHONES_OUTPUT",
+     "name": "Con salida para audífonos",
+     "value_id": "242085",
+     "value_name": "Sí",
+     "values": [
+      {
+       "id": "242085",
+       "name": "Sí"
+      }
+     ],
+     "meta": {
+      "value": true
+     }
+    },
+    {
+     "id": "TABLET_BATTERY_LIFE",
+     "name": "Duración de la batería de la tablet",
+     "value_id": "52752969",
+     "value_name": "5.100 amp",
+     "values": [
+      {
+       "id": "52752969",
+       "name": "5.100 amp"
+      }
+     ]
+    },
+    {
+     "id": "PROCESSOR_SPEED",
+     "name": "Velocidad del procesador",
+     "value_id": "366052",
+     "value_name": "2.2 GHz",
+     "values": [
+      {
+       "id": "366052",
+       "name": "2.2 GHz"
+      }
+     ]
+    },
+    {
+     "id": "BATTERY_CAPACITY",
+     "name": "Capacidad de la batería",
+     "value_id": "65437405",
+     "value_name": "5100 mAh",
+     "values": [
+      {
+       "id": "65437405",
+       "name": "5100 mAh"
+      }
+     ]
+    },
+    {
+     "id": "TABLET_REAR_CAMERAS_RESOLUTIONS",
+     "name": "Resoluciones de las cámaras traseras",
+     "value_id": "902414",
+     "value_name": "8 Mpx",
+     "values": [
+      {
+       "id": "902414",
+       "name": "8 Mpx"
+      }
+     ]
+    },
+    {
+     "id": "FRONT_CAMERAS_RESOLUTION",
+     "name": "Resolución de las cámaras frontales",
+     "value_id": "19328935",
+     "value_name": "5MP",
+     "values": [
+      {
+       "id": "19328935",
+       "name": "5MP"
+      }
+     ]
+    }
+   ],
+   "tags": [],
+   "status": "active",
+   "short_description": {
+    "type": "plaintext",
+    "content": "Esta tablet Samsung es la compañera ideal, con capacidad de sobra para cada una de tus actividades. El diseño delgado, compacto y portátil, con facilidad para sostener en una mano, lo convierte en una combinación perfecta de rendimiento y versatilidad.\n\nTransferir, sincronizar y acceder a tus dispositivos las veces que quieras ahora es posible. Sus conexiones bluetooth te permiten potenciar sus funciones al máximo.\n\nCaptura todos tus momentos al instante\nGracias a sus cámaras, con resoluciones de 8 Mpx y 5MP, podrás hacer videollamadas o sacarte fotos en cualquier momento y lugar, con una excelente calidad de imagen. Nitidez, brillo y colores vibrantes harán que tus experiencias se reflejen de manera óptima."
+   },
+   "pictures": [
+    {
+     "id": "816479-MLA92279564290_092025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_816479-MLA92279564290_092025-F.jpg",
+     "max_width": "1200",
+     "max_height": "907"
+    },
+    {
+     "id": "915674-MLA92687044807_092025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_915674-MLA92687044807_092025-F.jpg",
+     "max_width": "1066",
+     "max_height": "1074"
+    },
+    {
+     "id": "831173-MLA92279564310_092025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_831173-MLA92279564310_092025-F.jpg",
+     "max_width": "844",
+     "max_height": "1170"
+    },
+    {
+     "id": "808220-MLA92280005496_092025",
+     "url": "https://http2.mlstatic.com/D_NQ_NP_808220-MLA92280005496_092025-F.jpg",
+     "max_width": "1198",
+     "max_height": "915"
+    }
+   ],
+   "authority_types": [
+    "COMMUNITY"
+   ],
+   "date_created": "2025-09-17T15:39:27Z",
+   "last_updated": "2026-10-30T13:52:47Z",
+   "quality_type": "COMPLETE",
+   "product_standard": false,
+   "search_type": "KEYWORD"
+  }
+ ],
+ "query_type": "KEYWORDS"
+}

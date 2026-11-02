@@ -28,6 +28,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db import Base
 
 TIPOS_ACCESO = ("api", "extraccion")
+ESTADOS_EJECUCION = ("en_curso", "exitosa", "parcial", "fallida")
 
 
 class Plataforma(Base):
@@ -44,8 +45,36 @@ class Plataforma(Base):
     url_base: Mapped[str] = mapped_column(String(255))
     moneda: Mapped[str] = mapped_column(String(3))  # ISO 4217: COP, USD
     activa: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    # Aviso sobre el envío cuando la tienda no deja cotizarlo (lo actualiza el conector)
+    nota_envio: Mapped[str | None] = mapped_column(Text)
 
     ofertas: Mapped[list["Oferta"]] = relationship(back_populates="plataforma")
+    ejecuciones: Mapped[list["EjecucionCaptura"]] = relationship(back_populates="plataforma")
+
+
+class EjecucionCaptura(Base):
+    """Registro de cada pasada del worker por una plataforma (sección 5.1, RNF-05, RF-12).
+
+    Si la plataforma falla, el error queda aquí y el worker sigue con las demás.
+    "parcial" significa que algunas búsquedas fallaron y otras no.
+    """
+
+    __tablename__ = "ejecucion_captura"
+    __table_args__ = (
+        Index("ix_ejecucion_captura_plataforma_id_iniciada_en", "plataforma_id", "iniciada_en"),
+        CheckConstraint(f"estado IN {ESTADOS_EJECUCION}", name="estado_valido"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    plataforma_id: Mapped[int] = mapped_column(ForeignKey("plataforma.id"))
+    iniciada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    terminada_en: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    estado: Mapped[str] = mapped_column(String(20))
+    ofertas_capturadas: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    errores: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    mensaje_error: Mapped[str | None] = mapped_column(Text)
+
+    plataforma: Mapped[Plataforma] = relationship(back_populates="ejecuciones")
 
 
 class Producto(Base):
@@ -54,7 +83,7 @@ class Producto(Base):
     __tablename__ = "producto"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    nombre_canonico: Mapped[str] = mapped_column(String(255))
+    nombre_canonico: Mapped[str] = mapped_column(String(255), unique=True)
     marca: Mapped[str | None] = mapped_column(String(80))
     modelo: Mapped[str | None] = mapped_column(String(120))
     categoria: Mapped[str] = mapped_column(String(80))

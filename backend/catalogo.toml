@@ -1,0 +1,54 @@
+# Catálogo inicial: los productos que el worker captura en cada tienda (sección 5.1).
+# Las consultas de los usuarios se responden sobre lo que este catálogo haya capturado.
+#
+# Cada producto lleva, en [producto.ids], sus identificadores en cada tienda. Las ofertas que
+# salen de esos identificadores se vinculan a este producto sin emparejamiento automático.
+#
+# Mercado Libre: el identificador es el /p/MCO… de la página del producto. Verifícalo antes de
+# agregarlo (solo sirven los que tienen publicaciones activas):
+#   python -m app.herramientas.buscar_mercadolibre --id MCO12345678
+#
+# Falabella: el identificador es el número de la dirección /falabella-co/product/73447854/...
+# Homecenter: igual, el número de /homecenter-co/product/733184/...
+#
+# Un producto puede tener varios identificadores en una tienda (varios vendedores).
+#
+# PENDIENTE: definir el catálogo real. Estos productos se verificaron el 1 de noviembre de
+# 2026 y sirven para probar la captura de punta a punta.
+
+[[producto]]
+nombre = "Samsung Galaxy Tab A11 128 GB"
+categoria = "tecnologia"
+marca = "Samsung"
+modelo = "Galaxy Tab A11"
+[producto.ids]
+mercadolibre = ["MCO56570140"]
+falabella = ["73447854"]
+
+[[producto]]
+nombre = "Freidora de aire Kalley 6,3 litros"
+categoria = "hogar"
+marca = "Kalley"
+[producto.ids]
+mercadolibre = ["MCO47798002"]
+falabella = ["127694748"]
+
+[[producto]]
+nombre = "Freidora de aire Oster DiamondForce 4 litros manual"
+categoria = "hogar"
+marca = "Oster"
+modelo = "CKSTAF401MDF"
+[producto.ids]
+mercadolibre = ["MCO44586784"]
+falabella = ["158476198", "158167576", "158167350"]
+homecenter = ["733184"]
+
+[[producto]]
+nombre = "Freidora de aire Imusa Easy Fry Max 5 litros mecánica"
+categoria = "hogar"
+marca = "Imusa"
+modelo = "Easy Fry Max"
+[producto.ids]
+mercadolibre = ["MCO51012616"]
+falabella = ["73338973"]
+homecenter = ["3002404"]

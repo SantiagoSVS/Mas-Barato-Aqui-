@@ -1,0 +1,655 @@
+{
+  "descripcion": "Conjunto de evaluación de H2: 50 consultas coloquiales anotadas a mano por Santiago Velásquez (1 de noviembre de 2026). El script app/herramientas/evaluar_interprete lo lee por defecto.",
+  "consultas": [
+    {
+      "id": "C01",
+      "consulta": "Audífonos inalámbricos Sony con cancelación de ruido",
+      "esperado": {
+        "producto": "audífonos",
+        "marca": "Sony",
+        "modelo": null,
+        "atributos": {"tipo": "inalámbricos", "tecnología": "cancelación de ruido"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C02",
+      "consulta": "iPhone 15 Pro Max de 256gb el más barato posible",
+      "esperado": {
+        "producto": "iPhone",
+        "marca": "Apple",
+        "modelo": "15 Pro Max",
+        "atributos": {"capacidad": "256 GB"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C03",
+      "consulta": "Televisor de 55 pulgadas LG OLED que entreguen hoy mismo",
+      "esperado": {
+        "producto": "televisor",
+        "marca": "LG",
+        "modelo": null,
+        "atributos": {"tamaño": "55 pulgadas", "tecnología": "OLED"},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C04",
+      "consulta": "Nevera Whirlpool no frost gris de 400 litros",
+      "esperado": {
+        "producto": "nevera",
+        "marca": "Whirlpool",
+        "modelo": null,
+        "atributos": {"tecnología": "no frost", "color": "gris", "capacidad": "400 L"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C05",
+      "consulta": "Una chaqueta para el frío",
+      "esperado": {
+        "producto": "chaqueta",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"uso": "frío"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C06",
+      "consulta": "Laptop Asus ROG Zephyrus con tarjeta gráfica RTX 4060",
+      "esperado": {
+        "producto": "laptop",
+        "marca": "Asus",
+        "modelo": "ROG Zephyrus",
+        "atributos": {"tarjeta_gráfica": "RTX 4060"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C07",
+      "consulta": "Zapatos escolares negros de amarrar para niño talla 34",
+      "esperado": {
+        "producto": "zapatos",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"uso": "escolares", "color": "negros", "tipo": "amarrar", "género": "niño", "talla": "34"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C08",
+      "consulta": "Bicicleta de montaña GW Rin 29 freno de disco hidráulico",
+      "esperado": {
+        "producto": "bicicleta",
+        "marca": "GW",
+        "modelo": null,
+        "atributos": {"tipo": "montaña", "rin": "29", "frenos": "disco hidráulico"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C09",
+      "consulta": "Colchón King size ortopédico max 1 millón y medio",
+      "esperado": {
+        "producto": "colchón",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"tamaño": "King size", "tipo": "ortopédico"},
+        "precio_max_cop": 1500000,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C10",
+      "consulta": "Regalo para mi novia de aniversario",
+      "esperado": {
+        "producto": null,
+        "marca": null,
+        "modelo": null,
+        "atributos": {"motivo": "regalo aniversario", "destinatario": "novia"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C11",
+      "consulta": "Impresora Epson EcoTank L3250 con envío gratis",
+      "esperado": {
+        "producto": "impresora",
+        "marca": "Epson",
+        "modelo": "EcoTank L3250",
+        "atributos": {"envío": "gratis"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C12",
+      "consulta": "Smartwatch Xiaomi Redmi Watch 4 que llegue mañana",
+      "esperado": {
+        "producto": "smartwatch",
+        "marca": "Xiaomi",
+        "modelo": "Redmi Watch 4",
+        "atributos": {},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C13",
+      "consulta": "Cafetera Oster express para espresso y cappuccino",
+      "esperado": {
+        "producto": "cafetera",
+        "marca": "Oster",
+        "modelo": null,
+        "atributos": {"tipo": "express", "funciones": "espresso, cappuccino"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C14",
+      "consulta": "Silla gamer ergonómica reclinable barata",
+      "esperado": {
+        "producto": "silla gamer",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"ergonómica": "sí", "reclinable": "sí"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C15",
+      "consulta": "Perfume Carolina Herrera Good Girl de 80ml original",
+      "esperado": {
+        "producto": "perfume",
+        "marca": "Carolina Herrera",
+        "modelo": "Good Girl",
+        "atributos": {"tamaño": "80ml", "condición": "original"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C16",
+      "consulta": "Taladro percutor DeWalt inalámbrico de 20v con maleta",
+      "esperado": {
+        "producto": "taladro percutor",
+        "marca": "DeWalt",
+        "modelo": null,
+        "atributos": {"tipo": "inalámbrico", "voltaje": "20v", "accesorios": "maleta"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C17",
+      "consulta": "Maquillaje de marca",
+      "esperado": {
+        "producto": "maquillaje",
+        "marca": null,
+        "modelo": null,
+        "atributos": {},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C18",
+      "consulta": "Microondas Panasonic de 20 litros espejo max 450000 pesos",
+      "esperado": {
+        "producto": "microondas",
+        "marca": "Panasonic",
+        "modelo": null,
+        "atributos": {"capacidad": "20 L", "acabado": "espejo"},
+        "precio_max_cop": 450000,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C19",
+      "consulta": "Nintendo Switch OLED edición Zelda Tears of the Kingdom",
+      "esperado": {
+        "producto": "Nintendo Switch",
+        "marca": "Nintendo",
+        "modelo": "OLED",
+        "atributos": {"edición": "Zelda Tears of the Kingdom"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C20",
+      "consulta": "Crocs originales color negro talla 39 unisex",
+      "esperado": {
+        "producto": "zuecos",
+        "marca": "Crocs",
+        "modelo": null,
+        "atributos": {"condición": "originales", "color": "negro", "talla": "39", "género": "unisex"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C21",
+      "consulta": "Proyector portátil 4k para cine en casa urgente",
+      "esperado": {
+        "producto": "proyector",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"tipo": "portátil", "resolución": "4k", "uso": "cine en casa"},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C22",
+      "consulta": "Alimento para perro adulto Raza Mediana Chunky bulto 25 kg",
+      "esperado": {
+        "producto": "alimento para perro",
+        "marca": "Chunky",
+        "modelo": null,
+        "atributos": {"etapa": "adulto", "tamaño_raza": "mediana", "presentación": "bulto 25 kg"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C23",
+      "consulta": "Llantas 185 65 r15 Goodyear baratas combo x4",
+      "esperado": {
+        "producto": "llantas",
+        "marca": "Goodyear",
+        "modelo": null,
+        "atributos": {"medida": "185/65 R15", "presentación": "combo x4"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C24",
+      "consulta": "Hidrolavadora Karcher K2 para lavar el carro",
+      "esperado": {
+        "producto": "hidrolavadora",
+        "marca": "Karcher",
+        "modelo": "K2",
+        "atributos": {"uso": "lavar el carro"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C25",
+      "consulta": "Libro Hábitos Atómicos pasta blanda",
+      "esperado": {
+        "producto": "libro",
+        "marca": null,
+        "modelo": "Hábitos Atómicos",
+        "atributos": {"encuadernación": "pasta blanda"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C26",
+      "consulta": "Monitor gamer Curvo Samsung 24 pulgadas 144hz",
+      "esperado": {
+        "producto": "monitor gamer",
+        "marca": "Samsung",
+        "modelo": null,
+        "atributos": {"diseño": "curvo", "tamaño": "24 pulgadas", "tasa_refresco": "144hz"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C27",
+      "consulta": "Casco para moto certificado MT Helmets certificado dot integral",
+      "esperado": {
+        "producto": "casco para moto",
+        "marca": "MT Helmets",
+        "modelo": null,
+        "atributos": {"seguridad": "certificado dot", "tipo": "integral"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C28",
+      "consulta": "Ropa de gimnasio",
+      "esperado": {
+        "producto": "ropa de gimnasio",
+        "marca": null,
+        "modelo": null,
+        "atributos": {},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C29",
+      "consulta": "Ventilador de torre Samurai con control remoto silencioso",
+      "esperado": {
+        "producto": "ventilador",
+        "marca": "Samurai",
+        "modelo": null,
+        "atributos": {"tipo": "torre", "accesorios": "control remoto", "característica": "silencioso"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C30",
+      "consulta": "Cámara Canon EOS Rebel T7 con lente de kit 18-55mm",
+      "esperado": {
+        "producto": "cámara",
+        "marca": "Canon",
+        "modelo": "EOS Rebel T7",
+        "atributos": {"lente": "18-55mm"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C31",
+      "consulta": "Piscina inflable estructural Intex grande para patio",
+      "esperado": {
+        "producto": "piscina inflable estructural",
+        "marca": "Intex",
+        "modelo": null,
+        "atributos": {"tamaño": "grande", "uso": "patio"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C32",
+      "consulta": "Suplemento proteína Whey de 5 libras sabor vainilla",
+      "esperado": {
+        "producto": "proteína",
+        "marca": null,
+        "modelo": "Whey",
+        "atributos": {"peso": "5 libras", "sabor": "vainilla"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C33",
+      "consulta": "Teclado mecánico inalámbrico Logitech G915 TKL switch tactile",
+      "esperado": {
+        "producto": "teclado mecánico",
+        "marca": "Logitech",
+        "modelo": "G915 TKL",
+        "atributos": {"conectividad": "inalámbrico", "tipo_switch": "tactile"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C34",
+      "consulta": "Guitarra electroacústica Yamaha con cuerdas de metal",
+      "esperado": {
+        "producto": "guitarra electroacústica",
+        "marca": "Yamaha",
+        "modelo": null,
+        "atributos": {"tipo_cuerdas": "metal"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C35",
+      "consulta": "Carpa para acampar 4 personas impermeable Coleman rápida entrega",
+      "esperado": {
+        "producto": "carpa para acampar",
+        "marca": "Coleman",
+        "modelo": null,
+        "atributos": {"capacidad": "4 personas", "propiedad": "impermeable"},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C36",
+      "consulta": "Kit de pesas y mancuernas de 20kg con estuche max 250000 COP",
+      "esperado": {
+        "producto": "kit de pesas y mancuernas",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"peso_total": "20kg", "accesorios": "estuche"},
+        "precio_max_cop": 250000,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C37",
+      "consulta": "Herramientas para taller",
+      "esperado": {
+        "producto": "herramientas",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"uso": "taller"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C38",
+      "consulta": "Batería de cocina IMUSA de 7 piezas antiadherente color rojo",
+      "esperado": {
+        "producto": "batería de cocina",
+        "marca": "IMUSA",
+        "modelo": null,
+        "atributos": {"piezas": "7 piezas", "tecnología": "antiadherente", "color": "rojo"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C39",
+      "consulta": "Maleta de viaje de cabina 10kg rígida de 4 ruedas Totto",
+      "esperado": {
+        "producto": "maleta de viaje",
+        "marca": "Totto",
+        "modelo": null,
+        "atributos": {"tipo": "cabina / rígida", "capacidad_peso": "10kg", "ruedas": "4 ruedas"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C40",
+      "consulta": "Xiaomi Poco X6 Pro 5g amarillo de 512gb envío inmediato",
+      "esperado": {
+        "producto": "celular",
+        "marca": "Xiaomi",
+        "modelo": "Poco X6 Pro 5g",
+        "atributos": {"color": "amarillo", "capacidad": "512gb"},
+        "precio_max_cop": null,
+        "prioridad": "entrega_rapida",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C41",
+      "consulta": "Lego Star Wars Halcón Milenario original",
+      "esperado": {
+        "producto": "Lego",
+        "marca": "Lego",
+        "modelo": "Halcón Milenario",
+        "atributos": {"franquicia": "Star Wars", "condición": "original"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C42",
+      "consulta": "Sérum ácido hialurónico L'Oréal Revitalift antimanchas",
+      "esperado": {
+        "producto": "sérum",
+        "marca": "L'Oréal",
+        "modelo": "Revitalift",
+        "atributos": {"componente": "ácido hialurónico", "propiedad": "antimanchas"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C43",
+      "consulta": "Aspiradora robot Xiaomi Mop con mapeo láser inteligente",
+      "esperado": {
+        "producto": "aspiradora robot",
+        "marca": "Xiaomi",
+        "modelo": "Mop",
+        "atributos": {"navegación": "mapeo láser inteligente"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C44",
+      "consulta": "Zapatillas Nike Air Max blancas de hombre talle 40",
+      "esperado": {
+        "producto": "zapatillas",
+        "marca": "Nike",
+        "modelo": "Air Max",
+        "atributos": {"color": "blancas", "género": "hombre", "talla": "40"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C45",
+      "consulta": "Escritorio de oficina en L de madera moderno",
+      "esperado": {
+        "producto": "escritorio",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"uso": "oficina", "forma": "en L", "material": "madera", "estilo": "moderno"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C46",
+      "consulta": "Repuestos para carro Chevrolet Spark",
+      "esperado": {
+        "producto": "repuestos",
+        "marca": "Chevrolet",
+        "modelo": "Spark",
+        "atributos": {},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": true
+      }
+    },
+    {
+      "id": "C47",
+      "consulta": "Humidificador difusor de aromas ultrasónico con luces led",
+      "esperado": {
+        "producto": "humidificador difusor de aromas",
+        "marca": null,
+        "modelo": null,
+        "atributos": {"tipo": "ultrasónico", "características": "luces led"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C48",
+      "consulta": "Talco para pies Mexsana spray combo x3 económico",
+      "esperado": {
+        "producto": "talco para pies",
+        "marca": "Mexsana",
+        "modelo": null,
+        "atributos": {"formato": "spray", "presentación": "combo x3"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C49",
+      "consulta": "Termo Stanley original de 1.4 litros verde con manija",
+      "esperado": {
+        "producto": "termo",
+        "marca": "Stanley",
+        "modelo": null,
+        "atributos": {"condición": "original", "capacidad": "1.4 L", "color": "verde", "diseño": "con manija"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    },
+    {
+      "id": "C50",
+      "consulta": "PlayStation 5 Slim de 1tb con dos controles cupón descuento",
+      "esperado": {
+        "producto": "PlayStation 5",
+        "marca": "Sony",
+        "modelo": "Slim",
+        "atributos": {"capacidad": "1tb", "accesorios": "dos controles", "beneficio": "cupón descuento"},
+        "precio_max_cop": null,
+        "prioridad": "costo_total",
+        "requiere_aclaracion": false
+      }
+    }
+  ]
+}

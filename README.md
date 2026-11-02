@@ -22,6 +22,9 @@ backend/              API (FastAPI), worker, modelos, migraciones y pruebas (pyt
   migraciones/        migraciones de la base de datos (Alembic)
   pruebas/            pruebas unitarias y de integración
 frontend/             interfaz web (React + Vite)
+  src/paginas/        pantallas P1 a P4 y el estado sin cobertura
+  cypress/            pruebas de extremo a extremo (Cypress) con respuestas guardadas
+.github/workflows/   CI: alembic check + pytest, y build + Cypress en cada PR
 docker/               scripts de arranque de PostgreSQL
 docker-compose.yml    PostgreSQL para desarrollo
 .env.example          plantilla de variables de entorno
@@ -311,4 +314,9 @@ Nada más cambia (RNF-06).
 | 2. Interpretación PLN | 7 – 20 nov | Terminado (2 nov); H2 con Claude en la Fase 4 |
 | 3. Costo total y recomendación | 14 – 27 nov | Terminado (2 nov) |
 | 4. Historial de precios | 21 nov – 4 dic | Terminado (2 nov) |
-| 5. Interfaz e integración | 28 nov – 11 dic | En curso: P1–P4 y E2E listos |
+| 5. Interfaz e integración | 28 nov – 11 dic | Terminado (2 nov): P1–P4, estados y 18 pruebas E2E |
+
+El MVP de la Fase 3 está completo. Queda para la Fase 4: medir H2 con Claude (necesita
+`ANTHROPIC_API_KEY`), la auditoría de precios de H3, dejar el worker capturando a diario,
+ampliar el catálogo, las pruebas con usuarios (H1, H4, H5) con la calibración de `w`, y elegir
+el proveedor de la nube.

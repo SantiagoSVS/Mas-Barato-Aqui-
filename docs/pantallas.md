@@ -72,13 +72,24 @@ Datos de ejemplo usados en los mockups (consulta "celular Samsung gama media por
 ## Estados (móvil, aplican igual en escritorio)
 
 - **Cargando:** "Entendiendo tu búsqueda…" con esqueleto.
-- **Sin cobertura (RF-13):** "Aún no tenemos este producto… Lo agregamos a la lista para la próxima actualización de precios." + botón "Probar otra búsqueda".
+- **Sin cobertura (RF-13):** "Aún no tenemos este producto… Quedó registrado en la lista que usamos para ampliar el catálogo." + botón "Probar otra búsqueda".
 - **Tienda sin respuesta (RNF-05):** aviso amarillo "Éxito no respondió en la última actualización. Comparamos con las demás…".
 - **Emparejamiento dudoso:** "Ocultamos N ofertas porque no estamos seguros de que sean el mismo producto."
 
 ## Pie de página (escritorio)
 
 Fondo azul oscuro. Marca + "Compara · Encuentra · Ahorra" + frase de neutralidad; columnas Producto (Buscar, Cómo funciona, Tiendas, Preguntas frecuentes), Legal (Términos y condiciones, Política de privacidad, Tratamiento de datos — Ley 1581 de 2012, Cómo calculamos los precios), Síguenos (Instagram, TikTok, LinkedIn) y Contacto ([CORREO DE CONTACTO], pendiente). Línea final: "© 2026 Mas Barato Aquí! · Medellín, Colombia" y el aviso de costos estimados.
+
+## Diferencias entre los mockups y lo implementado (Fase 3)
+
+Los mockups son el diseño original con 7 tiendas y datos de ejemplo. La implementación (`frontend/src/paginas/`) cambia esto:
+
+- **Tiendas:** se muestran las tiendas activas que informa `GET /salud` (hoy Mercado Libre, Falabella y Homecenter). Amazon no está integrado, así que no aparecen la etiqueta "desde EE. UU." ni la nota de conversión de dólares.
+- **P2:** se agregó el criterio Modelo. La pregunta para afinar ofrece productos del catálogo (cuando varios coinciden o no quedó claro el producto), no preguntas sobre atributos. Los atributos se muestran pero no se editan. Sin indicador de pasos en escritorio.
+- **P3:** el resumen dice "N tiendas consultadas, M con resultados". Las ofertas sin costo de envío conocido (Falabella y Homecenter) van en la sección "Con envío por confirmar", con la nota de envío de cada tienda, y no compiten por la recomendada. Mientras `w` no esté calibrado, "Entrega más rápida" ordena por costo total y lo avisa.
+- **P4:** el gráfico muestra todas las tiendas con datos (sin botón para añadir). Si hay menos datos que el periodo elegido, el mínimo dice "desde el <día>" en lugar de "de 3 meses".
+- **Emparejamiento dudoso:** no aplica, porque las ofertas vienen de identificadores verificados a mano en el catálogo.
+- **Pie de página:** el correo de contacto y las redes siguen pendientes.
 
 ## Accesibilidad
 

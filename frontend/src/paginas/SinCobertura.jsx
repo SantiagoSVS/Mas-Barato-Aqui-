@@ -14,8 +14,8 @@ export default function SinCobertura() {
         </div>
         <h1 className="vacio__titulo">Aún no tenemos este producto</h1>
         <p className="texto-secundario" style={{ margin: 0 }}>
-          “{state.texto}” no está en nuestro catálogo todavía. Lo agregamos a la lista para la próxima
-          actualización de precios.
+          “{state.texto}” no está en nuestro catálogo todavía. Quedó registrado en la lista que usamos para
+          ampliar el catálogo.
         </p>
         <Link className="boton" to="/">
           Probar otra búsqueda

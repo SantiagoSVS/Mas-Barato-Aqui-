@@ -25,3 +25,6 @@ frontend/cypress/screenshots/
 Thumbs.db
 desktop.ini
 ~$*
+
+# Registros de la captura programada
+logs/

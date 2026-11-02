@@ -17,13 +17,16 @@ backend/              API (FastAPI), worker, modelos, migraciones y pruebas (pyt
     consultas/        búsqueda en el catálogo y resolución de consultas (POST /consultas)
     historial/        historial de precios y mínimo histórico (GET /productos/{id}/historial)
     worker/           worker de captura programada (APScheduler)
+    validacion/       análisis de la Fase 4: SUS, pruebas con usuarios (H1, H5) y auditoría (H3)
   catalogo.toml       productos que el worker captura y sus identificadores por tienda
-  evaluacion/         consultas anotadas para medir la exactitud del intérprete (H2)
+  evaluacion/         consultas anotadas (H2), plantillas de las pruebas con usuarios y auditorías (H3)
   migraciones/        migraciones de la base de datos (Alembic)
   pruebas/            pruebas unitarias y de integración
 frontend/             interfaz web (React + Vite)
   src/paginas/        pantallas P1 a P4 y el estado sin cobertura
   cypress/            pruebas de extremo a extremo (Cypress) con respuestas guardadas
+scripts/              captura programada en Windows (tarea de las 8:00 y las 20:00)
+docs/fase4/          protocolo, consentimiento, cuestionarios y auditoría de la Fase 4
 .github/workflows/   CI: alembic check + pytest, y build + Cypress en cada PR
 docker/               scripts de arranque de PostgreSQL
 docker-compose.yml    PostgreSQL para desarrollo
@@ -82,6 +85,16 @@ cd backend
 .\.venv\Scripts\Activate.ps1
 python -m app.worker --una-vez               # una sola pasada, para probar
 python -m app.worker                         # captura ahora y luego cada CAPTURA_INTERVALO_HORAS
+```
+
+Para que el historial crezca sin dejar una terminal abierta, registra la captura programada
+(una sola vez, sin permisos de administrador). Corre a las 8:00 y a las 20:00, y si el equipo
+estaba apagado, apenas se encienda; abre Docker Desktop si hace falta y deja el registro en
+`logs/captura_diaria.log`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\programar_captura.ps1          # registrar
+powershell -ExecutionPolicy Bypass -File scripts\programar_captura.ps1 -Quitar  # eliminar
 ```
 
 El worker es el único proceso que consulta las tiendas. Recorre las plataformas activas que
@@ -316,7 +329,8 @@ Nada más cambia (RNF-06).
 | 4. Historial de precios | 21 nov – 4 dic | Terminado (2 nov) |
 | 5. Interfaz e integración | 28 nov – 11 dic | Terminado (2 nov): P1–P4, estados y 18 pruebas E2E |
 
-El MVP de la Fase 3 está completo. Queda para la Fase 4: medir H2 con Claude (necesita
+El MVP de la Fase 3 está completo. Los materiales y el análisis de la Fase 4 están en
+[`docs/fase4/`](docs/fase4/README.md). Queda para la Fase 4: medir H2 con Claude (necesita
 `ANTHROPIC_API_KEY`), la auditoría de precios de H3, dejar el worker capturando a diario,
 ampliar el catálogo, las pruebas con usuarios (H1, H4, H5) con la calibración de `w`, y elegir
 el proveedor de la nube.

@@ -1,0 +1,61 @@
+"""POST /consultas y GET /productos/{id}/ofertas (sección 5.6)."""
+
+from functools import lru_cache
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.config import obtener_configuracion
+from app.consultas.servicio import Comparacion, RespuestaConsulta, comparar_producto, resolver_consulta
+from app.db import obtener_sesion
+from app.interpretacion.esquema import Prioridad
+from app.interpretacion.interprete import ErrorConsulta, Interprete
+from app.interpretacion.proveedor import ErrorProveedor
+from app.interpretacion.registro import crear_interprete
+from app.modelos import Producto
+
+router = APIRouter(tags=["consultas"])
+
+
+@lru_cache
+def obtener_interprete() -> Interprete:
+    return crear_interprete(obtener_configuracion())
+
+
+class ConsultaEntrada(BaseModel):
+    # El límite real (300) lo aplica el intérprete; este solo evita cuerpos enormes
+    texto: str = Field(min_length=1, max_length=2000)
+    # Criterio elegido en P3 (RF-11); si no viene, se usa el que interpretó el modelo
+    prioridad: Prioridad | None = None
+
+
+@router.post("/consultas", response_model=RespuestaConsulta)
+def crear_consulta(
+    entrada: ConsultaEntrada,
+    sesion: Annotated[Session, Depends(obtener_sesion)],
+    interprete: Annotated[Interprete, Depends(obtener_interprete)],
+) -> RespuestaConsulta:
+    try:
+        return resolver_consulta(sesion, interprete, entrada.texto, entrada.prioridad, obtener_configuracion())
+    except ErrorConsulta as error:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from error
+    except ErrorProveedor as error:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE, "No se pudo interpretar la consulta en este momento"
+        ) from error
+
+
+@router.get("/productos/{producto_id}/ofertas", response_model=Comparacion)
+def ofertas_de_producto(
+    producto_id: int,
+    sesion: Annotated[Session, Depends(obtener_sesion)],
+    prioridad: Prioridad = "costo_total",
+    presupuesto_cop: Annotated[int | None, Query(gt=0)] = None,
+) -> Comparacion:
+    producto = sesion.get(Producto, producto_id)
+    if producto is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "El producto no existe")
+    comparacion, _ = comparar_producto(sesion, producto, prioridad, presupuesto_cop, obtener_configuracion())
+    return comparacion

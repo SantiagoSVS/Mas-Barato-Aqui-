@@ -10,3 +10,4 @@ APScheduler==3.11.3
 requests==2.34.2
 Protego==0.7.0
 anthropic==2.3.0
+RapidFuzz==3.14.6

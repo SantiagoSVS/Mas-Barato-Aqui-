@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-from app.rutas import salud
+from app.rutas import consultas, salud
 
 app = FastAPI(
     title="Mas Barato Aquí! API",
@@ -11,3 +11,4 @@ app = FastAPI(
 )
 
 app.include_router(salud.router)
+app.include_router(consultas.router)

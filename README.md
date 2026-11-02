@@ -13,6 +13,8 @@ backend/              API (FastAPI), worker, modelos, migraciones y pruebas (pyt
   app/                código de la API
     extraccion/       conectores por tienda, cliente HTTP respetuoso, normalización, TRM
     interpretacion/   intérprete de consultas: esquema, validación, proveedores, evaluación H2
+    costo/            motor de costo total CT/CA y recomendación (sección 7)
+    consultas/        búsqueda en el catálogo y resolución de consultas (POST /consultas)
     worker/           worker de captura programada (APScheduler)
   catalogo.toml       productos que el worker captura y sus identificadores por tienda
   evaluacion/         consultas anotadas para medir la exactitud del intérprete (H2)
@@ -129,6 +131,30 @@ internet: las tiendas y la TRM se reemplazan por dobles de prueba y respuestas g
 En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 (`.github/workflows/pruebas.yml`).
 
+## Consultas y costo total
+
+```powershell
+# Con la API corriendo (uvicorn app.main:app --reload)
+Invoke-RestMethod -Method Post -Uri http://localhost:8000/consultas -ContentType "application/json" -Body '{"texto": "freidora de aire oster que no pase de 250 mil"}'
+```
+
+Flujo de `POST /consultas`: interpreta el texto → si requiere aclaración, devuelve los criterios
+sin buscar → busca el producto en el catálogo (marca igual y similitud de texto con RapidFuzz)
+→ si no está, responde `sin_cobertura` y queda registrado (esas consultas son la lista para
+ampliar el catálogo, RF-13) → calcula CT y CA de las ofertas vigentes y las ordena → guarda la
+consulta y las recomendaciones (RF-12). `GET /productos/{id}/ofertas?prioridad=...` devuelve el
+mismo ranking para un producto, por ejemplo al cambiar de criterio en P3.
+
+Motor de costo (`app/costo/motor.py`), determinístico y sin modelo de lenguaje:
+
+- `CT = P + E` y `CA = CT + w · D`. Se ordena por CA; en empate, menor CT, menos días y, por
+  último, el id de la oferta para que el orden sea reproducible. La tienda nunca influye.
+- `w = 0` para "Menor costo total". Para "Entrega más rápida" se usa `PESO_DIA_ESPERA_COP`, que
+  no está fijado; mientras falte, se ordena por costo total y la respuesta lo avisa.
+- Ofertas con envío desconocido (Falabella, Homecenter) van en `sin_costo_completo`: se muestran
+  con su precio y el aviso de envío de la tienda, pero no se mezclan con las demás ni pueden ser
+  la recomendada.
+
 ## Interpretación de consultas
 
 El intérprete convierte una consulta en lenguaje coloquial en criterios estructurados
@@ -244,6 +270,6 @@ Nada más cambia (RNF-06).
 | 0. Base del proyecto | 31 oct – 2 nov 2026 | Terminado (31 oct) |
 | 1. Extracción de datos | 31 oct – 13 nov | Terminado (1 nov): Mercado Libre, Falabella y Homecenter |
 | 2. Interpretación PLN | 7 – 20 nov | En curso: falta medir H2 con el proveedor real |
-| 3. Costo total y recomendación | 14 – 27 nov | Pendiente |
+| 3. Costo total y recomendación | 14 – 27 nov | En curso: motor CT/CA, búsqueda y POST /consultas listos |
 | 4. Historial de precios | 21 nov – 4 dic | Pendiente |
 | 5. Interfaz e integración | 28 nov – 11 dic | Pendiente |

@@ -36,9 +36,12 @@ class Configuracion(BaseSettings):
     mercadolibre_ciudad_destino: str = "TUNPQ01FRGRjNjc4"
     mercadolibre_ofertas_por_producto: int = 5
 
-    # Interpretación de consultas. "falso" funciona con reglas, sin clave de API; el proveedor
-    # real del modelo de lenguaje se agrega cuando se elija (sección 4, decisión pendiente).
+    # Interpretación de consultas. "falso" funciona con reglas, sin clave de API; "anthropic"
+    # usa Claude (proveedor elegido el 1 nov 2026) y necesita ANTHROPIC_API_KEY.
     interprete_proveedor: str = "falso"
+    interprete_modelo: str = "claude-opus-5-5"
+    interprete_timeout_s: float = 30
+    anthropic_api_key: str | None = Field(default=None, repr=False)
     # Por debajo de esta confianza se pide aclaración. Valor inicial: calibrar con las 50
     # consultas anotadas (H2).
     interprete_confianza_minima: float = 0.5

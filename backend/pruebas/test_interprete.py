@@ -178,5 +178,5 @@ def test_crea_el_interprete_con_el_proveedor_configurado() -> None:
 def test_proveedor_desconocido_da_un_error_claro() -> None:
     configuracion = Configuracion(database_url="postgresql+psycopg://x@localhost/x", interprete_proveedor="otro")
 
-    with pytest.raises(ValueError, match="Disponibles: falso"):
+    with pytest.raises(ValueError, match="Disponibles: anthropic, falso"):
         crear_interprete(configuracion)

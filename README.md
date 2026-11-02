@@ -143,10 +143,13 @@ python -m app.herramientas.interpretar "busco un celular Samsung gama media por 
 - **Si la respuesta no cumple el esquema,** se reintenta una vez; si vuelve a fallar, se pide
   aclaración al usuario. También se pide aclaración, por reglas propias, cuando no hay producto
   o la confianza es menor que `INTERPRETE_CONFIANZA_MINIMA`.
-- **Proveedor:** el del modelo de lenguaje aún no se ha elegido. Mientras tanto,
-  `INTERPRETE_PROVEEDOR=falso` interpreta con reglas simples (listas de productos y marcas,
-  expresiones de precio como "800 mil", "2 millones" o "4 palos"), sin clave de API. El
-  proveedor real se agrega en `app/interpretacion/registro.py` sin tocar lo demás.
+- **Proveedores** (`INTERPRETE_PROVEEDOR`):
+  - `anthropic`: Claude, el proveedor real elegido el 1 de noviembre de 2026. Necesita
+    `ANTHROPIC_API_KEY` en `.env`. El modelo se elige con `INTERPRETE_MODELO` (por defecto
+    `claude-opus-5-5`; `claude-haiku-5-5` es mucho más barato) y se usa con esfuerzo bajo,
+    porque extraer criterios es una tarea simple.
+  - `falso` (por defecto): reglas simples, sin clave de API ni costo. Sirve para desarrollar y
+    probar; entiende pocas palabras (en las 50 consultas anotadas acierta 0 de 50).
 
 ### Medir H2 (exactitud de la interpretación)
 
@@ -229,7 +232,7 @@ Nada más cambia (RNF-06).
 |---|---|---|
 | 0. Base del proyecto | 31 oct – 2 nov 2026 | Terminado (31 oct) |
 | 1. Extracción de datos | 31 oct – 13 nov | Terminado (1 nov): Mercado Libre, Falabella y Homecenter |
-| 2. Interpretación PLN | 7 – 20 nov | En curso: falta el conjunto de 50 consultas anotadas |
+| 2. Interpretación PLN | 7 – 20 nov | En curso: falta medir H2 con el proveedor real |
 | 3. Costo total y recomendación | 14 – 27 nov | Pendiente |
 | 4. Historial de precios | 21 nov – 4 dic | Pendiente |
 | 5. Interfaz e integración | 28 nov – 11 dic | Pendiente |

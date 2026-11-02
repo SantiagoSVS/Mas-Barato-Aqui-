@@ -20,7 +20,8 @@ from app.interpretacion.interprete import Interprete
 from app.interpretacion.proveedor_falso import ProveedorFalso
 from app.main import app
 from app.modelos import Captura, Consulta, Oferta, Plataforma, Producto, Recomendacion
-from app.rutas.consultas import obtener_interprete
+from app.limite import LimitadorPorIp
+from app.rutas.consultas import obtener_interprete, obtener_limitador
 
 AYER = datetime(2026, 11, 1, 10, 0, tzinfo=UTC)
 HOY = datetime(2026, 11, 2, 10, 0, tzinfo=UTC)
@@ -30,6 +31,7 @@ CONFIG = Configuracion(database_url="postgresql+psycopg://x@localhost/x")
 @pytest.fixture
 def api(cliente: TestClient) -> Iterator[TestClient]:
     app.dependency_overrides[obtener_interprete] = lambda: Interprete(ProveedorFalso(), 0.5)
+    app.dependency_overrides[obtener_limitador] = lambda: LimitadorPorIp(10_000)
     yield cliente
 
 
@@ -191,3 +193,49 @@ def test_ofertas_de_un_producto(api: TestClient, freidora: Producto) -> None:
 
 def test_producto_inexistente_responde_404(api: TestClient) -> None:
     assert api.get("/productos/999999/ofertas").status_code == 404
+
+
+# --- Criterios editados en P2, catálogo y límite por IP ---
+
+def test_criterios_editados_no_llaman_al_modelo(api: TestClient, sesion: Session, freidora: Producto) -> None:
+    editados = {"producto": "freidora de aire", "marca": "Oster", "precio_max_cop": 225_000, "confianza": 0.2, "requiere_aclaracion": True}
+
+    cuerpo = api.post("/consultas", json={"texto": "algo bueno y barato", "criterios": editados}).json()
+
+    assert cuerpo["estado"] == "resultados"  # el texto no se interpretó: mandan los criterios del usuario
+    assert cuerpo["criterios"]["confianza"] == 1.0
+    assert cuerpo["comparacion"]["alternativas"][0]["supera_presupuesto"] is True
+    assert sesion.get(Consulta, cuerpo["consulta_id"]).tokens_consumidos == 0
+
+
+def test_criterios_editados_sin_producto_piden_aclaracion(api: TestClient) -> None:
+    cuerpo = api.post("/consultas", json={"texto": "x", "criterios": {"marca": "Oster", "confianza": 1, "requiere_aclaracion": False}}).json()
+
+    assert cuerpo["estado"] == "requiere_aclaracion"
+
+
+def test_lista_los_productos_del_catalogo(api: TestClient, freidora: Producto) -> None:
+    productos = api.get("/productos").json()
+
+    assert {"id": freidora.id, "nombre": freidora.nombre_canonico} in productos
+
+
+def test_limite_de_consultas_por_ip(cliente: TestClient, freidora: Producto) -> None:
+    app.dependency_overrides[obtener_interprete] = lambda: Interprete(ProveedorFalso(), 0.5)
+    limitador = LimitadorPorIp(2)
+    app.dependency_overrides[obtener_limitador] = lambda: limitador
+
+    codigos = [cliente.post("/consultas", json={"texto": "freidora oster"}).status_code for _ in range(3)]
+
+    assert codigos == [200, 200, 429]
+
+
+def test_el_limitador_libera_la_ventana() -> None:
+    ahora = [0.0]
+    limitador = LimitadorPorIp(1, ventana_s=60, reloj=lambda: ahora[0])
+
+    assert limitador.permitir("1.1.1.1")
+    assert not limitador.permitir("1.1.1.1")
+    assert limitador.permitir("2.2.2.2")  # cada IP lleva su cuenta
+    ahora[0] = 60
+    assert limitador.permitir("1.1.1.1")

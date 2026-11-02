@@ -28,6 +28,10 @@ PRODUCTOS = [
     ("lavadora", ["lavadora"]),
     ("licuadora", ["licuadora"]),
     ("reloj inteligente", ["reloj inteligente", "smartwatch"]),
+    # Categorías del catálogo inicial (2 nov 2026)
+    ("protector solar", ["protector solar", "bloqueador solar", "fotoprotector", "bloqueador"]),
+    ("power bank", ["power bank", "powerbank", "bateria portatil", "cargador portatil"]),
+    ("robot aspirador", ["robot aspirador", "aspiradora robot", "robot de limpieza"]),
 ]
 
 MARCAS = {
@@ -37,7 +41,7 @@ MARCAS = {
     "acer": "Acer", "dell": "Dell", "lg": "LG", "sony": "Sony", "jbl": "JBL", "oster": "Oster",
     "imusa": "Imusa", "kalley": "Kalley", "ninja": "Ninja", "holstein": "Holstein",
     "adidas": "Adidas", "nike": "Nike", "puma": "Puma", "reebok": "Reebok",
-    "new balance": "New Balance",
+    "new balance": "New Balance", "isdin": "ISDIN", "eureka": "Eureka",
 }
 
 # Modelos con número: "galaxy a55", "iphone 15 pro", "redmi note 13", "moto g84"

@@ -163,7 +163,8 @@ class Consulta(Base):
     )
     tiempo_respuesta_ms: Mapped[int | None] = mapped_column(Integer)
     tokens_consumidos: Mapped[int | None] = mapped_column(Integer)
-    con_cobertura: Mapped[bool] = mapped_column(Boolean)
+    # None: no se buscó en el catálogo porque la consulta requería aclaración
+    con_cobertura: Mapped[bool | None] = mapped_column(Boolean)
 
     recomendaciones: Mapped[list["Recomendacion"]] = relationship(back_populates="consulta")
 

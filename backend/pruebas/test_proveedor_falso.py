@@ -62,6 +62,9 @@ def test_prioridad_entrega_rapida(consulta: str) -> None:
         ("air fryer oster", "freidora de aire", "Oster", None),
         ("zapatillas nike", "tenis", "Nike", None),
         ("Portátil LENOVO", "portátil", "Lenovo", None),
+        ("protector solar isdin", "protector solar", "ISDIN", None),
+        ("power bank xiaomi", "power bank", "Xiaomi", None),
+        ("aspiradora robot eureka", "robot aspirador", "Eureka", None),
     ],
 )
 def test_producto_marca_y_modelo(consulta: str, producto: str, marca: str | None, modelo: str | None) -> None:

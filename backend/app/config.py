@@ -46,6 +46,14 @@ class Configuracion(BaseSettings):
     # consultas anotadas (H2).
     interprete_confianza_minima: float = 0.5
 
+    # Costo total (sección 7). w = valor en pesos de cada día de espera para el perfil
+    # "Entrega más rápida". NO está fijado: se calibra con las pruebas de usuarios. Mientras sea
+    # None, ese perfil ordena igual que "Menor costo total" y la respuesta lo avisa.
+    peso_dia_espera_cop: int | None = Field(default=None, ge=0)
+    # Similitud mínima (0 a 100, RapidFuzz) entre la consulta y un producto del catálogo.
+    # Valor inicial: ajustar con consultas reales.
+    busqueda_puntaje_minimo: int = Field(default=80, ge=0, le=100)
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

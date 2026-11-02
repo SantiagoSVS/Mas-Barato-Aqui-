@@ -54,6 +54,10 @@ class Configuracion(BaseSettings):
     # Valor inicial: ajustar con consultas reales.
     busqueda_puntaje_minimo: int = Field(default=80, ge=0, le=100)
 
+    # Historial (RF-10): un precio está "cerca de su mínimo histórico" si no lo supera en más de
+    # esta proporción (0.05 = 5 %). Valor inicial: el documento no lo fija; ajustar con usuarios.
+    historial_umbral_cercania: float = Field(default=0.05, ge=0, le=1)
+
 
 @lru_cache
 def obtener_configuracion() -> Configuracion:

@@ -1,4 +1,4 @@
-"""POST /consultas y GET /productos/{id}/ofertas (sección 5.6)."""
+"""POST /consultas, GET /productos/{id}/ofertas y GET /productos/{id}/historial (sección 5.6)."""
 
 from functools import lru_cache
 from typing import Annotated
@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.config import obtener_configuracion
 from app.consultas.servicio import Comparacion, RespuestaConsulta, comparar_producto, resolver_consulta
 from app.db import obtener_sesion
+from app.historial.servicio import Historial, Periodo, construir_historial
 from app.interpretacion.esquema import Prioridad
 from app.interpretacion.interprete import ErrorConsulta, Interprete
 from app.interpretacion.proveedor import ErrorProveedor
@@ -59,3 +60,15 @@ def ofertas_de_producto(
         raise HTTPException(status.HTTP_404_NOT_FOUND, "El producto no existe")
     comparacion, _ = comparar_producto(sesion, producto, prioridad, presupuesto_cop, obtener_configuracion())
     return comparacion
+
+
+@router.get("/productos/{producto_id}/historial", response_model=Historial)
+def historial_de_producto(
+    producto_id: int,
+    sesion: Annotated[Session, Depends(obtener_sesion)],
+    periodo: Periodo = "3M",
+) -> Historial:
+    producto = sesion.get(Producto, producto_id)
+    if producto is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "El producto no existe")
+    return construir_historial(sesion, producto, periodo, obtener_configuracion().historial_umbral_cercania)

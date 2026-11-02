@@ -32,8 +32,8 @@ Aplicación **web responsiva** (primero móvil) que:
 
 | Prioridad | Tiendas | Nota |
 |---|---|---|
-| Núcleo del MVP, se integran primero | **Amazon, Mercado Libre, Falabella** | Mínimo exigido: 3 tiendas funcionando. Si una bloquea el acceso, se reemplaza por una de las otras cuatro. |
-| Después, según acceso a datos | Éxito, Alkosto, Alkomprar, Homecenter | |
+| MVP, integradas y activas (1 nov 2026) | **Mercado Libre, Falabella, Homecenter** | Mínimo exigido: 3 tiendas funcionando. Si una bloquea el acceso, se reemplaza por una de las otras cuatro. |
+| Después, según acceso a datos | Éxito, Alkosto, Alkomprar, Amazon | |
 
 **Amazon queda por fuera mientras sea proyecto de grado** (decisión de Santiago, 1 nov 2026): su acceso es complejo. No se integra, pero tampoco se borra de los documentos. Datos para cuando se integre: **Amazon** despacha desde EE. UU.: el precio viene en dólares y se convierte a pesos con la tasa de cambio del día de la captura (guardar la tasa usada). Su envío `E` incluye el envío internacional y el depósito estimado de impuestos de importación cuando Amazon los muestra antes del pago. Amazon limita la extracción automatizada: intentar su API para afiliados.
 
@@ -54,18 +54,18 @@ CA = CT + w · D     # costo ajustado por tiempo de entrega
 | Componente | Decisión |
 |---|---|
 | Backend | Python 3.12 + FastAPI (Pydantic para validar) |
-| Extracción | APIs oficiales; Requests + BeautifulSoup; Playwright solo si la página exige JavaScript |
-| Base de datos | PostgreSQL (en Docker durante el desarrollo) |
+| Extracción | API oficial (Mercado Libre); Requests y lectura de los datos estructurados (JSON) de cada página de producto (Falabella, Homecenter); robots.txt con Protego. BeautifulSoup y Playwright no hicieron falta; Playwright queda como opción si una tienda exige JavaScript |
+| Base de datos | PostgreSQL 17 (en Docker durante el desarrollo) + Alembic para migraciones |
 | Capturas periódicas | APScheduler dentro de un proceso worker |
-| Emparejamiento | Reglas (marca, modelo, atributos) + similitud de texto con RapidFuzz; embeddings solo como apoyo |
-| Interpretación de consultas | Modelo de lenguaje por API con salida JSON validada con Pydantic; si no cumple, reintentar una vez o pedir aclaración |
+| Emparejamiento | Catálogo por identificadores de cada tienda verificados a mano (`backend/catalogo.toml`); RapidFuzz relaciona la consulta con el catálogo. Sin embeddings ni LLM para emparejar |
+| Interpretación de consultas | Claude (Anthropic) por API con salida JSON validada con Pydantic; si no cumple, reintentar una vez o pedir aclaración. Proveedor falso por reglas para desarrollo y pruebas |
 | Frontend | React + Vite, responsivo, primero móvil |
 | Gráficos | Recharts |
-| Pruebas | pytest (unitarias e integración), Cypress (E2E de interfaz y API) |
-| Despliegue | Docker; nube de bajo costo (proveedor por definir) |
+| Pruebas | pytest (unitarias, integración y API), Cypress (E2E de la interfaz con la API simulada); GitHub Actions en cada PR |
+| Despliegue | Docker; nube de bajo costo (proveedor por definir). En desarrollo solo PostgreSQL corre en Docker |
 | Versiones | Git + GitHub, ramas por incremento |
 
-**Pendiente:** el proveedor del modelo de lenguaje y de la nube aún no se ha elegido. Implementar la interpretación detrás de una interfaz con un proveedor falso (*fake*) que responda con reglas simples, para que todo funcione y se pueda probar sin clave de API. El proveedor real se conecta después, por configuración.
+**Proveedor del modelo de lenguaje:** Claude (Anthropic), elegido el 2 nov 2026 (`INTERPRETE_PROVEEDOR=anthropic` y `ANTHROPIC_API_KEY` en `.env`). Por defecto se usa el proveedor falso (*fake*) por reglas, para que todo funcione y se pruebe sin clave ni costo. **Pendiente:** proveedor de la nube.
 
 Esquema de salida del intérprete:
 
@@ -87,36 +87,40 @@ Esquema de salida del intérprete:
 Interfaz web → API (FastAPI) → módulos (Historial · Costo total · Interpretación PLN) → base de datos PostgreSQL ← worker de captura programada (conectores por plataforma + normalización y emparejamiento). Servicios externos: usuario (navegador), modelo de lenguaje (API) y tiendas (API o extracción).
 
 - La interfaz solo habla con la API. Solo el worker toca las tiendas. Las consultas del usuario se responden sobre datos ya almacenados, en segundos (RNF-04); **nunca** se hace scraping en el momento de la consulta.
-- Producto fuera del catálogo → se informa al usuario, se registra como «sin cobertura» y se pone en cola para la siguiente captura (RF-13).
+- Producto fuera del catálogo → se informa al usuario y se registra como «sin cobertura»; esas consultas son la lista para ampliar el catálogo (RF-13).
+- Catálogo por identificadores: cada producto de `backend/catalogo.toml` lleva sus IDs verificados a mano en cada tienda (la API de Mercado Libre no permite buscar con token de aplicación). Hoy hay 10 productos de tecnología, hogar y belleza.
+- Envío: Mercado Libre cotiza envío y días a Medellín (`MERCADOLIBRE_CIUDAD_DESTINO`). Falabella y Homecenter no lo publican antes de pagar: queda desconocido, con la nota de la tienda (`plataforma.nota_envio`), y esas ofertas van aparte («envío por confirmar») y nunca son la recomendada.
 - Si una tienda falla, se registra el error y se responde con las demás (RNF-05).
 
 ## Modelo de datos (sección 6)
 
 | Entidad | Atributos principales |
 |---|---|
-| Plataforma | id, nombre, tipo de acceso (API o extracción), url base, moneda, activa |
+| Plataforma | id, nombre, tipo de acceso (API o extracción), url base, moneda, activa, nota de envío |
 | Producto | id, nombre canónico, marca, modelo, categoría, atributos clave |
 | Oferta | id, plataforma_id, producto_id, título original, url de origen, vendedor |
 | Captura | id, oferta_id, fecha y hora, precio (COP), costo de envío (COP), días de entrega estimados, disponibilidad. **Nunca se sobrescribe**: cada fila es un punto del historial. Para Amazon, guardar también precio original en USD y tasa de cambio. |
-| Consulta | id, texto original, criterios interpretados (JSON), confianza, fecha, tiempo de respuesta, tokens consumidos, cobertura (sí/no) |
+| Consulta | id, texto original, criterios interpretados (JSON), confianza, fecha, tiempo de respuesta, tokens consumidos, cobertura (sí/no; vacía si pidió aclaración) |
+| Ejecución de captura | id, plataforma_id, inicio, fin, estado, ofertas guardadas, error (RF-12, RNF-05) |
 | Recomendación | id, consulta_id, oferta_id, posición, costo total, componentes del cálculo |
 
 Índices: `oferta_id + fecha` y `producto_id`. Sin datos personales de usuarios en el MVP.
 
-## API inicial (nombres ajustables)
+## API
 
 | Endpoint | Función |
 |---|---|
-| `POST /consultas` | Recibe el texto; devuelve criterios interpretados y recomendación |
-| `GET /productos/{id}/ofertas` | Ofertas actuales por plataforma con costo total |
-| `GET /productos/{id}/historial` | Serie de precios por plataforma |
+| `POST /consultas` | Recibe el texto (y opcionalmente criterios editados, sin llamar al modelo); devuelve criterios interpretados y recomendación. Límite: 20 consultas por minuto por IP |
+| `GET /productos` | Productos del catálogo (para la aclaración en P2) |
+| `GET /productos/{id}/ofertas` | Ofertas actuales por plataforma con costo total; acepta `prioridad` y `presupuesto` |
+| `GET /productos/{id}/historial` | Serie de precios por plataforma y mínimo histórico; acepta `periodo` (1M, 3M, 6M) |
 | `GET /salud` | Estado del servicio y de la última captura por plataforma |
 
 ## Requerimientos
 
 Funcionales (M = debe, S = debería). Construir primero todos los M.
 
-- **M:** RF-01 consulta en texto libre · RF-02 criterios estructurados · RF-03 captura periódica de precio, envío, entrega y disponibilidad (Amazon, Mercado Libre y Falabella primero) · RF-04 normalización (moneda, unidades, variantes; USD→COP para Amazon) · RF-05 emparejar publicaciones del mismo producto · RF-06 calcular costo total y ordenar · RF-07 mostrar recomendación con explicación, fuente y fecha · RF-08 redirigir a la publicación original (centralizar en una sola función, para añadir afiliación después sin tocar el orden).
+- **M:** RF-01 consulta en texto libre · RF-02 criterios estructurados · RF-03 captura periódica de precio, envío, entrega y disponibilidad (Mercado Libre, Falabella y Homecenter en el MVP) · RF-04 normalización (moneda, unidades, variantes; USD→COP para Amazon cuando se integre) · RF-05 emparejar publicaciones del mismo producto · RF-06 calcular costo total y ordenar · RF-07 mostrar recomendación con explicación, fuente y fecha · RF-08 redirigir a la publicación original (centralizar en una sola función, para añadir afiliación después sin tocar el orden).
 - **S:** RF-09 historial con gráfico · RF-10 indicar si el precio está cerca del mínimo histórico · RF-11 elegir criterio (menor costo / entrega más rápida) · RF-12 registrar métricas de uso y errores · RF-13 manejo de productos sin cobertura.
 
 No funcionales (ISO/IEC 25010): RNF-01 ≥ 95 % de precios correctos (H3) · RNF-02 ≥ 80 % de consultas bien interpretadas (H2) · RNF-03 SUS ≥ 68 (H4) · RNF-04 respuesta en segundos · RNF-05 una tienda caída no tumba el sistema · RNF-06 una tienda = un conector · RNF-07 seguridad y Ley 1581 · RNF-08 navegadores modernos de móvil y escritorio.
@@ -125,16 +129,25 @@ Hipótesis que el sistema debe permitir medir: H1 tiempo de decisión ≥ 50 % m
 
 ## Plan de desarrollo (Fase 3: 31 oct – 11 dic 2026)
 
-| Incremento | Fechas | Entregable |
-|---|---|---|
-| 0. Base del proyecto | 31 oct – 2 nov | Monorepo, Docker Compose con PostgreSQL, migraciones del modelo de datos, `GET /salud`, frontend Vite vacío con la paleta |
-| 1. Extracción de datos | 31 oct – 13 nov | Conectores Amazon, Mercado Libre y Falabella; worker con APScheduler; normalización; registro de errores |
-| 2. Interpretación PLN | 7 – 20 nov | Intérprete con esquema validado + proveedor falso; conjunto de 50 consultas anotadas y script de evaluación (H2) |
-| 3. Costo total y recomendación | 14 – 27 nov | Emparejamiento, motor CT/CA determinístico con pruebas, `POST /consultas` |
-| 4. Historial de precios | 21 nov – 4 dic | Serie por oferta, mínimo histórico, `GET /productos/{id}/historial` |
-| 5. Interfaz e integración | 28 nov – 11 dic | Pantallas P1–P4 según mockups; E2E con Cypress; MVP completo (entrega 3: 11 dic) |
+Los cinco incrementos se terminaron y fusionaron en `main` entre el 31 oct y el 2 nov 2026, antes de lo planeado (PR #1 a #6). Cada uno tiene sus pruebas (pytest y Cypress) y pasa el CI.
 
-Cada incremento cierra con código y pruebas en el repositorio (evidencia para la Entrega 2: el profesor pidió repositorio, capturas y comparar cronograma real vs planeado).
+| Incremento | Fechas planeadas | Real | Entregable |
+|---|---|---|---|
+| 0. Base del proyecto | 31 oct – 2 nov | 31 oct | Monorepo, Docker Compose con PostgreSQL, migraciones, `GET /salud`, frontend Vite con la paleta |
+| 1. Extracción de datos | 31 oct – 13 nov | 1 nov | Conectores Mercado Libre, Falabella y Homecenter; worker con APScheduler; normalización; registro de errores |
+| 2. Interpretación PLN | 7 – 20 nov | 2 nov | Intérprete con esquema validado, proveedor falso y Claude; 50 consultas anotadas y script de evaluación (H2) |
+| 3. Costo total y recomendación | 14 – 27 nov | 2 nov | Búsqueda en el catálogo, motor CT/CA determinístico con pruebas, `POST /consultas` |
+| 4. Historial de precios | 21 nov – 4 dic | 2 nov | Serie por tienda, mínimo histórico, `GET /productos/{id}/historial` |
+| 5. Interfaz e integración | 28 nov – 11 dic | 2 nov | Pantallas P1–P4 y estados; 18 pruebas E2E con Cypress; MVP completo |
+
+## Fase 4 (pendiente)
+
+- **H2:** medir el intérprete con Claude sobre `backend/evaluacion/consultas_anotadas.json` (necesita `ANTHROPIC_API_KEY`; cuesta tokens, pedir aprobación antes). Convención: campos relevantes producto, marca, modelo, precio_max_cop, prioridad y requiere_aclaracion; producto y modelo por contención de palabras; atributos aparte; se reporta también la medida estricta e intervalo de Wilson.
+- **H3:** auditoría manual de 100 pares producto–tienda contra la página real.
+- Dejar el worker capturando a diario para que el historial crezca.
+- Ampliar el catálogo para las tareas con usuarios (faltan tenis, ropa y suplementos).
+- Pruebas con usuarios (H1, H4, H5) y calibración de `w` (`PESO_DIA_ESPERA_COP`); mientras no tenga valor, «Entrega más rápida» ordena por CT y avisa.
+- Elegir el proveedor de la nube y contenerizar la API y el worker.
 
 ## Diseño de la interfaz
 

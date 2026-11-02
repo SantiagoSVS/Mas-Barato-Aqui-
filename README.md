@@ -133,7 +133,7 @@ En GitHub, cada Pull Request corre las mismas pruebas automáticamente
 |---|---|---|
 | Mercado Libre | API oficial (token de aplicación) | `MERCADOLIBRE_CLIENT_ID` y `MERCADOLIBRE_CLIENT_SECRET`, de la app creada en developers.mercadolibre.com.co |
 | Falabella | Extracción de la página de producto (robots.txt la permite) | Ninguna |
-| Homecenter | Extracción de la página de producto (robots.txt la permite; prohíbe la búsqueda) | Ninguna. Queda inactiva hasta revisar sus términos (ver abajo) |
+| Homecenter | Extracción de la página de producto (robots.txt la permite; prohíbe la búsqueda) | Ninguna |
 | Amazon | No se integra por ahora (ver abajo) | — |
 
 Si a una tienda le faltan credenciales, el worker la omite y lo avisa en el log.
@@ -161,7 +161,8 @@ Como exige el documento de arquitectura, la tienda se registró inactiva y se ac
 catálogo (`productProps` de `__NEXT_DATA__`) y toma el menor precio vigente (INTERNET frente a
 NORMAL), sin el precio con tarjeta CMR. Nunca usa la búsqueda, porque su `robots.txt` la
 prohíbe. El envío y los días quedan como desconocidos, con un aviso en `nota_envio`. Se
-registró inactiva; se activa con una migración después de revisar sus términos, como Falabella.
+registró inactiva y se activó (migración `activa_homecenter`) después de revisar sus términos,
+el 1 de noviembre de 2026.
 
 `robots.txt` se interpreta con Protego, que entiende los comodines `*` y `$` de la RFC 9309
 (`urllib.robotparser` de Python no los entiende).
@@ -191,7 +192,7 @@ Nada más cambia (RNF-06).
 | Incremento | Fechas | Estado |
 |---|---|---|
 | 0. Base del proyecto | 31 oct – 2 nov 2026 | Terminado (31 oct) |
-| 1. Extracción de datos | 31 oct – 13 nov | En curso: falta el acceso a las tiendas |
+| 1. Extracción de datos | 31 oct – 13 nov | Terminado (1 nov): Mercado Libre, Falabella y Homecenter |
 | 2. Interpretación PLN | 7 – 20 nov | Pendiente |
 | 3. Costo total y recomendación | 14 – 27 nov | Pendiente |
 | 4. Historial de precios | 21 nov – 4 dic | Pendiente |

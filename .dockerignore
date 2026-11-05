@@ -1,0 +1,18 @@
+# Solo entra a la imagen lo que el Dockerfile copia. Claves y datos locales, nunca.
+.env
+.env.*
+.git
+.github
+.vscode
+logs
+docs
+scripts
+docker
+**/__pycache__
+**/.pytest_cache
+backend/.venv
+backend/evaluacion
+backend/pruebas
+frontend/node_modules
+frontend/dist
+frontend/cypress

@@ -1,0 +1,26 @@
+# Despliegue en Render (plan gratuito). Pasos en docs/despliegue.md.
+services:
+  - type: web
+    name: mas-barato-aqui
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      # sync: false = Render los pide al crear el servicio; nunca van en el repositorio
+      - key: DATABASE_URL
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: INTERPRETE_PROVEEDOR
+        value: anthropic
+      - key: INTERPRETE_MODELO
+        value: claude-haiku-5-5
+      # La base de Neon se suspende sin uso y tarda unos segundos en despertar
+      - key: DB_TIMEOUT_CONEXION_S
+        value: "20"
+      # Protege los créditos de la API en un sitio público (valor inicial, ajustable en Render)
+      - key: LIMITE_CONSULTAS_MODELO_POR_DIA
+        value: "300"

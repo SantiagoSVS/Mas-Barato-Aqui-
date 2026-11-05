@@ -23,7 +23,9 @@ class Base(DeclarativeBase):
 
 # connect_timeout: si PostgreSQL no está encendido, falla en segundos en vez de quedarse colgado
 motor = create_engine(
-    obtener_configuracion().database_url, pool_pre_ping=True, connect_args={"connect_timeout": 5}
+    obtener_configuracion().database_url,
+    pool_pre_ping=True,
+    connect_args={"connect_timeout": obtener_configuracion().db_timeout_conexion_s},
 )
 FabricaSesiones = sessionmaker(bind=motor, autoflush=False, expire_on_commit=False)
 

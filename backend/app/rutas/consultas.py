@@ -22,7 +22,7 @@ from app.interpretacion.esquema import CriteriosConsulta, Prioridad
 from app.interpretacion.interprete import ErrorConsulta, Interprete
 from app.interpretacion.proveedor import ErrorProveedor
 from app.interpretacion.registro import crear_interprete
-from app.limite import LimitadorPorIp
+from app.limite import LimitadorPorIp, cupo_del_modelo_agotado
 from app.modelos import Producto
 
 router = APIRouter(tags=["consultas"])
@@ -59,6 +59,12 @@ def crear_consulta(
     if not limitador.permitir(ip):
         raise HTTPException(
             status.HTTP_429_TOO_MANY_REQUESTS, "Hiciste muchas consultas seguidas. Intenta de nuevo en un minuto."
+        )
+    # Con criterios editados no se llama al modelo, así que no gastan el cupo
+    limite_diario = obtener_configuracion().limite_consultas_modelo_por_dia
+    if entrada.criterios is None and cupo_del_modelo_agotado(sesion, limite_diario):
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS, "Se alcanzó el límite de búsquedas de hoy. Intenta de nuevo mañana."
         )
     try:
         return resolver_consulta(

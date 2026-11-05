@@ -1,6 +1,6 @@
 ﻿# Una pasada de captura del catálogo (la ejecuta la tarea programada "MasBaratoAqui - Captura").
 #
-# Arranca Docker Desktop si está apagado, levanta PostgreSQL y corre el worker una vez.
+# Si la base es local, arranca Docker Desktop y PostgreSQL. Luego corre el worker una vez.
 # El resultado queda en logs/captura_diaria.log y en GET /salud.
 #
 # Uso manual:  powershell -ExecutionPolicy Bypass -File scripts\captura_diaria.ps1
@@ -22,22 +22,26 @@ try {
     Set-Location $raiz
     Escribir 'Inicia la captura diaria'
 
-    # 1. Docker: si el motor no responde, se abre Docker Desktop y se espera hasta 3 minutos
-    docker info *> $null
-    if ($LASTEXITCODE -ne 0) {
-        Escribir 'Docker apagado: se abre Docker Desktop'
-        Start-Process "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe"
-        $limite = (Get-Date).AddMinutes(3)
-        do {
-            Start-Sleep -Seconds 10
-            docker info *> $null
-        } until ($LASTEXITCODE -eq 0 -or (Get-Date) -gt $limite)
-        if ($LASTEXITCODE -ne 0) { throw 'Docker no arrancó en 3 minutos' }
-    }
+    # Docker solo hace falta si la base es local; con una base en la nube (Neon) se omite
+    $baseLocal = Select-String -Path (Join-Path $raiz '.env') -Pattern '^DATABASE_URL=.*(localhost|127\.0\.0\.1)' -Quiet
+    if ($baseLocal) {
+        # 1. Docker: si el motor no responde, se abre Docker Desktop y se espera hasta 3 minutos
+        docker info *> $null
+        if ($LASTEXITCODE -ne 0) {
+            Escribir 'Docker apagado: se abre Docker Desktop'
+            Start-Process "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe"
+            $limite = (Get-Date).AddMinutes(3)
+            do {
+                Start-Sleep -Seconds 10
+                docker info *> $null
+            } until ($LASTEXITCODE -eq 0 -or (Get-Date) -gt $limite)
+            if ($LASTEXITCODE -ne 0) { throw 'Docker no arrancó en 3 minutos' }
+        }
 
-    # 2. Base de datos
-    cmd /c "docker compose up -d --wait >> `"$archivoLog`" 2>&1"
-    if ($LASTEXITCODE -ne 0) { throw 'No se pudo levantar PostgreSQL' }
+        # 2. Base de datos
+        cmd /c "docker compose up -d --wait >> `"$archivoLog`" 2>&1"
+        if ($LASTEXITCODE -ne 0) { throw 'No se pudo levantar PostgreSQL' }
+    }
 
     # 3. Una pasada del worker (respeta robots.txt y el intervalo entre peticiones)
     Set-Location (Join-Path $raiz 'backend')

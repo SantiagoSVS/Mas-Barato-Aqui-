@@ -3,7 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
@@ -19,6 +19,8 @@ class Configuracion(BaseSettings):
     # repr=False: los valores con claves nunca se imprimen (logs, errores de pytest, CI)
     database_url: str = Field(repr=False)
     test_database_url: str | None = Field(default=None, repr=False)
+    # Segundos para conectar: 5 en local; más con una base en la nube que se suspende sin uso
+    db_timeout_conexion_s: int = Field(default=5, ge=1)
 
     # Extracción (valores iniciales de operación; se ajustan según lo que acepte cada tienda)
     captura_intervalo_horas: float = 12
@@ -60,6 +62,19 @@ class Configuracion(BaseSettings):
 
     # Seguridad (sección 9): consultas por minuto desde una misma IP. Valor inicial.
     limite_consultas_por_minuto: int = Field(default=20, ge=1)
+    # Llamadas al modelo en 24 horas, en total; protege los créditos en un sitio público. Sin valor: sin tope
+    limite_consultas_modelo_por_dia: int | None = Field(default=None, ge=1)
+
+    @field_validator("database_url", "test_database_url")
+    @classmethod
+    def usar_psycopg(cls, url: str | None) -> str | None:
+        """Neon y otros servicios entregan postgresql://; SQLAlchemy debe saber que el controlador es psycopg."""
+        if url is None:
+            return None
+        for prefijo in ("postgresql://", "postgres://"):
+            if url.startswith(prefijo):
+                return "postgresql+psycopg://" + url.removeprefix(prefijo)
+        return url
 
 
 @lru_cache

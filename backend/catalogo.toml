@@ -13,8 +13,8 @@
 #
 # Un producto puede tener varios identificadores en una tienda (varios vendedores).
 #
-# PENDIENTE: definir el catálogo real. Estos productos se verificaron el 1 de noviembre de
-# 2026 y sirven para probar la captura de punta a punta.
+# Los primeros productos se verificaron el 1 de noviembre de 2026; abajo están los de la lista
+# de Santiago y la ampliación por categorías.
 
 [[producto]]
 nombre = "Samsung Galaxy Tab A11 128 GB"
@@ -111,3 +111,346 @@ modelo = "NER650"
 [producto.ids]
 mercadolibre = ["MCO28453977"]
 homecenter = ["3018343"]
+
+
+# --- Ampliación por las categorías de Santiago (5 de noviembre de 2026). Cada identificador se
+# verificó con los conectores ese día: oferta nueva, disponible y con el mismo modelo. Los que
+# están en el mapa de la tienda pero sin datos o agotados se dejaron por fuera. Sin `marca` en
+# juegos y consolas: la gente dice "PlayStation" o "Xbox", y una marca distinta descartaría el producto.
+
+# Celulares
+
+[[producto]]
+nombre = "Celular Samsung Galaxy A36 5G 256 GB 8 GB RAM"
+categoria = "celulares"
+marca = "Samsung"
+modelo = "Galaxy A36"
+[producto.ids]
+mercadolibre = ["MCO47111905", "MCO47106610", "MCO47111011"]
+
+[[producto]]
+nombre = "Celular Samsung Galaxy A56 5G 256 GB 8 GB RAM"
+categoria = "celulares"
+marca = "Samsung"
+modelo = "Galaxy A56"
+[producto.ids]
+mercadolibre = ["MCO47112282"]
+
+[[producto]]
+nombre = "Celular Apple iPhone 16 128 GB"
+categoria = "celulares"
+marca = "Apple"
+modelo = "iPhone 16"
+[producto.ids]
+mercadolibre = ["MCO40287808", "MCO40287802", "MCO40287791"]
+
+# Tablets
+
+[[producto]]
+nombre = "Tablet Apple iPad 11 256 GB Wi-Fi"
+categoria = "tablets"
+marca = "Apple"
+modelo = "iPad 11"
+[producto.ids]
+mercadolibre = ["MCO47876774"]
+
+[[producto]]
+nombre = "Tablet Lenovo Idea Tab 11 128 GB con Tab Pen"
+categoria = "tablets"
+marca = "Lenovo"
+modelo = "Idea Tab"
+[producto.ids]
+mercadolibre = ["MCO75210678", "MCO61753207"]
+
+[[producto]]
+nombre = "Tablet Samsung Galaxy Tab A9+ 128 GB Wi-Fi"
+categoria = "tablets"
+marca = "Samsung"
+modelo = "Galaxy Tab A9 Plus"
+[producto.ids]
+mercadolibre = ["MCO29560511", "MCO32228197"]
+
+# Portátiles
+
+[[producto]]
+nombre = "Portátil Lenovo LOQ 15IRX10 Core i7 16 GB 1 TB"
+categoria = "portatiles"
+marca = "Lenovo"
+modelo = "LOQ 15IRX10 laptop computador"
+[producto.ids]
+mercadolibre = ["MCO61092773"]
+
+[[producto]]
+nombre = "Portátil Apple MacBook Air M4 13 pulgadas MW0W3"
+categoria = "portatiles"
+marca = "Apple"
+modelo = "MacBook Air M4 laptop computador"
+[producto.ids]
+mercadolibre = ["MCO59197128", "MCO54109555"]
+
+[[producto]]
+nombre = "Portátil Lenovo IdeaPad Slim 3 14IWC11 Core i5 8 GB 512 GB"
+categoria = "portatiles"
+marca = "Lenovo"
+modelo = "IdeaPad Slim 3 laptop computador"
+[producto.ids]
+mercadolibre = ["MCO79889378"]
+
+# Componentes de computador
+
+[[producto]]
+nombre = "SSD Kingston NV3 1 TB NVMe"
+categoria = "componentes"
+marca = "Kingston"
+modelo = "NV3 disco de estado sólido"
+[producto.ids]
+mercadolibre = ["MCO39766120", "MCO50957106", "MCO68812268"]
+falabella = ["141670659"]
+
+[[producto]]
+nombre = "Procesador AMD Ryzen 5 5600"
+categoria = "componentes"
+marca = "AMD"
+modelo = "Ryzen 5 5600"
+[producto.ids]
+mercadolibre = ["MCO19223323"]
+
+[[producto]]
+nombre = "Procesador AMD Ryzen 7 5700X"
+categoria = "componentes"
+marca = "AMD"
+modelo = "Ryzen 7 5700X"
+[producto.ids]
+mercadolibre = ["MCO53410760"]
+
+[[producto]]
+nombre = "Tarjeta gráfica Gigabyte GeForce RTX 4060 8 GB"
+categoria = "componentes"
+marca = "Gigabyte"
+modelo = "RTX 4060 tarjeta de video"
+[producto.ids]
+mercadolibre = ["MCO28671631"]
+
+[[producto]]
+nombre = "Memoria RAM Corsair Vengeance LPX 16 GB DDR4 3200 MHz"
+categoria = "componentes"
+marca = "Corsair"
+modelo = "Vengeance LPX"
+[producto.ids]
+mercadolibre = ["MCO22226723"]
+
+# Consolas
+
+[[producto]]
+nombre = "Consola Sony PlayStation 5 Slim Digital"
+categoria = "consolas"
+modelo = "PS5 Slim"
+[producto.ids]
+mercadolibre = ["MCO29001054"]
+
+[[producto]]
+nombre = "Consola Xbox Series S 512 GB"
+categoria = "consolas"
+modelo = "Microsoft Xbox Series S"
+[producto.ids]
+mercadolibre = ["MCO16650345"]
+
+[[producto]]
+nombre = "Consola Xbox Series X 1 TB"
+categoria = "consolas"
+modelo = "Microsoft Xbox Series X"
+[producto.ids]
+mercadolibre = ["MCO29577429", "MCO59169520"]
+
+[[producto]]
+nombre = "Consola Nintendo Switch 2"
+categoria = "consolas"
+modelo = "Switch 2"
+[producto.ids]
+mercadolibre = ["MCO50177572"]
+falabella = ["73297242"]
+
+# Videojuegos
+
+[[producto]]
+nombre = "Juego God of War Ragnarök PS5"
+categoria = "videojuegos"
+modelo = "videojuego PlayStation 5"
+[producto.ids]
+mercadolibre = ["MCO19472097", "MCO75632976"]
+falabella = ["127142279", "54487337"]
+
+[[producto]]
+nombre = "Juego Marvel's Spider-Man 2 PS5"
+categoria = "videojuegos"
+modelo = "videojuego Spiderman PlayStation 5"
+[producto.ids]
+mercadolibre = ["MCO26835194"]
+falabella = ["128270333"]
+
+[[producto]]
+nombre = "Juego The Last of Us Part II Remastered PS5"
+categoria = "videojuegos"
+modelo = "videojuego PlayStation 5"
+[producto.ids]
+mercadolibre = ["MCO29019978", "MCO30318944"]
+falabella = ["129758955", "128841360"]
+
+[[producto]]
+nombre = "Juego Call of Duty Black Ops 6 PS5"
+categoria = "videojuegos"
+modelo = "videojuego PlayStation 5"
+[producto.ids]
+mercadolibre = ["MCO41142414", "MCO42703922"]
+falabella = ["136917131"]
+
+[[producto]]
+nombre = "Juego Astro Bot PS5"
+categoria = "videojuegos"
+modelo = "videojuego PlayStation 5"
+[producto.ids]
+mercadolibre = ["MCO42975162"]
+falabella = ["136917025", "73048526"]
+
+[[producto]]
+nombre = "Juego Mario Kart World Nintendo Switch 2"
+categoria = "videojuegos"
+modelo = "videojuego"
+[producto.ids]
+mercadolibre = ["MCO49537584", "MCO51929491"]
+
+[[producto]]
+nombre = "Juego The Legend of Zelda Breath of the Wild Nintendo Switch"
+categoria = "videojuegos"
+modelo = "videojuego"
+[producto.ids]
+mercadolibre = ["MCO6334852"]
+
+[[producto]]
+nombre = "Juego Forza Horizon 5 Xbox"
+categoria = "videojuegos"
+modelo = "videojuego Xbox Series X Xbox One"
+[producto.ids]
+mercadolibre = ["MCO23027724"]
+
+[[producto]]
+nombre = "Juego Elden Ring Nightreign Xbox"
+categoria = "videojuegos"
+modelo = "videojuego Xbox Series X Xbox One"
+[producto.ids]
+mercadolibre = ["MCO50391606"]
+
+# Televisores y monitores
+
+[[producto]]
+nombre = "Televisor Samsung 55 pulgadas Crystal UHD DU7000"
+categoria = "televisores"
+marca = "Samsung"
+modelo = "DU7000 TV"
+[producto.ids]
+mercadolibre = ["MCO37850031"]
+
+[[producto]]
+nombre = "Televisor LG 55 pulgadas 4K 55UT8050"
+categoria = "televisores"
+marca = "LG"
+modelo = "55UT8050 TV"
+[producto.ids]
+mercadolibre = ["MCO38520945"]
+homecenter = ["789158"]
+
+[[producto]]
+nombre = "Televisor Hisense 55 pulgadas QLED 55Q6QV"
+categoria = "televisores"
+marca = "Hisense"
+modelo = "55Q6QV TV"
+[producto.ids]
+mercadolibre = ["MCO55232951"]
+homecenter = ["3029106"]
+
+[[producto]]
+nombre = "Televisor Hisense 55 pulgadas QLED 55QD5SV"
+categoria = "televisores"
+marca = "Hisense"
+modelo = "55QD5SV TV"
+[producto.ids]
+mercadolibre = ["MCO68433942"]
+homecenter = ["3109588"]
+
+[[producto]]
+nombre = "Televisor TCL 55 pulgadas 4K V6C"
+categoria = "televisores"
+marca = "TCL"
+modelo = "V6C TV"
+[producto.ids]
+mercadolibre = ["MCO51069838"]
+
+[[producto]]
+nombre = "Monitor Samsung 24 pulgadas Essential S3"
+categoria = "monitores"
+marca = "Samsung"
+modelo = "Essential S3"
+[producto.ids]
+mercadolibre = ["MCO53270548"]
+
+[[producto]]
+nombre = "Monitor Samsung 27 pulgadas Odyssey G3"
+categoria = "monitores"
+marca = "Samsung"
+modelo = "Odyssey G3"
+[producto.ids]
+mercadolibre = ["MCO51285651"]
+
+# Audífonos
+
+[[producto]]
+nombre = "Audífonos JBL Tune 520BT"
+categoria = "audifonos"
+marca = "JBL"
+modelo = "Tune 520BT auriculares"
+[producto.ids]
+mercadolibre = ["MCO44202830", "MCO62045253"]
+homecenter = ["713683", "656587"]
+
+[[producto]]
+nombre = "Audífonos Apple AirPods 4"
+categoria = "audifonos"
+marca = "Apple"
+modelo = "AirPods 4 auriculares"
+[producto.ids]
+mercadolibre = ["MCO40520107"]
+
+[[producto]]
+nombre = "Audífonos Soundcore Q20i"
+categoria = "audifonos"
+marca = "Soundcore"
+modelo = "Q20i auriculares"
+[producto.ids]
+mercadolibre = ["MCO40406967", "MCO66559644"]
+
+[[producto]]
+nombre = "Audífonos Samsung Galaxy Buds FE"
+categoria = "audifonos"
+marca = "Samsung"
+modelo = "Galaxy Buds FE auriculares"
+[producto.ids]
+mercadolibre = ["MCO39016606", "MCO29595951"]
+
+[[producto]]
+nombre = "Audífonos Sony WH-CH520"
+categoria = "audifonos"
+marca = "Sony"
+modelo = "WH-CH520 auriculares"
+[producto.ids]
+mercadolibre = ["MCO41946950", "MCO46392815"]
+falabella = ["120300130", "120300576"]
+homecenter = ["3005543"]
+
+[[producto]]
+nombre = "Audífonos Sony WH-1000XM5"
+categoria = "audifonos"
+marca = "Sony"
+modelo = "WH-1000XM5 auriculares"
+[producto.ids]
+mercadolibre = ["MCO39073727", "MCO77986980"]
+falabella = ["119322622", "121398069"]

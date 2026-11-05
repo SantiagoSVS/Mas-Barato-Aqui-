@@ -88,7 +88,7 @@ Interfaz web → API (FastAPI) → módulos (Historial · Costo total · Interpr
 
 - La interfaz solo habla con la API. Solo el worker toca las tiendas. Las consultas del usuario se responden sobre datos ya almacenados, en segundos (RNF-04); **nunca** se hace scraping en el momento de la consulta.
 - Producto fuera del catálogo → se informa al usuario y se registra como «sin cobertura»; esas consultas son la lista para ampliar el catálogo (RF-13).
-- Catálogo por identificadores: cada producto de `backend/catalogo.toml` lleva sus IDs verificados a mano en cada tienda (la API de Mercado Libre no permite buscar con token de aplicación). Hoy hay 10 productos de tecnología, hogar y belleza.
+- Catálogo por identificadores: cada producto de `backend/catalogo.toml` lleva sus IDs verificados a mano en cada tienda (la API de Mercado Libre no permite buscar con token de aplicación). Hoy hay 50 productos: celulares, tablets, portátiles, componentes, consolas, videojuegos, televisores, monitores y audífonos, además de los 10 iniciales de tecnología, hogar y belleza.
 - Envío: Mercado Libre cotiza envío y días a Medellín (`MERCADOLIBRE_CIUDAD_DESTINO`). Falabella y Homecenter no lo publican antes de pagar: queda desconocido, con la nota de la tienda (`plataforma.nota_envio`), y esas ofertas van aparte («envío por confirmar») y nunca son la recomendada.
 - Si una tienda falla, se registra el error y se responde con las demás (RNF-05).
 
@@ -147,7 +147,7 @@ Materiales en `docs/fase4/` (protocolo, consentimiento, cuestionarios, auditorí
 - **H2 medida el 4 nov 2026:** Haiku 5.5 41/50 (82 %), Opus 5.5 40/50 (80 %); detalle en `docs/fase4/resultados_h2.md`. Repetirla cuesta tokens: pedir aprobación antes. Convención: campos relevantes producto, marca, modelo, precio_max_cop, prioridad y requiere_aclaracion; producto y modelo por contención de palabras; atributos aparte; se reporta también la medida estricta e intervalo de Wilson.
 - **H3:** auditoría manual de 100 pares producto–tienda contra la página real.
 - Dejar el worker capturando a diario para que el historial crezca.
-- Ampliar el catálogo para las tareas con usuarios (faltan tenis, ropa y suplementos).
+- Del listado inicial de Santiago faltan tenis, ropa y suplementos en el catálogo; tenis y ropa se complican por tallas y colores.
 - Pruebas con usuarios (H1, H4, H5) y calibración de `w` (`PESO_DIA_ESPERA_COP`); mientras no tenga valor, «Entrega más rápida» ordena por CT y avisa.
 - Publicar en Render y Neon: la configuración está lista; faltan las cuentas de Santiago (`docs/despliegue.md`).
 

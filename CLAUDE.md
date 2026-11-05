@@ -65,7 +65,7 @@ CA = CT + w · D     # costo ajustado por tiempo de entrega
 | Despliegue | Docker; nube de bajo costo (proveedor por definir). En desarrollo solo PostgreSQL corre en Docker |
 | Versiones | Git + GitHub, ramas por incremento |
 
-**Proveedor del modelo de lenguaje:** Claude (Anthropic), elegido el 2 nov 2026 (`INTERPRETE_PROVEEDOR=anthropic` y `ANTHROPIC_API_KEY` en `.env`). Por defecto se usa el proveedor falso (*fake*) por reglas, para que todo funcione y se pruebe sin clave ni costo. **Pendiente:** proveedor de la nube.
+**Proveedor del modelo de lenguaje:** Claude (Anthropic), elegido el 2 nov 2026 (`INTERPRETE_PROVEEDOR=anthropic` y `ANTHROPIC_API_KEY` en `.env`). Modelo: `claude-haiku-5-5`, elegido por Santiago el 4 nov 2026 tras medir H2. Por defecto se usa el proveedor falso (*fake*) por reglas, para que todo funcione y se pruebe sin clave ni costo. Las pruebas de pytest siempre usan el proveedor falso (`pruebas/conftest.py`), aunque `.env` tenga la clave. **Pendiente:** proveedor de la nube.
 
 Esquema de salida del intérprete:
 
@@ -144,7 +144,7 @@ Los cinco incrementos se terminaron y fusionaron en `main` entre el 31 oct y el 
 
 Materiales en `docs/fase4/` (protocolo, consentimiento, cuestionarios, auditoría H3); análisis en `backend/app/validacion/` con las herramientas `analizar_pruebas_usuarios` y `auditoria_precios`. Captura programada con `scripts/programar_captura.ps1`.
 
-- **H2:** medir el intérprete con Claude sobre `backend/evaluacion/consultas_anotadas.json` (necesita `ANTHROPIC_API_KEY`; cuesta tokens, pedir aprobación antes). Convención: campos relevantes producto, marca, modelo, precio_max_cop, prioridad y requiere_aclaracion; producto y modelo por contención de palabras; atributos aparte; se reporta también la medida estricta e intervalo de Wilson.
+- **H2 medida el 4 nov 2026:** Haiku 5.5 41/50 (82 %), Opus 5.5 40/50 (80 %); detalle en `docs/fase4/resultados_h2.md`. Repetirla cuesta tokens: pedir aprobación antes. Convención: campos relevantes producto, marca, modelo, precio_max_cop, prioridad y requiere_aclaracion; producto y modelo por contención de palabras; atributos aparte; se reporta también la medida estricta e intervalo de Wilson.
 - **H3:** auditoría manual de 100 pares producto–tienda contra la página real.
 - Dejar el worker capturando a diario para que el historial crezca.
 - Ampliar el catálogo para las tareas con usuarios (faltan tenis, ropa y suplementos).

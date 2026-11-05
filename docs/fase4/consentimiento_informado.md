@@ -3,9 +3,9 @@
 **Proyecto:** «Mas Barato Aquí!», aplicación con inteligencia artificial para comparar el costo
 total de compra entre tiendas en línea. Proyecto de grado de Ingeniería de Software.
 
-**Responsable del tratamiento de los datos:** Santiago Velásquez, estudiante de
-**[PENDIENTE: universidad]**. Contacto: **[PENDIENTE: correo de contacto]**.
-Director del proyecto: **[PENDIENTE: nombre]**.
+**Responsable del tratamiento de los datos:** Santiago Velásquez, estudiante del
+Politécnico Grancolombiano. Contacto: savelasquezsa@gmail.com.
+Director del proyecto: Manuel Eberto Baez Mancera.
 
 ## En qué consiste
 
@@ -24,8 +24,8 @@ pagar nada.** Se evalúa la aplicación, no a ti: no hay respuestas correctas o 
   firmado se guarda aparte y no se une a los resultados.
 - No se graba audio ni video de la sesión. No inicias sesión en ninguna tienda ni escribes
   datos personales en la aplicación.
-- Los datos se conservan hasta la sustentación del proyecto, **[PENDIENTE: fecha]**, y después se
-  eliminan los que permitan identificarte.
+- Los datos se conservan hasta que termine la sustentación del proyecto, y después se eliminan
+  los que permitan identificarte.
 
 ## Tus derechos (Ley 1581 de 2012)
 
@@ -34,7 +34,7 @@ explicaciones y sin ninguna consecuencia. Puedes conocer, actualizar, rectificar
 eliminen tus datos escribiendo al correo de contacto. Puedes negarte a responder cualquier
 pregunta.
 
-**Retribución:** **[PENDIENTE: ninguna / detalle]**.
+**Retribución:** ninguna. La participación es voluntaria y no recibirás pago ni beneficio por ella.
 
 ## Autorización
 

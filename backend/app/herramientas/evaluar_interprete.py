@@ -39,7 +39,10 @@ def evaluar(consultas: list[dict]) -> Reporte:
     interprete = crear_interprete(obtener_configuracion())
     reporte = Reporte()
     for c in consultas:
-        obtenido = interprete.interpretar(c["consulta"]).criterios
+        interpretacion = interprete.interpretar(c["consulta"])
+        obtenido = interpretacion.criterios
+        reporte.tokens_entrada += interpretacion.tokens_entrada
+        reporte.tokens_salida += interpretacion.tokens_salida
         reporte.resultados.append(
             ResultadoConsulta(id=c["id"], consulta=c["consulta"], obtenido=obtenido, esperado=c["esperado"])
         )
@@ -48,7 +51,8 @@ def evaluar(consultas: list[dict]) -> Reporte:
 
 def imprimir(reporte: Reporte, detalle: bool) -> None:
     bajo, alto = intervalo_wilson(reporte.correctas, reporte.total)
-    print(f"Proveedor: {obtener_configuracion().interprete_proveedor}")
+    configuracion = obtener_configuracion()
+    print(f"Proveedor: {configuracion.interprete_proveedor} ({configuracion.interprete_modelo})")
     print(f"Consultas: {reporte.total}")
     print(f"Correctas en los campos relevantes (H2): {reporte.correctas} ({reporte.exactitud:.1%})")
     print(f"Intervalo de confianza 95 %: {bajo:.1%} – {alto:.1%}")
@@ -58,6 +62,10 @@ def imprimir(reporte: Reporte, detalle: bool) -> None:
     print(f"Medida estricta (todos los campos y atributos idénticos): {reporte.identicas} ({estricta:.1%})")
     if reporte.total < 50:
         print(f"Aviso: H2 exige al menos 50 consultas; este archivo tiene {reporte.total}.")
+
+    if reporte.total:
+        print(f"Tokens: {reporte.tokens_entrada} de entrada y {reporte.tokens_salida} de salida "
+              f"(por consulta: {reporte.tokens_entrada / reporte.total:.0f} y {reporte.tokens_salida / reporte.total:.0f})")
 
     print("\nAciertos por campo:")
     for campo, aciertos in reporte.aciertos_por_campo().items():

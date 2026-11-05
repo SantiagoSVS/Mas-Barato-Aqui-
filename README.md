@@ -227,7 +227,7 @@ python -m app.herramientas.interpretar "busco un celular Samsung gama media por 
 - **Proveedores** (`INTERPRETE_PROVEEDOR`):
   - `anthropic`: Claude, el proveedor real elegido el 1 de noviembre de 2026. Necesita
     `ANTHROPIC_API_KEY` en `.env`. El modelo se elige con `INTERPRETE_MODELO` (por defecto
-    `claude-opus-5-5`; `claude-haiku-5-5` es mucho más barato) y se usa con esfuerzo bajo,
+    `claude-haiku-5-5`, elegido tras medir H2; `claude-opus-5-5` rindió igual y cuesta unas 36 veces más) y se usa con esfuerzo bajo,
     porque extraer criterios es una tarea simple.
   - `falso` (por defecto): reglas simples, sin clave de API ni costo. Sirve para desarrollar y
     probar; entiende pocas palabras (en las 50 consultas anotadas acierta 0 de 50).

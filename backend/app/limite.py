@@ -1,14 +1,21 @@
-"""Límite de consultas por dirección IP (sección 9: controla el consumo de tokens sin cuentas).
+"""Límites de consultas (sección 9: controlan el consumo de tokens sin cuentas de usuario).
 
-Ventana deslizante en memoria: cada IP puede hacer hasta N consultas por minuto. Basta para
-un solo proceso de la API; si se despliegan varios, habría que guardar los contadores en un
-lugar compartido (por ejemplo, la base de datos).
+1. Por dirección IP: ventana deslizante en memoria, hasta N consultas por minuto. Basta para un
+   solo proceso de la API; si se despliegan varios, habría que compartir los contadores.
+2. Cupo total del modelo: llamadas en las últimas 24 horas, contadas en la base de datos. Sobrevive
+   a los reinicios del servicio y no depende de la IP, que un cliente puede falsear tras un proxy.
 """
 
 import time
 from collections import defaultdict, deque
 from collections.abc import Callable
+from datetime import UTC, datetime, timedelta
 from threading import Lock
+
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
+from app.modelos import Consulta
 
 
 class LimitadorPorIp:
@@ -30,3 +37,14 @@ class LimitadorPorIp:
                 return False
             recientes.append(ahora)
             return True
+
+
+def cupo_del_modelo_agotado(sesion: Session, maximo: int | None) -> bool:
+    """Dice si ya se hicieron `maximo` llamadas al modelo en 24 horas (None: sin tope)."""
+    if maximo is None:
+        return False
+    desde = datetime.now(UTC) - timedelta(hours=24)
+    llamadas = sesion.scalar(
+        select(func.count()).select_from(Consulta).where(Consulta.creada_en >= desde, Consulta.tokens_consumidos > 0)
+    )
+    return llamadas >= maximo

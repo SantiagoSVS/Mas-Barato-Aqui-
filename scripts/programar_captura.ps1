@@ -25,7 +25,7 @@ $horarios = @(
     New-ScheduledTaskTrigger -Daily -At '20:00'
 )
 $ajustes = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew `
-    -ExecutionTimeLimit (New-TimeSpan -Hours 1) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+    -ExecutionTimeLimit (New-TimeSpan -Hours 3) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 
 Register-ScheduledTask -TaskName $nombre -Action $accion -Trigger $horarios -Settings $ajustes `
     -Description 'Mas Barato Aquí!: captura de precios del catálogo (scripts\captura_diaria.ps1)' -Force | Out-Null

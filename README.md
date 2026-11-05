@@ -30,6 +30,8 @@ docs/fase4/          protocolo, consentimiento, cuestionarios y auditoría de la
 .github/workflows/   CI: alembic check + pytest, y build + Cypress en cada PR
 docker/               scripts de arranque de PostgreSQL
 docker-compose.yml    PostgreSQL para desarrollo
+Dockerfile            imagen de producción: API e interfaz en un solo servicio
+render.yaml           despliegue gratuito en Render (pasos en docs/despliegue.md)
 .env.example          plantilla de variables de entorno
 ```
 
@@ -308,6 +310,11 @@ el 1 de noviembre de 2026.
    mismo nombre que `nombre_plataforma`.
 
 Nada más cambia (RNF-06).
+
+## Despliegue
+
+La aplicación se publica gratis en Render, con la base de datos en Neon. Los pasos están en
+[`docs/despliegue.md`](docs/despliegue.md).
 
 ## Comandos útiles
 

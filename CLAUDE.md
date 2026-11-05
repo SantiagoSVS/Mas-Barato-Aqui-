@@ -62,10 +62,10 @@ CA = CT + w · D     # costo ajustado por tiempo de entrega
 | Frontend | React + Vite, responsivo, primero móvil |
 | Gráficos | Recharts |
 | Pruebas | pytest (unitarias, integración y API), Cypress (E2E de la interfaz con la API simulada); GitHub Actions en cada PR |
-| Despliegue | Docker; nube de bajo costo (proveedor por definir). En desarrollo solo PostgreSQL corre en Docker |
+| Despliegue | Docker en Render (plan gratuito) con PostgreSQL en Neon, elegidos el 5 nov 2026 (`docs/despliegue.md`). El worker sigue en el equipo de Santiago. En desarrollo solo PostgreSQL corre en Docker |
 | Versiones | Git + GitHub, ramas por incremento |
 
-**Proveedor del modelo de lenguaje:** Claude (Anthropic), elegido el 2 nov 2026 (`INTERPRETE_PROVEEDOR=anthropic` y `ANTHROPIC_API_KEY` en `.env`). Modelo: `claude-haiku-5-5`, elegido por Santiago el 4 nov 2026 tras medir H2. Por defecto se usa el proveedor falso (*fake*) por reglas, para que todo funcione y se pruebe sin clave ni costo. Las pruebas de pytest siempre usan el proveedor falso (`pruebas/conftest.py`), aunque `.env` tenga la clave. **Pendiente:** proveedor de la nube.
+**Proveedor del modelo de lenguaje:** Claude (Anthropic), elegido el 2 nov 2026 (`INTERPRETE_PROVEEDOR=anthropic` y `ANTHROPIC_API_KEY` en `.env`). Modelo: `claude-haiku-5-5`, elegido por Santiago el 4 nov 2026 tras medir H2. Por defecto se usa el proveedor falso (*fake*) por reglas, para que todo funcione y se pruebe sin clave ni costo. Las pruebas de pytest siempre usan el proveedor falso (`pruebas/conftest.py`), aunque `.env` tenga la clave.
 
 Esquema de salida del intérprete:
 
@@ -110,7 +110,7 @@ Interfaz web → API (FastAPI) → módulos (Historial · Costo total · Interpr
 
 | Endpoint | Función |
 |---|---|
-| `POST /consultas` | Recibe el texto (y opcionalmente criterios editados, sin llamar al modelo); devuelve criterios interpretados y recomendación. Límite: 20 consultas por minuto por IP |
+| `POST /consultas` | Recibe el texto (y opcionalmente criterios editados, sin llamar al modelo); devuelve criterios interpretados y recomendación. Límites: 20 consultas por minuto por IP y un cupo diario de llamadas al modelo, configurable |
 | `GET /productos` | Productos del catálogo (para la aclaración en P2) |
 | `GET /productos/{id}/ofertas` | Ofertas actuales por plataforma con costo total; acepta `prioridad` y `presupuesto` |
 | `GET /productos/{id}/historial` | Serie de precios por plataforma y mínimo histórico; acepta `periodo` (1M, 3M, 6M) |
@@ -149,7 +149,7 @@ Materiales en `docs/fase4/` (protocolo, consentimiento, cuestionarios, auditorí
 - Dejar el worker capturando a diario para que el historial crezca.
 - Ampliar el catálogo para las tareas con usuarios (faltan tenis, ropa y suplementos).
 - Pruebas con usuarios (H1, H4, H5) y calibración de `w` (`PESO_DIA_ESPERA_COP`); mientras no tenga valor, «Entrega más rápida» ordena por CT y avisa.
-- Elegir el proveedor de la nube y contenerizar la API y el worker.
+- Publicar en Render y Neon: la configuración está lista; faltan las cuentas de Santiago (`docs/despliegue.md`).
 
 ## Diseño de la interfaz
 

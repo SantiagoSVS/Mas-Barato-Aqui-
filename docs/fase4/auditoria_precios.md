@@ -6,9 +6,8 @@ al menos 100 verificaciones, muestreadas al azar y estratificadas por plataforma
 ## Unidad de la muestra
 
 La **oferta**: una publicación concreta de un producto del catálogo en una tienda, con su última
-captura. Hoy el catálogo tiene 10 productos y unas 90 ofertas activas, así que las 100
-verificaciones se completan en **dos rondas en días distintos** (o en una sola, si el catálogo
-ya se amplió). Cada ronda es una muestra nueva.
+captura. El catálogo ya tiene 50 productos (5 de noviembre), con más de 100 ofertas, así que las 100
+verificaciones caben en una ronda. Se harán dos en días distintos, cada una con una muestra nueva.
 
 **Cuándo:** Santiago decidió dejar pasar más días, para que el historial tenga más capturas y
 las rondas caigan en momentos distintos (fechas tentativas: 18 y 25 de noviembre). Cada ronda

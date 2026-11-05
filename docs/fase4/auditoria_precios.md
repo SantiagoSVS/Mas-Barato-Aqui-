@@ -10,6 +10,11 @@ captura. Hoy el catálogo tiene 10 productos y unas 90 ofertas activas, así que
 verificaciones se completan en **dos rondas en días distintos** (o en una sola, si el catálogo
 ya se amplió). Cada ronda es una muestra nueva.
 
+**Cuándo:** Santiago decidió dejar pasar más días, para que el historial tenga más capturas y
+las rondas caigan en momentos distintos (fechas tentativas: 18 y 25 de noviembre). Cada ronda
+sigue comparando la última captura con la página ese mismo día, para no contar como error un
+precio que simplemente cambió después de capturarlo.
+
 ## Procedimiento de cada ronda
 
 1. Correr una pasada de captura (la tarea programada o `python -m app.worker --una-vez`).

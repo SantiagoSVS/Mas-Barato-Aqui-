@@ -5,19 +5,25 @@ esquema con las migraciones (bajar a cero y subir de nuevo), y cada prueba corre
 una transacción que se deshace al final, así ninguna prueba deja datos para la siguiente.
 """
 
+import os
 from collections.abc import Iterator
 from pathlib import Path
 
-import pytest
-from alembic import command
-from alembic.config import Config
-from fastapi.testclient import TestClient
-from sqlalchemy import Engine, create_engine
-from sqlalchemy.orm import Session
+# Las pruebas nunca llaman al modelo real, aunque el .env local tenga la clave: gastaría créditos.
+# Las variables de entorno mandan sobre .env y deben quedar antes de importar la aplicación.
+os.environ["INTERPRETE_PROVEEDOR"] = "falso"
+os.environ["ANTHROPIC_API_KEY"] = ""
 
-from app.config import obtener_configuracion
-from app.db import obtener_sesion
-from app.main import app
+import pytest  # noqa: E402
+from alembic import command  # noqa: E402
+from alembic.config import Config  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy import Engine, create_engine  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
+
+from app.config import obtener_configuracion  # noqa: E402
+from app.db import obtener_sesion  # noqa: E402
+from app.main import app  # noqa: E402
 
 ALEMBIC_INI = Path(__file__).resolve().parents[1] / "alembic.ini"
 

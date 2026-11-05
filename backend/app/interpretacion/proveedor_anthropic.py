@@ -5,8 +5,9 @@ elección del proveedor. Se eligió Claude porque tiene SDK oficial de Python, s
 instrucciones de formato JSON en español y deja ajustar el esfuerzo de razonamiento, lo que
 controla el costo por consulta.
 
-- Modelo: INTERPRETE_MODELO (por defecto claude-opus-5-5). Se puede cambiar por uno más barato,
-  como claude-haiku-5-5, sin tocar el código; conviene comparar ambos con el script de H2.
+- Modelo: INTERPRETE_MODELO (por defecto claude-haiku-5-5). Santiago lo eligió el 4 de noviembre
+  de 2026: rindió igual que claude-opus-5-5 en H2 y cuesta unas 36 veces menos. Se puede cambiar
+  sin tocar el código (resultados en docs/fase4/resultados_h2.md).
 - Esfuerzo bajo ("low"): extraer criterios es una tarea simple; menos razonamiento = menos
   tokens y respuesta más rápida (RNF-04).
 - La clave va en .env (ANTHROPIC_API_KEY), nunca en el código ni en el repositorio.

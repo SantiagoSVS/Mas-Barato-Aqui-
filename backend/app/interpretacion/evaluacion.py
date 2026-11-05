@@ -121,6 +121,8 @@ class ResultadoConsulta:
 @dataclass
 class Reporte:
     resultados: list[ResultadoConsulta] = field(default_factory=list)
+    tokens_entrada: int = 0
+    tokens_salida: int = 0
 
     @property
     def total(self) -> int:

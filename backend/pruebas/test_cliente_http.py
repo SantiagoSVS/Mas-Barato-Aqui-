@@ -67,6 +67,28 @@ def test_si_robots_no_se_puede_leer_todo_esta_prohibido(falla) -> None:
         cliente.get("https://tienda.example/buscar")
 
 
+def test_si_robots_falla_lo_reintenta_con_la_siguiente_peticion() -> None:
+    pagina = "https://tienda.example/buscar"
+    cliente, sesion = crear_cliente({ROBOTS: requests.ConnectionError("sin red"), pagina: RespuestaFalsa(200, "ok")})
+
+    with pytest.raises(AccesoNoPermitido):
+        cliente.get(pagina)
+    assert [p["url"] for p in sesion.peticiones] == [ROBOTS]  # nunca se pidió la página sin permiso
+
+    sesion.respuestas[ROBOTS] = RespuestaFalsa(200, "User-agent: *\nAllow: /\n")
+    assert cliente.get(pagina).text == "ok"
+
+
+def test_robots_leido_no_se_vuelve_a_pedir() -> None:
+    pagina = "https://tienda.example/buscar"
+    cliente, sesion = crear_cliente({ROBOTS: RespuestaFalsa(200, "User-agent: *\nAllow: /\n"), pagina: RespuestaFalsa(200, "ok")})
+
+    cliente.get(pagina)
+    cliente.get(pagina)
+
+    assert [p["url"] for p in sesion.peticiones].count(ROBOTS) == 1
+
+
 def test_api_oficial_no_consulta_robots() -> None:
     cliente, sesion = crear_cliente({"https://api.example/items": RespuestaFalsa(200, "{}")})
 

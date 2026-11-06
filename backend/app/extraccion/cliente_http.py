@@ -19,7 +19,6 @@ from protego import Protego
 
 from app.extraccion.conector import ErrorConector
 
-_PROHIBIR_TODO = "User-agent: *\nDisallow: /\n"
 
 
 class AccesoNoPermitido(ErrorConector):
@@ -117,23 +116,26 @@ class ClienteHttp:
         partes = urlsplit(url)
         dominio = partes.netloc
         if dominio not in self._robots:
-            self._robots[dominio] = self._leer_robots(f"{partes.scheme}://{dominio}/robots.txt")
+            robots = self._leer_robots(f"{partes.scheme}://{dominio}/robots.txt")
+            if robots is None:
+                return False  # no se guarda: la siguiente petición vuelve a intentar leerlo
+            self._robots[dominio] = robots
         return self._robots[dominio].can_fetch(url, self.user_agent)
 
-    def _leer_robots(self, url_robots: str) -> Protego:
+    def _leer_robots(self, url_robots: str) -> Protego | None:
         """Lee robots.txt siguiendo la RFC 9309, sección 2.3.1:
 
         - 2xx: se aplican sus reglas.
         - 4xx: no hay restricciones (el archivo no existe).
-        - 5xx o sin respuesta: se asume que todo está prohibido.
+        - 5xx o sin respuesta: devuelve None, y mientras tanto todo está prohibido.
         """
         try:
             respuesta = self._pedir(url_robots)
         except ErrorConector:
-            return Protego.parse(_PROHIBIR_TODO)
+            return None
 
         if 200 <= respuesta.status_code < 300:
             return Protego.parse(respuesta.text)
         if 400 <= respuesta.status_code < 500:
             return Protego.parse("")
-        return Protego.parse(_PROHIBIR_TODO)
+        return None

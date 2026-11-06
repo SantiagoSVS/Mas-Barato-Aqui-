@@ -59,6 +59,9 @@ class Configuracion(BaseSettings):
     # Historial (RF-10): un precio está "cerca de su mínimo histórico" si no lo supera en más de
     # esta proporción (0.05 = 5 %). Valor inicial: el documento no lo fija; ajustar con usuarios.
     historial_umbral_cercania: float = Field(default=0.05, ge=0, le=1)
+    # Días sin capturarse tras los cuales una oferta sale de la comparación (valor inicial).
+    # Cubre un fin de semana con el equipo de captura apagado; su historial se conserva.
+    oferta_vigencia_dias: int = Field(default=3, ge=1)
 
     # Seguridad (sección 9): consultas por minuto desde una misma IP. Valor inicial.
     limite_consultas_por_minuto: int = Field(default=20, ge=1)

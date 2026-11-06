@@ -98,12 +98,13 @@ def construir_historial(
     periodo: Periodo,
     umbral_cercania: float,
     hoy: date | None = None,
+    dias_vigencia: int | None = None,
 ) -> Historial:
     hoy = hoy or datetime.now(ZONA_COLOMBIA).date()
     desde = hoy - timedelta(days=DIAS_POR_PERIODO[periodo])
     series = serie_por_tienda(sesion, producto.id, desde)
 
-    vigentes = [o for o in ofertas_vigentes(sesion, producto.id) if o.disponible]
+    vigentes = [o for o in ofertas_vigentes(sesion, producto.id, dias_vigencia) if o.disponible]
     precio_actual: dict[str, int] = {}
     for oferta in vigentes:
         precio_actual[oferta.plataforma] = min(oferta.precio_cop, precio_actual.get(oferta.plataforma, oferta.precio_cop))

@@ -91,6 +91,7 @@ Interfaz web → API (FastAPI) → módulos (Historial · Costo total · Interpr
 - Catálogo por identificadores: cada producto de `backend/catalogo.toml` lleva sus IDs verificados a mano en cada tienda (la API de Mercado Libre no permite buscar con token de aplicación). Hoy hay 55 productos: celulares, tablets, portátiles, componentes, consolas, controles, videojuegos, televisores, monitores y audífonos, además de los 10 iniciales de tecnología, hogar y belleza.
 - Envío: Mercado Libre cotiza envío y días a Medellín (`MERCADOLIBRE_CIUDAD_DESTINO`). Falabella y Homecenter no lo publican antes de pagar: queda desconocido, con la nota de la tienda (`plataforma.nota_envio`), y esas ofertas van aparte («envío por confirmar») y nunca son la recomendada.
 - Si una tienda falla, se registra el error y se responde con las demás (RNF-05).
+- Una oferta sin captura en `OFERTA_VIGENCIA_DIAS` días (3 por defecto) sale de la comparación; su historial se conserva.
 
 ## Modelo de datos (sección 6)
 

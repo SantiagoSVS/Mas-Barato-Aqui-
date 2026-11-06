@@ -13,6 +13,8 @@ from pathlib import Path
 # Las variables de entorno mandan sobre .env y deben quedar antes de importar la aplicación.
 os.environ["INTERPRETE_PROVEEDOR"] = "falso"
 os.environ["ANTHROPIC_API_KEY"] = ""
+# Las pruebas usan fechas fijas: el plazo de vigencia se prueba aparte, con fechas relativas a hoy.
+os.environ["OFERTA_VIGENCIA_DIAS"] = "36500"
 
 import pytest  # noqa: E402
 from alembic import command  # noqa: E402

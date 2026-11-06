@@ -116,12 +116,14 @@ def comparar_producto(
 ) -> tuple[Comparacion, list[OfertaCalculada]]:
     """Ranking de las ofertas de un producto. También lo usa GET /productos/{id}/ofertas."""
     w, avisos = peso_para(prioridad, configuracion)
-    ranking = ordenar(ofertas_vigentes(sesion, producto.id), w, presupuesto_cop)
+    ranking = ordenar(ofertas_vigentes(sesion, producto.id, configuracion.oferta_vigencia_dias), w, presupuesto_cop)
     activas = plataformas_activas(sesion)
     con_resultados = sorted({c.oferta.plataforma for c in [*ranking.ordenadas, *ranking.incompletas]})
 
     if ranking.recomendada is None and ranking.incompletas:
         avisos.append("Ninguna oferta tiene precio y envío conocidos, por eso no hay una recomendada.")
+    if not con_resultados:
+        avisos.append("Aún no tenemos precios recientes de este producto. Intenta de nuevo más tarde.")
 
     comparacion = Comparacion(
         producto=ProductoResumen(id=producto.id, nombre=producto.nombre_canonico),
@@ -134,7 +136,8 @@ def comparar_producto(
         tiendas=Tiendas(
             consultadas=[p.nombre for p in activas],
             con_resultados=con_resultados,
-            sin_producto=[p.nombre for p in activas if p.nombre not in con_resultados],
+            # Sin ninguna oferta reciente no se puede afirmar que las tiendas no lo tengan
+            sin_producto=[p.nombre for p in activas if p.nombre not in con_resultados] if con_resultados else [],
         ),
         notas_envio={p.nombre: p.nota_envio for p in activas if p.nota_envio and p.nombre in con_resultados},
         avisos=avisos,

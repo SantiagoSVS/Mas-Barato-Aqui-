@@ -114,19 +114,29 @@ def consultar_audifonos_sony(sesion: Session, presupuesto: int | None):
     )
 
 
-def test_con_presupuesto_muestra_primero_el_producto_que_cabe(catalogo: Session) -> None:
+def test_entre_empatados_muestra_primero_el_mas_barato(catalogo: Session) -> None:
     capturar(catalogo, "Audífonos Sony WH-1000XM5", 900_000)
     capturar(catalogo, "Audífonos Sony WH-CH520", 280_000)
 
-    respuesta = consultar_audifonos_sony(catalogo, 400_000)
+    for presupuesto in (None, 400_000, 100_000):
+        respuesta = consultar_audifonos_sony(catalogo, presupuesto)
+        assert respuesta.comparacion.producto.nombre == "Audífonos Sony WH-CH520"
+        assert [p.nombre for p in respuesta.otros_productos] == ["Audífonos Sony WH-1000XM5"]
 
-    assert respuesta.comparacion.producto.nombre == "Audífonos Sony WH-CH520"
-    assert [p.nombre for p in respuesta.otros_productos] == ["Audífonos Sony WH-1000XM5"]
+
+def test_controles_de_ps5_sin_mezclar_otra_consola_por_la_cantidad(catalogo: Session) -> None:
+    c = criterios("control", plataforma="PS5", cantidad="2", gama="económica")
+    assert set(nombres(catalogo, c)) == {"Control Sony DualSense PS5", "Control Sony DualSense Edge PS5"}
 
 
-def test_si_ninguno_cabe_o_no_hay_presupuesto_no_cambia_el_orden(catalogo: Session) -> None:
-    capturar(catalogo, "Audífonos Sony WH-1000XM5", 900_000)
-    capturar(catalogo, "Audífonos Sony WH-CH520", 280_000)
+def test_control_de_ps5_barato_muestra_primero_el_estandar(catalogo: Session) -> None:
+    capturar(catalogo, "Control Sony DualSense Edge PS5", 969_900)
+    capturar(catalogo, "Control Sony DualSense PS5", 235_173)
+    c = criterios("control", plataforma="PS5", cantidad="2", gama="económica")
 
-    assert consultar_audifonos_sony(catalogo, None).comparacion.producto.nombre == "Audífonos Sony WH-1000XM5"
-    assert consultar_audifonos_sony(catalogo, 100_000).comparacion.producto.nombre == "Audífonos Sony WH-1000XM5"
+    respuesta = resolver_consulta(
+        catalogo, Interprete(ProveedorFalso(), 0.5), "2 controles de ps5 baratos", None,
+        Configuracion(database_url="postgresql+psycopg://x@localhost/x"), c,
+    )
+
+    assert respuesta.comparacion.producto.nombre == "Control Sony DualSense PS5"

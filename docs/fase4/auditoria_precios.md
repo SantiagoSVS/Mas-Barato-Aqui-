@@ -6,7 +6,7 @@ al menos 100 verificaciones, muestreadas al azar y estratificadas por plataforma
 ## Unidad de la muestra
 
 La **oferta**: una publicación concreta de un producto del catálogo en una tienda, con su última
-captura. El catálogo ya tiene 50 productos (5 de noviembre), con más de 100 ofertas, así que las 100
+captura. El catálogo ya tiene 55 productos (6 de noviembre), con más de 100 ofertas, así que las 100
 verificaciones caben en una ronda. Se harán dos en días distintos, cada una con una muestra nueva.
 
 **Cuándo:** Santiago decidió dejar pasar más días, para que el historial tenga más capturas y

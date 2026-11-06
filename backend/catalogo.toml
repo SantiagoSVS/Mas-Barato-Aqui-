@@ -454,3 +454,43 @@ modelo = "WH-1000XM5 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO39073727", "MCO77986980"]
 falabella = ["119322622", "121398069"]
+
+# Controles (6 de noviembre de 2026). El Pro Controller de Falabella a $149.000 quedó por fuera:
+# la mitad del precio de los demás no parece el mismo producto.
+
+[[producto]]
+nombre = "Control Sony DualSense PS5"
+categoria = "controles"
+modelo = "DualSense PlayStation 5 inalámbrico mando joystick"
+[producto.ids]
+mercadolibre = ["MCO33997846"]
+falabella = ["130955399", "123198554"]
+
+[[producto]]
+nombre = "Control Sony DualSense Edge PS5"
+categoria = "controles"
+modelo = "DualSense Edge PlayStation 5 inalámbrico mando joystick"
+[producto.ids]
+mercadolibre = ["MCO41152829"]
+
+[[producto]]
+nombre = "Control Xbox Series X|S inalámbrico"
+categoria = "controles"
+modelo = "Microsoft Xbox Series X S Wireless mando joystick"
+[producto.ids]
+mercadolibre = ["MCO51284658"]
+falabella = ["126133730"]
+
+[[producto]]
+nombre = "Control Nintendo Switch Pro Controller"
+categoria = "controles"
+modelo = "Pro inalámbrico mando joystick"
+[producto.ids]
+mercadolibre = ["MCO15009014", "MCO25911939"]
+
+[[producto]]
+nombre = "Control Nintendo Switch 2 Pro Controller"
+categoria = "controles"
+modelo = "Pro inalámbrico mando joystick"
+[producto.ids]
+mercadolibre = ["MCO48924402"]

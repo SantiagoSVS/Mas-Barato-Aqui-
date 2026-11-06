@@ -142,27 +142,31 @@ def comparar_producto(
     return comparacion, ranking.ordenadas
 
 
-def _primero_el_que_cabe_en_el_presupuesto(
+def _primero_el_mas_barato(
     sesion: Session,
     encontrados: list[ProductoEncontrado],
     prioridad: Prioridad,
     presupuesto_cop: int | None,
     configuracion: Configuracion,
 ) -> list[ProductoEncontrado]:
-    """Entre productos que coinciden igual de bien, muestra primero uno dentro del presupuesto.
+    """Entre productos que coinciden igual de bien, muestra primero el de menor costo total.
 
-    Solo cambia cuál se muestra primero; los demás siguen disponibles para elegirlos en P2. El
-    orden de las ofertas de cada producto sigue saliendo solo del motor de costo.
+    Si hay presupuesto y alguno cabe, ese queda primero. Solo cambia cuál se muestra primero; los
+    demás siguen disponibles para elegirlos en P2. El orden de las ofertas de cada producto sigue
+    saliendo solo del motor de costo.
     """
-    if presupuesto_cop is None:
-        return encontrados
     mejor = encontrados[0]
     empatados = [e for e in encontrados if (e.puntaje, e.afinidad) == (mejor.puntaje, mejor.afinidad)]
-    for candidato in empatados:
-        comparacion, _ = comparar_producto(sesion, candidato.producto, prioridad, presupuesto_cop, configuracion)
-        if comparacion.recomendada and not comparacion.recomendada.supera_presupuesto:
-            return [candidato, *(e for e in encontrados if e is not candidato)]
-    return encontrados
+    if len(empatados) == 1:
+        return encontrados
+
+    def costo(encontrado: ProductoEncontrado) -> float:
+        comparacion, _ = comparar_producto(sesion, encontrado.producto, prioridad, presupuesto_cop, configuracion)
+        recomendada = comparacion.recomendada
+        return recomendada.costo_total_cop if recomendada else float("inf")
+
+    candidato = min(empatados, key=costo)
+    return [candidato, *(e for e in encontrados if e is not candidato)]
 
 
 def resolver_consulta(
@@ -198,7 +202,7 @@ def resolver_consulta(
             estado, con_cobertura = "sin_cobertura", False
         else:
             estado, con_cobertura = "resultados", True
-            encontrados = _primero_el_que_cabe_en_el_presupuesto(
+            encontrados = _primero_el_mas_barato(
                 sesion, encontrados, prioridad, criterios.precio_max_cop, configuracion
             )
             principal = encontrados[0].producto

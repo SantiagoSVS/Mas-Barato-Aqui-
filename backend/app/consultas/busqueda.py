@@ -38,7 +38,10 @@ def _normalizar(texto: str) -> str:
 
 
 def texto_de_busqueda(criterios: CriteriosConsulta) -> str:
-    atributos = [v for v in criterios.atributos.values() if any(c.isdigit() for c in v)]
+    # Con letras y números ("55 pulgadas", "PS5"); una cantidad suelta ("2") no describe el producto
+    atributos = [
+        v for v in criterios.atributos.values() if any(c.isdigit() for c in v) and any(c.isalpha() for c in v)
+    ]
     return _sin_palabras_vacias(" ".join(p for p in (criterios.producto, criterios.modelo, *atributos) if p))
 
 

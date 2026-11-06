@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import Configuracion
-from app.consultas.busqueda import buscar_productos, ofertas_vigentes, plataformas_activas
+from app.consultas.busqueda import ProductoEncontrado, buscar_productos, ofertas_vigentes, plataformas_activas
 from app.costo.motor import OfertaCalculada, explicar, ordenar, url_de_compra
 from app.interpretacion.esquema import CriteriosConsulta, Prioridad
 from app.interpretacion.interprete import Interprete, limpiar_consulta
@@ -142,6 +142,29 @@ def comparar_producto(
     return comparacion, ranking.ordenadas
 
 
+def _primero_el_que_cabe_en_el_presupuesto(
+    sesion: Session,
+    encontrados: list[ProductoEncontrado],
+    prioridad: Prioridad,
+    presupuesto_cop: int | None,
+    configuracion: Configuracion,
+) -> list[ProductoEncontrado]:
+    """Entre productos que coinciden igual de bien, muestra primero uno dentro del presupuesto.
+
+    Solo cambia cuál se muestra primero; los demás siguen disponibles para elegirlos en P2. El
+    orden de las ofertas de cada producto sigue saliendo solo del motor de costo.
+    """
+    if presupuesto_cop is None:
+        return encontrados
+    mejor = encontrados[0]
+    empatados = [e for e in encontrados if (e.puntaje, e.afinidad) == (mejor.puntaje, mejor.afinidad)]
+    for candidato in empatados:
+        comparacion, _ = comparar_producto(sesion, candidato.producto, prioridad, presupuesto_cop, configuracion)
+        if comparacion.recomendada and not comparacion.recomendada.supera_presupuesto:
+            return [candidato, *(e for e in encontrados if e is not candidato)]
+    return encontrados
+
+
 def resolver_consulta(
     sesion: Session,
     interprete: Interprete,
@@ -175,6 +198,9 @@ def resolver_consulta(
             estado, con_cobertura = "sin_cobertura", False
         else:
             estado, con_cobertura = "resultados", True
+            encontrados = _primero_el_que_cabe_en_el_presupuesto(
+                sesion, encontrados, prioridad, criterios.precio_max_cop, configuracion
+            )
             principal = encontrados[0].producto
             comparacion, ordenadas = comparar_producto(
                 sesion, principal, prioridad, criterios.precio_max_cop, configuracion

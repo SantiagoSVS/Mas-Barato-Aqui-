@@ -20,7 +20,7 @@
 nombre = "Samsung Galaxy Tab A11 128 GB"
 categoria = "tecnologia"
 marca = "Samsung"
-modelo = "Galaxy Tab A11"
+modelo = "Galaxy Tab A11 tablet"
 [producto.ids]
 mercadolibre = ["MCO56570140"]
 falabella = ["73447854"]
@@ -60,7 +60,7 @@ homecenter = ["3002404"]
 nombre = "Audífonos Xiaomi Redmi Buds 8 Lite"
 categoria = "tecnologia"
 marca = "Xiaomi"
-modelo = "Redmi Buds 8 Lite"
+modelo = "Redmi Buds 8 Lite auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO63135410", "MCO62995693"]
 falabella = ["73530552"]
@@ -244,28 +244,28 @@ mercadolibre = ["MCO22226723"]
 [[producto]]
 nombre = "Consola Sony PlayStation 5 Slim Digital"
 categoria = "consolas"
-modelo = "PS5 Slim"
+modelo = "PS5 Slim videojuegos"
 [producto.ids]
 mercadolibre = ["MCO29001054"]
 
 [[producto]]
 nombre = "Consola Xbox Series S 512 GB"
 categoria = "consolas"
-modelo = "Microsoft Xbox Series S"
+modelo = "Microsoft Xbox Series S videojuegos"
 [producto.ids]
 mercadolibre = ["MCO16650345"]
 
 [[producto]]
 nombre = "Consola Xbox Series X 1 TB"
 categoria = "consolas"
-modelo = "Microsoft Xbox Series X"
+modelo = "Microsoft Xbox Series X videojuegos"
 [producto.ids]
 mercadolibre = ["MCO29577429", "MCO59169520"]
 
 [[producto]]
 nombre = "Consola Nintendo Switch 2"
 categoria = "consolas"
-modelo = "Switch 2"
+modelo = "Switch 2 videojuegos"
 [producto.ids]
 mercadolibre = ["MCO50177572"]
 falabella = ["73297242"]
@@ -407,7 +407,7 @@ mercadolibre = ["MCO51285651"]
 nombre = "Audífonos JBL Tune 520BT"
 categoria = "audifonos"
 marca = "JBL"
-modelo = "Tune 520BT auriculares"
+modelo = "Tune 520BT auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO44202830", "MCO62045253"]
 homecenter = ["713683", "656587"]
@@ -416,7 +416,7 @@ homecenter = ["713683", "656587"]
 nombre = "Audífonos Apple AirPods 4"
 categoria = "audifonos"
 marca = "Apple"
-modelo = "AirPods 4 auriculares"
+modelo = "AirPods 4 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO40520107"]
 
@@ -424,7 +424,7 @@ mercadolibre = ["MCO40520107"]
 nombre = "Audífonos Soundcore Q20i"
 categoria = "audifonos"
 marca = "Soundcore"
-modelo = "Q20i auriculares"
+modelo = "Q20i auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO40406967", "MCO66559644"]
 
@@ -432,7 +432,7 @@ mercadolibre = ["MCO40406967", "MCO66559644"]
 nombre = "Audífonos Samsung Galaxy Buds FE"
 categoria = "audifonos"
 marca = "Samsung"
-modelo = "Galaxy Buds FE auriculares"
+modelo = "Galaxy Buds FE auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO39016606", "MCO29595951"]
 
@@ -440,7 +440,7 @@ mercadolibre = ["MCO39016606", "MCO29595951"]
 nombre = "Audífonos Sony WH-CH520"
 categoria = "audifonos"
 marca = "Sony"
-modelo = "WH-CH520 auriculares"
+modelo = "WH-CH520 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO41946950", "MCO46392815"]
 falabella = ["120300130", "120300576"]
@@ -450,7 +450,7 @@ homecenter = ["3005543"]
 nombre = "Audífonos Sony WH-1000XM5"
 categoria = "audifonos"
 marca = "Sony"
-modelo = "WH-1000XM5 auriculares"
+modelo = "WH-1000XM5 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO39073727", "MCO77986980"]
 falabella = ["119322622", "121398069"]

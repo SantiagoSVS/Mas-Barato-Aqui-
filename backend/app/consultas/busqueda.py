@@ -1,8 +1,11 @@
 """Búsqueda sobre los datos ya capturados (nunca se consulta una tienda en este momento).
 
-1. Productos del catálogo que corresponden a los criterios: la marca debe coincidir si el
-   usuario la dio, y el texto (producto, modelo y atributos) se compara con el nombre del
-   producto usando similitud de palabras (RapidFuzz, token_set_ratio).
+1. Productos del catálogo que corresponden a los criterios. El texto (producto, modelo y
+   atributos con números, como "55 pulgadas") se compara con el nombre del producto usando
+   similitud de palabras (RapidFuzz, token_set_ratio). Los atributos descriptivos ("económica",
+   "estudio") solo ayudan a ordenar: casi nunca están en el nombre y no deben descartar nada.
+   La marca debe coincidir si el usuario la dio, salvo que el modelo identifique el producto:
+   en "tarjeta RTX 4060 NVIDIA" el producto registrado puede ser de marca Gigabyte.
 2. Ofertas vigentes de un producto: la última captura de cada oferta, solo de tiendas activas.
 """
 
@@ -19,10 +22,14 @@ from app.interpretacion.esquema import CriteriosConsulta
 from app.modelos import Captura, Oferta, Plataforma, Producto
 
 
+PALABRAS_VACIAS = {"de", "del", "el", "la", "los", "las", "un", "una", "para", "con", "y"}
+
+
 @dataclass(frozen=True)
 class ProductoEncontrado:
     producto: Producto
     puntaje: float
+    afinidad: float = 0  # parecido contando todos los atributos; solo sirve para ordenar
 
 
 def _normalizar(texto: str) -> str:
@@ -31,8 +38,18 @@ def _normalizar(texto: str) -> str:
 
 
 def texto_de_busqueda(criterios: CriteriosConsulta) -> str:
-    partes = [criterios.producto, criterios.modelo, *criterios.atributos.values()]
-    return _normalizar(" ".join(p for p in partes if p))
+    atributos = [v for v in criterios.atributos.values() if any(c.isdigit() for c in v)]
+    return _sin_palabras_vacias(" ".join(p for p in (criterios.producto, criterios.modelo, *atributos) if p))
+
+
+def _sin_palabras_vacias(texto: str) -> str:
+    return " ".join(p for p in _normalizar(texto).split() if p not in PALABRAS_VACIAS)
+
+
+def _marca_compatible(criterios: CriteriosConsulta, producto: Producto, texto_producto: str) -> bool:
+    if not criterios.marca or not producto.marca or _normalizar(criterios.marca) == _normalizar(producto.marca):
+        return True
+    return bool(criterios.modelo) and set(_sin_palabras_vacias(criterios.modelo).split()) <= set(texto_producto.split())
 
 
 def buscar_productos(sesion: Session, criterios: CriteriosConsulta, puntaje_minimo: int) -> list[ProductoEncontrado]:
@@ -41,14 +58,18 @@ def buscar_productos(sesion: Session, criterios: CriteriosConsulta, puntaje_mini
         return []
     consulta = texto_de_busqueda(criterios)
     encontrados = []
+    todos_los_atributos = _sin_palabras_vacias(" ".join(criterios.atributos.values()))
     for producto in sesion.scalars(select(Producto)):
-        if criterios.marca and producto.marca and _normalizar(criterios.marca) != _normalizar(producto.marca):
+        texto_producto = _sin_palabras_vacias(" ".join(p for p in (producto.nombre_canonico, producto.modelo) if p))
+        if not _marca_compatible(criterios, producto, texto_producto):
             continue
-        texto_producto = _normalizar(" ".join(p for p in (producto.nombre_canonico, producto.modelo) if p))
-        puntaje = fuzz.token_set_ratio(consulta, texto_producto)
+        # Sin marca registrada (consolas, juegos), la marca dicha cuenta como una palabra más: "Xbox"
+        texto = f"{consulta} {_normalizar(criterios.marca)}" if criterios.marca and not producto.marca else consulta
+        puntaje = fuzz.token_set_ratio(texto, texto_producto)
         if puntaje >= puntaje_minimo:
-            encontrados.append(ProductoEncontrado(producto, puntaje))
-    return sorted(encontrados, key=lambda e: (-e.puntaje, e.producto.nombre_canonico))
+            afinidad = fuzz.token_set_ratio(f"{texto} {todos_los_atributos}", texto_producto)
+            encontrados.append(ProductoEncontrado(producto, puntaje, afinidad))
+    return sorted(encontrados, key=lambda e: (-e.puntaje, -e.afinidad, e.producto.nombre_canonico))
 
 
 def ofertas_vigentes(sesion: Session, producto_id: int) -> list[OfertaVigente]:

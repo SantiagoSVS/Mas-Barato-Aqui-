@@ -109,7 +109,7 @@ categoria = "hogar"
 marca = "Eureka"
 modelo = "NER650"
 [producto.ids]
-mercadolibre = ["MCO28453977"]
+# Mercado Libre: MCO28453977 dejó de responder (error 400) el 6 de noviembre de 2026
 homecenter = ["3018343"]
 
 

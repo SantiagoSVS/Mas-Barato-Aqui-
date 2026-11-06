@@ -108,4 +108,11 @@ def historial_de_producto(
     producto = sesion.get(Producto, producto_id)
     if producto is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "El producto no existe")
-    return construir_historial(sesion, producto, periodo, obtener_configuracion().historial_umbral_cercania)
+    configuracion = obtener_configuracion()
+    return construir_historial(
+        sesion,
+        producto,
+        periodo,
+        configuracion.historial_umbral_cercania,
+        dias_vigencia=configuracion.oferta_vigencia_dias,
+    )

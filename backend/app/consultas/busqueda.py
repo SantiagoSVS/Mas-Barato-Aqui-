@@ -6,11 +6,13 @@
    "estudio") solo ayudan a ordenar: casi nunca están en el nombre y no deben descartar nada.
    La marca debe coincidir si el usuario la dio, salvo que el modelo identifique el producto:
    en "tarjeta RTX 4060 NVIDIA" el producto registrado puede ser de marca Gigabyte.
-2. Ofertas vigentes de un producto: la última captura de cada oferta, solo de tiendas activas.
+2. Ofertas vigentes de un producto: la última captura de cada oferta, solo de tiendas activas y
+   solo si es reciente. Una oferta que dejó de capturarse no debe competir con un precio viejo.
 """
 
 import unicodedata
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 
 from rapidfuzz import fuzz
 from sqlalchemy import select
@@ -75,8 +77,12 @@ def buscar_productos(sesion: Session, criterios: CriteriosConsulta, puntaje_mini
     return sorted(encontrados, key=lambda e: (-e.puntaje, -e.afinidad, e.producto.nombre_canonico))
 
 
-def ofertas_vigentes(sesion: Session, producto_id: int) -> list[OfertaVigente]:
-    """Última captura de cada oferta del producto, en tiendas activas."""
+def ofertas_vigentes(sesion: Session, producto_id: int, dias_vigencia: int | None = None) -> list[OfertaVigente]:
+    """Última captura de cada oferta del producto, en tiendas activas.
+
+    Con dias_vigencia, omite las ofertas cuya última captura es más antigua que ese plazo.
+    """
+    limite = datetime.now(UTC) - timedelta(days=dias_vigencia) if dias_vigencia is not None else None
     filas = sesion.execute(
         select(Oferta, Plataforma.nombre, Captura)
         .join(Plataforma, Plataforma.id == Oferta.plataforma_id)
@@ -99,6 +105,7 @@ def ofertas_vigentes(sesion: Session, producto_id: int) -> list[OfertaVigente]:
             capturado_en=captura.capturado_en,
         )
         for oferta, plataforma, captura in filas
+        if limite is None or captura.capturado_en >= limite
     ]
 
 

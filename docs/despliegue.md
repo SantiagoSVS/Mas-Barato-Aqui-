@@ -58,10 +58,19 @@ powershell -ExecutionPolicy Bypass -File scripts\programar_captura.ps1
 2. Abre la dirección principal y busca «audífonos Xiaomi que no pasen de 150 mil».
 3. Abre el historial y recarga la página: debe seguir en la misma pantalla.
 
+## Si el equipo de captura se queda apagado
+
+Una oferta sin captura en 3 días sale de la comparación, para no recomendar un precio viejo. Si el
+equipo pasa más de 3 días apagado, la aplicación se queda sin ofertas y avisa que no tiene precios
+recientes; el historial se conserva. Basta encenderlo: la captura corre sola y los precios vuelven
+cuando termina, unos 40 minutos después. El plazo se cambia con `OFERTA_VIGENCIA_DIAS` en el panel
+de Render.
+
 ## El día de la revisión
 
 - Abre la aplicación un par de minutos antes y haz una búsqueda: así ya está despierta.
-- Revisa `/api/salud` para saber la fecha de la última captura.
+- Revisa `/api/salud` para saber la fecha de la última captura. Si tiene más de 3 días, enciende el
+  equipo con tiempo: sin capturas recientes la aplicación no muestra precios.
 - Ten capturas de pantalla por si falla internet.
 
 ## Protección de los créditos

@@ -116,7 +116,10 @@ class ConectorMercadoLibre(Conector):
             if error.status_code == 404:  # producto sin publicaciones activas
                 return []
             raise
-        return items[: self._ofertas_por_producto]
+        # La API no las entrega ordenadas por precio: recortar sin ordenar dejaba por fuera las más
+        # baratas (visto con la PS5 Slim el 10 de noviembre de 2026). Solo cuentan las nuevas.
+        nuevas = sorted((i for i in items if i.get("condition") == "new"), key=lambda i: i["price"])
+        return nuevas[: self._ofertas_por_producto]
 
     def _convertir(self, nombre: str, item: dict[str, Any]) -> OfertaCapturada | None:
         # Solo productos nuevos: un usado no es el mismo producto para comparar precios

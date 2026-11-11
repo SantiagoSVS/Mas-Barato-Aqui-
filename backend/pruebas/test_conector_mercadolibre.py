@@ -46,7 +46,9 @@ class Reloj:
         return self.ahora
 
 
-def crear(respuestas: dict, reloj: Reloj | None = None) -> tuple[ConectorMercadoLibre, SesionHttpFalsa]:
+def crear(
+    respuestas: dict, reloj: Reloj | None = None, ofertas_por_producto: int = 5
+) -> tuple[ConectorMercadoLibre, SesionHttpFalsa]:
     sesion = SesionHttpFalsa(respuestas)
     cliente = ClienteHttp("prueba", intervalo_minimo_s=0, timeout_s=5, sesion=sesion)
     conector = ConectorMercadoLibre(
@@ -54,7 +56,7 @@ def crear(respuestas: dict, reloj: Reloj | None = None) -> tuple[ConectorMercado
         client_id="id",
         client_secret="secreto",
         ciudad_destino="TUNPQ01FRGRjNjc4",
-        ofertas_por_producto=5,
+        ofertas_por_producto=ofertas_por_producto,
         hoy=lambda: date(2026, 11, 1),
         reloj=reloj or Reloj(),
     )
@@ -139,6 +141,21 @@ def test_omite_publicaciones_usadas() -> None:
     ofertas = conector.buscar(TABLET)
 
     assert [str(o.url) for o in ofertas] == [url_publicacion(ITEM_2)]
+
+
+def test_guarda_las_publicaciones_mas_baratas_aunque_la_api_las_entregue_en_otro_orden() -> None:
+    def item(numero: int, precio: int, condicion: str = "new") -> dict:
+        return {"item_id": f"MCO{numero}", "price": precio, "currency_id": "COP", "condition": condicion, "seller_id": numero}
+
+    respuestas = respuestas_completas()
+    respuestas[f"{URL_API}/products/{PRODUCTO}/items"] = RespuestaFalsa(
+        200, datos={"results": [item(1, 300_000), item(2, 280_000), item(3, 150_000, "used"), item(4, 240_000), item(5, 260_000)]}
+    )
+    conector, _ = crear(respuestas, ofertas_por_producto=2)
+
+    ofertas = conector.buscar(TABLET)
+
+    assert [o.precio for o in ofertas] == [Decimal(240_000), Decimal(260_000)]
 
 
 def test_si_la_api_falla_lanza_error_de_conector() -> None:

@@ -232,12 +232,13 @@ modelo = "RTX 4060 tarjeta de video"
 mercadolibre = ["MCO28671631"]
 
 [[producto]]
-nombre = "Memoria RAM Corsair Vengeance LPX 16 GB DDR4 3200 MHz"
+# Reemplaza a la Corsair Vengeance LPX 16 GB (MCO22226723), sin vendedores desde el 18 de noviembre de 2026
+nombre = "Memoria RAM Kingston Fury Beast 16 GB DDR4 3200 MHz"
 categoria = "componentes"
-marca = "Corsair"
-modelo = "Vengeance LPX"
+marca = "Kingston"
+modelo = "Fury Beast KF432C16BB1/16"
 [producto.ids]
-mercadolibre = ["MCO22226723"]
+mercadolibre = ["MCO64093902"]
 
 # Consolas
 
@@ -343,12 +344,13 @@ mercadolibre = ["MCO50391606"]
 # Televisores y monitores
 
 [[producto]]
-nombre = "Televisor Samsung 55 pulgadas Crystal UHD DU7000"
+# Reemplaza al Samsung DU7000 (MCO37850031), sin vendedores desde el 18 de noviembre de 2026
+nombre = "Televisor Samsung 55 pulgadas Crystal UHD U8000F"
 categoria = "televisores"
 marca = "Samsung"
-modelo = "DU7000 TV"
+modelo = "U8000F 2025 TV"
 [producto.ids]
-mercadolibre = ["MCO37850031"]
+mercadolibre = ["MCO54717275"]
 
 [[producto]]
 nombre = "Televisor LG 55 pulgadas 4K 55UT8050"

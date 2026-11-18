@@ -89,6 +89,46 @@ def test_un_producto_fuera_del_catalogo_sigue_sin_cobertura(catalogo: Session) -
     assert nombres(catalogo, criterios("nevera")) == []
 
 
+@pytest.mark.parametrize(
+    "c",
+    [
+        criterios("celular", "Apple", "iPhone 16 Pro Max", gama="alta"),  # prueba de Santiago, 18 nov 2026
+        criterios("celular", "Samsung", "Galaxy S26 Ultra"),
+        criterios("consola", "Sony", "PlayStation 5 Pro"),
+        criterios("audífonos", "Sony", "WH-1000XM6"),
+    ],
+)
+def test_un_modelo_que_no_esta_no_se_confunde_con_uno_parecido(catalogo: Session, c: CriteriosConsulta) -> None:
+    assert nombres(catalogo, c) == []
+
+
+def test_un_modelo_de_una_sola_pieza_no_basta_para_aceptar_un_producto(catalogo: Session) -> None:
+    # "5" está en "Ryzen 5 5600", pero no identifica una consola
+    assert "Procesador AMD Ryzen 5 5600" not in nombres(catalogo, criterios("consola de videojuegos", None, "5"))
+
+
+@pytest.mark.parametrize(
+    ("c", "esperado"),
+    [
+        (criterios("videojuego", None, "Call of Duty: Black Ops 6"), "Juego Call of Duty Black Ops 6 PS5"),
+        (criterios("videojuego", None, "Marvel's Spider-Man 2"), "Juego Marvel's Spider-Man 2 PS5"),
+        (criterios("audífonos", "Sony", "WH-1000XM5"), "Audífonos Sony WH-1000XM5"),
+        (criterios("celular", "Samsung", "Galaxy A36 5G"), "Celular Samsung Galaxy A36 5G 256 GB 8 GB RAM"),
+        (criterios("consola de videojuegos", "PlayStation", "5"), "Consola Sony PlayStation 5 Slim Digital"),
+        # Criterios reales de Haiku: "tableta" y "CH520" bajaban el puntaje de palabras
+        (criterios("audífonos", "Sony", "CH520"), "Audífonos Sony WH-CH520"),
+        (criterios("tableta", None, "Galaxy Tab A9+"), "Tablet Samsung Galaxy Tab A9+ 128 GB Wi-Fi"),
+        (criterios("tableta", "Lenovo", "Idea Tab"), "Tablet Lenovo Idea Tab 11 128 GB con Tab Pen"),
+        (criterios("controles", plataforma="PS5", cantidad="2"), "Control Sony DualSense Edge PS5"),
+        (criterios("audífono", "JBL"), "Audífonos JBL Tune 520BT"),
+    ],
+)
+def test_un_modelo_escrito_distinto_sigue_encontrando_su_producto(
+    catalogo: Session, c: CriteriosConsulta, esperado: str
+) -> None:
+    assert nombres(catalogo, c)[0] == esperado
+
+
 def capturar(sesion: Session, nombre: str, precio: int) -> None:
     plataforma = sesion.scalar(select(Plataforma).where(Plataforma.nombre == "Mercado Libre"))
     producto = sesion.scalar(select(Producto).where(Producto.nombre_canonico == nombre))

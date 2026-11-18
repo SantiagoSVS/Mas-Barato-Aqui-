@@ -6,10 +6,15 @@
    "estudio") solo ayudan a ordenar: casi nunca están en el nombre y no deben descartar nada.
    La marca debe coincidir si el usuario la dio, salvo que el modelo identifique el producto:
    en "tarjeta RTX 4060 NVIDIA" el producto registrado puede ser de marca Gigabyte.
+   Si el usuario dio un modelo, todas sus piezas deben estar en el producto: "iPhone 16 Pro Max" no
+   es el "iPhone 16". Ante la duda se omite, y la consulta queda sin cobertura. Al revés, un modelo
+   de dos o más piezas que está completo en el producto basta aunque las demás palabras difieran
+   ("tableta Galaxy Tab A9+" frente a "Tablet Samsung Galaxy Tab A9+").
 2. Ofertas vigentes de un producto: la última captura de cada oferta, solo de tiendas activas y
    solo si es reciente. Una oferta que dejó de capturarse no debe competir con un precio viejo.
 """
 
+import re
 import unicodedata
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
@@ -48,13 +53,31 @@ def texto_de_busqueda(criterios: CriteriosConsulta) -> str:
 
 
 def _sin_palabras_vacias(texto: str) -> str:
-    return " ".join(p for p in _normalizar(texto).split() if p not in PALABRAS_VACIAS)
+    return " ".join(_singular(p) for p in _normalizar(texto).split() if p not in PALABRAS_VACIAS)
+
+
+def _singular(palabra: str) -> str:
+    """Singular aproximado, igual para la consulta y el producto: "controles" y "control" coinciden."""
+    if len(palabra) > 4 and palabra.endswith("es") and palabra[-3] not in "aeiou":
+        return palabra[:-2]
+    if len(palabra) > 3 and palabra.endswith("s") and not palabra[-2].isdigit():
+        return palabra[:-1]
+    return palabra
+
+
+def _piezas(texto: str) -> set[str]:
+    """Letras y números por separado: "WH-1000XM5" -> {wh, 1000, xm, 5}; "Tune 520" está en "Tune 520BT"."""
+    return set(re.findall(r"[a-z]+|[0-9]+", _sin_palabras_vacias(texto)))
+
+
+def _modelo_contenido(criterios: CriteriosConsulta, texto_producto: str) -> bool:
+    return not criterios.modelo or _piezas(criterios.modelo) <= _piezas(texto_producto)
 
 
 def _marca_compatible(criterios: CriteriosConsulta, producto: Producto, texto_producto: str) -> bool:
     if not criterios.marca or not producto.marca or _normalizar(criterios.marca) == _normalizar(producto.marca):
         return True
-    return bool(criterios.modelo) and set(_sin_palabras_vacias(criterios.modelo).split()) <= set(texto_producto.split())
+    return bool(criterios.modelo) and _modelo_contenido(criterios, texto_producto)
 
 
 def buscar_productos(sesion: Session, criterios: CriteriosConsulta, puntaje_minimo: int) -> list[ProductoEncontrado]:
@@ -64,14 +87,16 @@ def buscar_productos(sesion: Session, criterios: CriteriosConsulta, puntaje_mini
     consulta = texto_de_busqueda(criterios)
     encontrados = []
     todos_los_atributos = _sin_palabras_vacias(" ".join(criterios.atributos.values()))
+    # Un modelo de una sola pieza ("5") no identifica nada por sí solo
+    modelo_identifica = bool(criterios.modelo) and len(_piezas(criterios.modelo)) >= 2
     for producto in sesion.scalars(select(Producto)):
         texto_producto = _sin_palabras_vacias(" ".join(p for p in (producto.nombre_canonico, producto.modelo) if p))
-        if not _marca_compatible(criterios, producto, texto_producto):
+        if not _marca_compatible(criterios, producto, texto_producto) or not _modelo_contenido(criterios, texto_producto):
             continue
         # Sin marca registrada (consolas, juegos), la marca dicha cuenta como una palabra más: "Xbox"
         texto = f"{consulta} {_normalizar(criterios.marca)}" if criterios.marca and not producto.marca else consulta
         puntaje = fuzz.token_set_ratio(texto, texto_producto)
-        if puntaje >= puntaje_minimo:
+        if puntaje >= puntaje_minimo or modelo_identifica:
             afinidad = fuzz.token_set_ratio(f"{texto} {todos_los_atributos}", texto_producto)
             encontrados.append(ProductoEncontrado(producto, puntaje, afinidad))
     return sorted(encontrados, key=lambda e: (-e.puntaje, -e.afinidad, e.producto.nombre_canonico))

@@ -140,9 +140,15 @@ def test_con_poco_historial_no_dice_3_meses(sesion: Session) -> None:
     )
 
 
-def test_sin_oferta_recomendada_no_hay_indicador(sesion: Session) -> None:
+def test_sin_envio_conocido_el_indicador_es_de_la_recomendada_por_precio(sesion: Session) -> None:
     reloj = producto(sesion)
     capturar(sesion, reloj, "Falabella", "https://fal/1", en_utc(HOY), 159_900, envio=None, dias=None)
+
+    assert construir_historial(sesion, reloj, "3M", 0.05, hoy=HOY).indicador.plataforma == "Falabella"
+
+
+def test_sin_ofertas_vigentes_no_hay_indicador(sesion: Session) -> None:
+    reloj = producto(sesion)
 
     assert construir_historial(sesion, reloj, "3M", 0.05, hoy=HOY).indicador is None
 

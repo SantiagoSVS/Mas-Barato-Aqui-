@@ -64,6 +64,7 @@ class Comparacion(BaseModel):
     prioridad: Prioridad
     w: int
     recomendada: OfertaRespuesta | None
+    recomendada_por_precio: bool = False  # ninguna tienda informa el envío: se eligió por precio
     explicacion: str | None
     alternativas: list[OfertaRespuesta]
     sin_costo_completo: list[OfertaRespuesta]  # envío o días desconocidos: no se ordenan con las demás
@@ -120,8 +121,11 @@ def comparar_producto(
     activas = plataformas_activas(sesion)
     con_resultados = sorted({c.oferta.plataforma for c in [*ranking.ordenadas, *ranking.incompletas]})
 
-    if ranking.recomendada is None and ranking.incompletas:
-        avisos.append("Ninguna oferta tiene precio y envío conocidos, por eso no hay una recomendada.")
+    if ranking.por_precio:
+        avisos.append(
+            "Ninguna tienda informa el envío antes de pagar, por eso recomendamos la de menor precio. "
+            "El envío se suma al pagar en la tienda."
+        )
     if not con_resultados:
         avisos.append("Aún no tenemos precios recientes de este producto. Intenta de nuevo más tarde.")
 
@@ -130,9 +134,10 @@ def comparar_producto(
         prioridad=prioridad,
         w=w,
         recomendada=_respuesta(ranking.recomendada) if ranking.recomendada else None,
+        recomendada_por_precio=ranking.por_precio,
         explicacion=explicar(ranking),
         alternativas=[_respuesta(c) for c in ranking.ordenadas[1:]],
-        sin_costo_completo=[_respuesta(c) for c in ranking.incompletas],
+        sin_costo_completo=[_respuesta(c) for c in ranking.sin_costo_completo],
         tiendas=Tiendas(
             consultadas=[p.nombre for p in activas],
             con_resultados=con_resultados,
@@ -163,10 +168,14 @@ def _primero_el_mas_barato(
     if len(empatados) == 1:
         return encontrados
 
-    def costo(encontrado: ProductoEncontrado) -> float:
+    def costo(encontrado: ProductoEncontrado) -> tuple[int, float]:
+        """Primero los productos con costo total conocido; si ninguno lo tiene (por ejemplo, si la
+        única tienda que cotiza el envío no respondió), el de menor precio visible."""
         comparacion, _ = comparar_producto(sesion, encontrado.producto, prioridad, presupuesto_cop, configuracion)
         recomendada = comparacion.recomendada
-        return recomendada.costo_total_cop if recomendada else float("inf")
+        if recomendada and recomendada.costo_total_cop is not None:
+            return 0, recomendada.costo_total_cop
+        return (1, recomendada.precio_cop) if recomendada else (2, 0)
 
     candidato = min(empatados, key=costo)
     return [candidato, *(e for e in encontrados if e is not candidato)]

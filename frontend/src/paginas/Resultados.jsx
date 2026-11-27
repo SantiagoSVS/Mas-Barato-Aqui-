@@ -28,6 +28,8 @@ export default function Resultados() {
   if (!comparacion) return <Navigate to="/" replace />
 
   const presupuesto = state.criterios?.precio_max_cop
+  // Una tienda que no respondió no "deja de tener" el producto: ya tiene su propio aviso
+  const sinProducto = comparacion.tiendas.sin_producto.filter((tienda) => !sinRespuesta.includes(tienda))
 
   async function cambiarPrioridad(prioridad) {
     if (prioridad === comparacion.prioridad) return
@@ -101,6 +103,7 @@ export default function Resultados() {
               producto={comparacion.producto.nombre}
               explicacion={comparacion.explicacion}
               prioridad={comparacion.prioridad}
+              porPrecio={comparacion.recomendada_por_precio}
               enlaceHistorial={enlaceHistorial}
             />
           )}
@@ -131,9 +134,9 @@ export default function Resultados() {
             </section>
           )}
 
-          {tiendas.sin_producto.length > 0 && (
+          {sinProducto.length > 0 && (
             <span className="alternativa__detalle" data-cy="sin-producto">
-              {tiendas.sin_producto.join(', ')} {tiendas.sin_producto.length === 1 ? 'no tiene' : 'no tienen'} este
+              {sinProducto.join(', ')} {sinProducto.length === 1 ? 'no tiene' : 'no tienen'} este
               producto.
             </span>
           )}
@@ -145,12 +148,15 @@ export default function Resultados() {
   )
 }
 
-function Recomendada({ oferta, producto, explicacion, prioridad, enlaceHistorial }) {
+function Recomendada({ oferta, producto, explicacion, prioridad, porPrecio, enlaceHistorial }) {
+  // Si ninguna tienda informa el envío, se recomienda por precio y se muestra el precio, no un costo total
+  const etiqueta = porPrecio ? 'Precio (envío por confirmar)' : 'Costo total estimado'
+  const valor = porPrecio ? oferta.precio_cop : oferta.costo_total_cop
   return (
     <section className="recomendada" aria-label="Opción recomendada" data-cy="recomendada">
       <div className="recomendada__franja">
         <Estrella tamano={16} />
-        Recomendada · {PRIORIDADES[prioridad].toLowerCase()}
+        Recomendada · {porPrecio ? 'menor precio' : PRIORIDADES[prioridad].toLowerCase()}
       </div>
       <div className="recomendada__cuerpo">
         <div style={{ display: 'grid', gap: 12 }}>
@@ -167,8 +173,8 @@ function Recomendada({ oferta, producto, explicacion, prioridad, enlaceHistorial
             </div>
           </div>
           <div className="costo-total solo-movil">
-            <span className="costo-total__etiqueta">Costo total estimado</span>
-            <span className="costo-total__valor">{pesos(oferta.costo_total_cop)}</span>
+            <span className="costo-total__etiqueta">{etiqueta}</span>
+            <span className="costo-total__valor">{pesos(valor)}</span>
           </div>
           <div className="desglose">
             <Dato nombre="Precio" valor={pesos(oferta.precio_cop)} />
@@ -184,7 +190,7 @@ function Recomendada({ oferta, producto, explicacion, prioridad, enlaceHistorial
             </p>
           )}
           {oferta.supera_presupuesto && (
-            <span className="etiqueta-presupuesto">Supera tu presupuesto con envío</span>
+            <span className="etiqueta-presupuesto">{porPrecio ? 'Supera tu presupuesto' : 'Supera tu presupuesto con envío'}</span>
           )}
           <span className="fuente">
             Fuente: {oferta.plataforma} · capturado {fechaCaptura(oferta.capturado_en)}
@@ -192,9 +198,9 @@ function Recomendada({ oferta, producto, explicacion, prioridad, enlaceHistorial
         </div>
         <div className="recomendada__acciones">
           <div className="costo-total solo-escritorio">
-            <span className="costo-total__etiqueta">Costo total estimado</span>
+            <span className="costo-total__etiqueta">{etiqueta}</span>
             <span className="costo-total__valor" data-cy="costo-total">
-              {pesos(oferta.costo_total_cop)}
+              {pesos(valor)}
             </span>
           </div>
           <div className="botones-par">

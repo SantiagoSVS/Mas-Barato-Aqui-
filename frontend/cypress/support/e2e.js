@@ -8,6 +8,7 @@ Cypress.Commands.add('simularApi', () => {
     const texto = peticion.body.texto.toLowerCase()
     if (texto.includes('tenis')) peticion.reply({ fixture: 'consulta_sin_cobertura.json' })
     else if (texto.includes('algo bueno')) peticion.reply({ fixture: 'consulta_aclaracion.json' })
+    else if (texto.includes('sin envío')) peticion.reply({ fixture: 'consulta_por_precio.json' })
     else peticion.reply({ fixture: 'consulta_resultados.json' })
   }).as('consulta')
   cy.fixture('consulta_resultados.json').then((resultados) => {

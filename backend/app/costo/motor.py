@@ -12,8 +12,13 @@ para que el resultado sea reproducible. Ninguna regla depende de la tienda (neut
 
 Datos incompletos ("ante la duda, omitir"): si falta el envío, CT no se puede calcular; si
 w > 0 y faltan los días, tampoco CA. Esas ofertas no se mezclan con las completas: van en un
-grupo aparte, ordenadas por precio, y nunca son la recomendada. Las ofertas no disponibles se
-descartan.
+grupo aparte, ordenadas por precio. Las ofertas no disponibles se descartan.
+
+Recomendación por precio (desde el 27 de noviembre de 2026): si ninguna oferta tiene el costo
+completo, se recomienda la de menor precio visible y se avisa que el envío está por confirmar.
+Pasó a ser necesario cuando la API de Mercado Libre, la única tienda que cotizaba el envío, dejó
+de entregar precios: Falabella y Homecenter calculan el envío solo al pagar. Si alguna oferta
+tiene el costo completo, la regla de siempre manda y la recomendada sale de CT/CA.
 """
 
 from dataclasses import dataclass
@@ -56,7 +61,20 @@ class Ranking:
 
     @property
     def recomendada(self) -> OfertaCalculada | None:
-        return self.ordenadas[0] if self.ordenadas else None
+        """La de menor costo (CA, luego CT); si ninguna tiene el costo completo, la de menor precio."""
+        if self.ordenadas:
+            return self.ordenadas[0]
+        return self.incompletas[0] if self.incompletas else None
+
+    @property
+    def por_precio(self) -> bool:
+        """True si la recomendada se eligió por precio porque ninguna tienda informa el envío."""
+        return not self.ordenadas and bool(self.incompletas)
+
+    @property
+    def sin_costo_completo(self) -> list[OfertaCalculada]:
+        """Ofertas del grupo "envío por confirmar", sin la recomendada si salió de ahí."""
+        return self.incompletas[1:] if self.por_precio else self.incompletas
 
 
 def calcular(oferta: OfertaVigente, w: int, presupuesto_cop: int | None = None) -> OfertaCalculada:
@@ -97,6 +115,16 @@ def explicar(ranking: Ranking) -> str | None:
     recomendada = ranking.recomendada
     if recomendada is None:
         return None
+    if ranking.por_precio:
+        if len(ranking.incompletas) == 1:
+            return "es la única opción disponible; la tienda informa el envío al pagar."
+        diferencia = ranking.incompletas[1].oferta.precio_cop - recomendada.oferta.precio_cop
+        if diferencia == 0:
+            return "tiene el menor precio, empatada con otra opción; ninguna tienda informa el envío antes de pagar."
+        return (
+            f"tiene el menor precio: {formato_pesos(diferencia)} menos que la siguiente opción. Ninguna "
+            "tienda informa el envío antes de pagar, así que compáralo al pagar."
+        )
     if len(ranking.ordenadas) == 1:
         return "es la única opción con precio y envío conocidos."
     siguiente = ranking.ordenadas[1]

@@ -129,15 +129,15 @@ def test_un_modelo_escrito_distinto_sigue_encontrando_su_producto(
     assert nombres(catalogo, c)[0] == esperado
 
 
-def capturar(sesion: Session, nombre: str, precio: int) -> None:
-    plataforma = sesion.scalar(select(Plataforma).where(Plataforma.nombre == "Mercado Libre"))
+def capturar(sesion: Session, nombre: str, precio: int, tienda: str = "Mercado Libre", envio: int | None = 0) -> None:
+    plataforma = sesion.scalar(select(Plataforma).where(Plataforma.nombre == tienda))
     producto = sesion.scalar(select(Producto).where(Producto.nombre_canonico == nombre))
     oferta = Oferta(plataforma=plataforma, producto=producto, titulo_original=nombre, url_origen=f"https://ejemplo/{nombre}")
     sesion.add(oferta)
     sesion.add(
         Captura(
-            oferta=oferta, capturado_en=datetime(2026, 11, 5, tzinfo=UTC), precio_cop=precio, envio_cop=0,
-            dias_entrega=2, disponible=True,
+            oferta=oferta, capturado_en=datetime(2026, 11, 5, tzinfo=UTC), precio_cop=precio, envio_cop=envio,
+            dias_entrega=2 if envio is not None else None, disponible=True,
         )
     )
     sesion.flush()
@@ -180,3 +180,19 @@ def test_control_de_ps5_barato_muestra_primero_el_estandar(catalogo: Session) ->
     )
 
     assert respuesta.comparacion.producto.nombre == "Control Sony DualSense PS5"
+
+
+def test_sin_costo_total_conocido_muestra_primero_el_de_menor_precio(catalogo: Session) -> None:
+    # Pasó el 27 de noviembre de 2026: Mercado Libre no respondía y solo quedaban ofertas de
+    # Falabella con envío por confirmar; se mostraban los audífonos de $949.900 con presupuesto de 400 mil
+    capturar(catalogo, "Audífonos Sony WH-1000XM5", 949_900, tienda="Falabella", envio=None)
+    capturar(catalogo, "Audífonos Sony WH-CH520", 149_900, tienda="Falabella", envio=None)
+
+    respuesta = consultar_audifonos_sony(catalogo, 400_000)
+
+    comparacion = respuesta.comparacion
+    assert comparacion.producto.nombre == "Audífonos Sony WH-CH520"
+    # Sin envío conocido se recomienda por precio y se avisa
+    assert comparacion.recomendada_por_precio is True
+    assert comparacion.recomendada.precio_cop == 149_900 and comparacion.recomendada.costo_total_cop is None
+    assert any("recomendamos la de menor precio" in aviso for aviso in comparacion.avisos)

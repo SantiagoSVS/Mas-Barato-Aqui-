@@ -66,7 +66,7 @@ def test_empate_total_gana_la_que_llega_antes_y_luego_el_id() -> None:
     assert [c.oferta for c in ordenar([lenta, igual, rapida], w=0).ordenadas] == [rapida, igual, lenta]
 
 
-def test_envio_desconocido_va_aparte_y_nunca_es_la_recomendada() -> None:
+def test_envio_desconocido_va_aparte_si_otra_tiene_el_costo_completo() -> None:
     sin_envio = oferta(1, 50_000, None, None, "Falabella")  # más barata, pero sin envío conocido
     con_envio = oferta(2, 80_000, 5_000, 3, "Mercado Libre")
 
@@ -75,6 +75,40 @@ def test_envio_desconocido_va_aparte_y_nunca_es_la_recomendada() -> None:
     assert ranking.recomendada.oferta == con_envio
     assert [c.oferta for c in ranking.incompletas] == [sin_envio]
     assert ranking.incompletas[0].costo_total is None
+    assert ranking.por_precio is False
+    assert [c.oferta for c in ranking.sin_costo_completo] == [sin_envio]
+
+
+def test_si_ninguna_informa_el_envio_recomienda_la_de_menor_precio() -> None:
+    # Falabella y Homecenter calculan el envío al pagar (desde el 27 de noviembre de 2026 son
+    # las tiendas principales, porque Mercado Libre dejó de dar precios)
+    falabella = oferta(1, 249_900, None, None, "Falabella")
+    homecenter = oferta(2, 239_900, None, None, "Homecenter")
+
+    ranking = ordenar([falabella, homecenter], w=0)
+
+    assert ranking.por_precio is True
+    assert ranking.recomendada.oferta == homecenter
+    assert [c.oferta for c in ranking.sin_costo_completo] == [falabella]
+    assert explicar(ranking) == (
+        "tiene el menor precio: $10.000 menos que la siguiente opción. Ninguna tienda informa el "
+        "envío antes de pagar, así que compáralo al pagar."
+    )
+
+
+def test_recomendada_por_precio_es_deterministica_en_empate() -> None:
+    a, b = oferta(7, 100_000, None, None), oferta(3, 100_000, None, None)
+
+    assert ordenar([a, b], w=0).recomendada.oferta == b
+    assert ordenar([b, a], w=0).recomendada.oferta == b
+    assert "empatada" in explicar(ordenar([a, b], w=0))
+
+
+def test_una_sola_oferta_sin_envio_es_la_recomendada_y_lo_explica() -> None:
+    ranking = ordenar([oferta(1, 100_000, None, None, "Falabella")], w=0)
+
+    assert ranking.recomendada is not None and ranking.sin_costo_completo == []
+    assert explicar(ranking) == "es la única opción disponible; la tienda informa el envío al pagar."
 
 
 def test_con_w_mayor_que_cero_faltan_los_dias_y_la_oferta_va_aparte() -> None:
@@ -82,7 +116,7 @@ def test_con_w_mayor_que_cero_faltan_los_dias_y_la_oferta_va_aparte() -> None:
 
     assert ordenar([sin_dias], w=0).recomendada is not None  # con w = 0 los días no importan
     ranking = ordenar([sin_dias], w=10_000)
-    assert ranking.recomendada is None
+    assert ranking.ordenadas == [] and ranking.por_precio is True  # sin días no hay CA
     assert ranking.incompletas[0].costo_total == 50_000
     assert ranking.incompletas[0].costo_ajustado is None
 

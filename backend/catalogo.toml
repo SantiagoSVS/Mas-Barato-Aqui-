@@ -10,6 +10,9 @@
 #
 # Falabella: el identificador es el número de la dirección /falabella-co/product/73447854/...
 # Homecenter: igual, el número de /homecenter-co/product/733184/...
+# Alkosto: el código de la dirección /p/711719574293 (es el código de barras del producto). Solo
+# productos nuevos del mismo modelo y capacidad; se omiten combos, reacondicionados y otras
+# capacidades. Verificados el 27 de noviembre de 2026 con el conector.
 #
 # Un producto puede tener varios identificadores en una tienda (varios vendedores).
 #
@@ -32,6 +35,7 @@ marca = "Kalley"
 [producto.ids]
 mercadolibre = ["MCO47798002"]
 falabella = ["127694748"]
+alkosto = ["7700149140027"]
 
 [[producto]]
 nombre = "Freidora de aire Oster DiamondForce 4 litros manual"
@@ -42,6 +46,7 @@ modelo = "CKSTAF401MDF"
 mercadolibre = ["MCO44586784"]
 falabella = ["158476198", "158167576", "158167350"]
 homecenter = ["733184"]
+alkosto = ["053891175937"]
 
 [[producto]]
 nombre = "Freidora de aire Imusa Easy Fry Max 5 litros mecánica"
@@ -65,6 +70,7 @@ modelo = "Redmi Buds 8 Lite auriculares inalámbricos"
 mercadolibre = ["MCO63135410", "MCO62995693"]
 falabella = ["73530552"]
 homecenter = ["3075293"]
+alkosto = ["6932554471880", "6932554471897", "6932554471927"]
 
 [[producto]]
 nombre = "Celular Xiaomi Redmi Note 15 4G 256 GB 8 GB RAM"
@@ -84,6 +90,7 @@ modelo = "Redmi Watch 6 Active"
 mercadolibre = ["MCO76818379", "MCO78296359", "MCO77168313", "MCO78291260"]
 falabella = ["157087050", "158615248", "157017522"]
 homecenter = ["3117099"]
+alkosto = ["6932554406059", "6932554406080", "6932554406103"]
 
 [[producto]]
 nombre = "Protector solar ISDIN Fusion Water Magic SPF50 50 ml"
@@ -127,6 +134,7 @@ marca = "Samsung"
 modelo = "Galaxy A36"
 [producto.ids]
 mercadolibre = ["MCO47111905", "MCO47106610", "MCO47111011"]
+alkosto = ["8806097477334", "8806097477341"]
 
 [[producto]]
 nombre = "Celular Samsung Galaxy A56 5G 256 GB 8 GB RAM"
@@ -135,6 +143,7 @@ marca = "Samsung"
 modelo = "Galaxy A56"
 [producto.ids]
 mercadolibre = ["MCO47112282"]
+alkosto = ["8806097117148"]
 
 [[producto]]
 nombre = "Celular Apple iPhone 16 128 GB"
@@ -145,6 +154,7 @@ modelo = "iPhone 16"
 mercadolibre = ["MCO40287808", "MCO40287802", "MCO40287791"]
 
 # Tablets
+alkosto = ["195949821813", "195949821998", "195949822179", "195949822353", "195949822537"]
 
 [[producto]]
 nombre = "Tablet Apple iPad 11 256 GB Wi-Fi"
@@ -272,6 +282,7 @@ mercadolibre = ["MCO50177572"]
 falabella = ["73297242"]
 
 # Videojuegos
+alkosto = ["045496885854"]
 
 [[producto]]
 nombre = "Juego God of War Ragnarök PS5"
@@ -280,6 +291,7 @@ modelo = "videojuego PlayStation 5"
 [producto.ids]
 mercadolibre = ["MCO19472097", "MCO75632976"]
 falabella = ["127142279", "54487337"]
+alkosto = ["711719547013"]
 
 [[producto]]
 nombre = "Juego Marvel's Spider-Man 2 PS5"
@@ -288,6 +300,7 @@ modelo = "videojuego Spiderman PlayStation 5"
 [producto.ids]
 mercadolibre = ["MCO26835194"]
 falabella = ["128270333"]
+alkosto = ["711719567974"]
 
 [[producto]]
 nombre = "Juego The Last of Us Part II Remastered PS5"
@@ -296,6 +309,7 @@ modelo = "videojuego PlayStation 5"
 [producto.ids]
 mercadolibre = ["MCO29019978", "MCO30318944"]
 falabella = ["129758955", "128841360"]
+alkosto = ["711719553793"]
 
 [[producto]]
 nombre = "Juego Call of Duty Black Ops 6 PS5"
@@ -312,6 +326,7 @@ modelo = "videojuego PlayStation 5"
 [producto.ids]
 mercadolibre = ["MCO42975162"]
 falabella = ["136917025", "73048526"]
+alkosto = ["711719589051"]
 
 [[producto]]
 nombre = "Juego Mario Kart World Nintendo Switch 2"
@@ -319,6 +334,7 @@ categoria = "videojuegos"
 modelo = "videojuego"
 [producto.ids]
 mercadolibre = ["MCO49537584", "MCO51929491"]
+alkosto = ["045496905453"]
 
 [[producto]]
 nombre = "Juego The Legend of Zelda Breath of the Wild Nintendo Switch"
@@ -326,6 +342,7 @@ categoria = "videojuegos"
 modelo = "videojuego"
 [producto.ids]
 mercadolibre = ["MCO6334852"]
+alkosto = ["045496590420"]
 
 [[producto]]
 nombre = "Juego Forza Horizon 5 Xbox"
@@ -386,6 +403,7 @@ marca = "TCL"
 modelo = "V6C TV"
 [producto.ids]
 mercadolibre = ["MCO51069838"]
+alkosto = ["6921732899387"]
 
 [[producto]]
 nombre = "Monitor Samsung 24 pulgadas Essential S3"
@@ -421,6 +439,7 @@ marca = "Apple"
 modelo = "AirPods 4 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO40520107"]
+alkosto = ["195949688454"]
 
 [[producto]]
 nombre = "Audífonos Soundcore Q20i"
@@ -437,6 +456,7 @@ marca = "Samsung"
 modelo = "Galaxy Buds FE auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO39016606", "MCO29595951"]
+alkosto = ["8806095221595"]
 
 [[producto]]
 nombre = "Audífonos Sony WH-CH520"
@@ -447,6 +467,7 @@ modelo = "WH-CH520 auriculares inalámbricos"
 mercadolibre = ["MCO41946950", "MCO46392815"]
 falabella = ["120300130", "120300576"]
 homecenter = ["3005543"]
+alkosto = ["027242925205", "027242925465", "027242925472", "027242925489", "027242932425"]
 
 [[producto]]
 nombre = "Audífonos Sony WH-1000XM5"
@@ -459,6 +480,7 @@ falabella = ["119322622", "121398069"]
 
 # Controles (6 de noviembre de 2026). El Pro Controller de Falabella a $149.000 quedó por fuera:
 # la mitad del precio de los demás no parece el mismo producto.
+alkosto = ["027242923232", "027242923249", "027242923911", "027242931510"]
 
 [[producto]]
 nombre = "Control Sony DualSense PS5"
@@ -467,6 +489,7 @@ modelo = "DualSense PlayStation 5 inalámbrico mando joystick"
 [producto.ids]
 mercadolibre = ["MCO33997846"]
 falabella = ["130955399", "123198554"]
+alkosto = ["711719574293", "711719574309", "711719574316", "711719574347"]
 
 [[producto]]
 nombre = "Control Sony DualSense Edge PS5"
@@ -474,6 +497,7 @@ categoria = "controles"
 modelo = "DualSense Edge PlayStation 5 inalámbrico mando joystick"
 [producto.ids]
 mercadolibre = ["MCO41152829"]
+alkosto = ["711719559337"]
 
 [[producto]]
 nombre = "Control Xbox Series X|S inalámbrico"
@@ -482,6 +506,7 @@ modelo = "Microsoft Xbox Series X S Wireless mando joystick"
 [producto.ids]
 mercadolibre = ["MCO51284658"]
 falabella = ["126133730"]
+alkosto = ["889842896473", "889842654776", "889842782721", "196388518081", "196388518197", "196388518159", "196388518227", "889842707106"]
 
 [[producto]]
 nombre = "Control Nintendo Switch Pro Controller"
@@ -489,6 +514,7 @@ categoria = "controles"
 modelo = "Pro inalámbrico mando joystick"
 [producto.ids]
 mercadolibre = ["MCO15009014", "MCO25911939"]
+alkosto = ["045496590161"]
 
 [[producto]]
 nombre = "Control Nintendo Switch 2 Pro Controller"
@@ -496,3 +522,4 @@ categoria = "controles"
 modelo = "Pro inalámbrico mando joystick"
 [producto.ids]
 mercadolibre = ["MCO48924402"]
+alkosto = ["045496885861"]

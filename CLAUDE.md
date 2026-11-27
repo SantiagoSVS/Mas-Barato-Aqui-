@@ -32,8 +32,9 @@ Aplicación **web responsiva** (primero móvil) que:
 
 | Prioridad | Tiendas | Nota |
 |---|---|---|
-| MVP, integradas y activas (1 nov 2026) | **Mercado Libre, Falabella, Homecenter** | Mínimo exigido: 3 tiendas funcionando. Si una bloquea el acceso, se reemplaza por una de las otras cuatro. |
-| Después, según acceso a datos | Éxito, Alkosto, Alkomprar, Amazon | |
+| MVP, integradas (1 nov 2026) | **Mercado Libre, Falabella, Homecenter** | Mínimo exigido: 3 tiendas funcionando. Si una bloquea el acceso, se reemplaza por una de las otras cuatro. |
+| Principales desde el 27 nov 2026 | **Falabella, Homecenter** | La API de Mercado Libre dejó de dar precios a terceros desde el 20 nov (403 PolicyAgent, también con token de usuario y permisos funcionales): quedó inactiva (migración `9a3f1c2b7d40`), con su historial. |
+| Después, según acceso a datos | Éxito, Alkosto, Alkomprar, Amazon | Evaluadas el 27 nov: Alkosto publica envío, pero sus términos prohíben el acceso automatizado sin autorización escrita (conector listo, sin activar); Alkomprar es la misma empresa; Éxito responde 403 al agente identificado. |
 
 **Amazon queda por fuera mientras sea proyecto de grado** (decisión de Santiago, 1 nov 2026): su acceso es complejo. No se integra, pero tampoco se borra de los documentos. Datos para cuando se integre: **Amazon** despacha desde EE. UU.: el precio viene en dólares y se convierte a pesos con la tasa de cambio del día de la captura (guardar la tasa usada). Su envío `E` incluye el envío internacional y el depósito estimado de impuestos de importación cuando Amazon los muestra antes del pago. Amazon limita la extracción automatizada: intentar su API para afiliados.
 
@@ -89,7 +90,7 @@ Interfaz web → API (FastAPI) → módulos (Historial · Costo total · Interpr
 - La interfaz solo habla con la API. Solo el worker toca las tiendas. Las consultas del usuario se responden sobre datos ya almacenados, en segundos (RNF-04); **nunca** se hace scraping en el momento de la consulta.
 - Producto fuera del catálogo → se informa al usuario y se registra como «sin cobertura»; esas consultas son la lista para ampliar el catálogo (RF-13).
 - Catálogo por identificadores: cada producto de `backend/catalogo.toml` lleva sus IDs verificados a mano en cada tienda (la API de Mercado Libre no permite buscar con token de aplicación). Hoy hay 55 productos: celulares, tablets, portátiles, componentes, consolas, controles, videojuegos, televisores, monitores y audífonos, además de los 10 iniciales de tecnología, hogar y belleza.
-- Envío: Mercado Libre cotiza envío y días a Medellín (`MERCADOLIBRE_CIUDAD_DESTINO`). Falabella y Homecenter no lo publican antes de pagar: queda desconocido, con la nota de la tienda (`plataforma.nota_envio`), y esas ofertas van aparte («envío por confirmar») y nunca son la recomendada.
+- Envío: Mercado Libre cotizaba envío y días a Medellín (`MERCADOLIBRE_CIUDAD_DESTINO`). Falabella y Homecenter no lo publican antes de pagar: queda desconocido, con la nota de la tienda (`plataforma.nota_envio`), y esas ofertas van aparte («envío por confirmar»). Si ninguna oferta tiene el envío conocido, se recomienda la de menor precio visible con aviso (`Ranking.por_precio`, desde el 27 nov 2026); si alguna lo tiene, manda CT/CA.
 - Si una tienda falla, se registra el error y se responde con las demás (RNF-05).
 - Una oferta sin captura en `OFERTA_VIGENCIA_DIAS` días (3 por defecto) sale de la comparación; su historial se conserva.
 

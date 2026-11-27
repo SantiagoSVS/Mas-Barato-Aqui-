@@ -60,4 +60,20 @@ describe('Flujo de compra', () => {
     cy.wait('@historial1M')
     cy.get('[data-cy=periodo-1M]').should('have.attr', 'aria-pressed', 'true')
   })
+
+  it('si ninguna tienda informa el envío, recomienda la de menor precio y lo avisa', () => {
+    cy.visit('/')
+    cy.buscar('freidora oster sin envío conocido')
+    cy.get('[data-cy=ver-resultados]').click()
+    cy.get('[data-cy=recomendada]').within(() => {
+      cy.contains('Recomendada · menor precio')
+      cy.get('[data-cy=tienda-recomendada]').should('contain', 'Homecenter')
+      cy.get('[data-cy=costo-total]').should('contain', '$238.900')
+      cy.contains('Precio (envío por confirmar)')
+      cy.contains('Envío').parent().should('contain', 'Por confirmar')
+      cy.get('[data-cy=explicacion]').should('contain', 'tiene el menor precio')
+    })
+    cy.get('[data-cy=aviso]').should('contain', 'recomendamos la de menor precio')
+    cy.get('[data-cy=sin-costo]').should('contain', 'Falabella')
+  })
 })

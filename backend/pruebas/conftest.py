@@ -20,7 +20,7 @@ import pytest  # noqa: E402
 from alembic import command  # noqa: E402
 from alembic.config import Config  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
-from sqlalchemy import Engine, create_engine  # noqa: E402
+from sqlalchemy import Engine, create_engine, text  # noqa: E402
 from sqlalchemy.orm import Session  # noqa: E402
 
 from app.config import obtener_configuracion  # noqa: E402
@@ -45,6 +45,11 @@ def motor_pruebas() -> Iterator[Engine]:
     command.upgrade(alembic_cfg, "head")
 
     motor = create_engine(url, connect_args={"connect_timeout": 5})
+    # Mercado Libre quedó inactiva en producción (migración 9a3f1c2b7d40: su API dejó de dar
+    # precios). Las pruebas la siguen usando como la tienda que informa envío y días, que es el
+    # caso que el motor de costo debe seguir resolviendo si una tienda vuelve a darlos.
+    with motor.begin() as conexion:
+        conexion.execute(text("UPDATE plataforma SET activa = true WHERE nombre = 'Mercado Libre'"))
     yield motor
     motor.dispose()
 

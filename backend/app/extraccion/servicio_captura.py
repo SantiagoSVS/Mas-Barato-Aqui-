@@ -3,6 +3,10 @@ normaliza y las guarda vinculadas a ese producto.
 
 Cada pasada queda registrada en ejecucion_captura con su estado y sus errores. Las capturas
 nunca se sobrescriben: cada pasada agrega un punto al historial de cada oferta.
+
+Se confirma (commit) después de cada producto. Así ninguna transacción queda abierta mientras se
+espera a la tienda: con 55 productos y 5 segundos entre peticiones, una sola transacción pasaba
+varios minutos inactiva y Neon la cortaba, y se perdía el registro de toda la pasada.
 """
 
 from collections.abc import Callable
@@ -33,7 +37,7 @@ def capturar_plataforma(
         plataforma=plataforma, iniciada_en=ahora(), estado="en_curso", ofertas_capturadas=0, errores=0
     )
     sesion.add(ejecucion)
-    sesion.flush()
+    sesion.commit()
 
     mensajes: list[str] = []
     tasas: dict[str, TasaCambio | None] = {}
@@ -65,6 +69,7 @@ def capturar_plataforma(
             _guardar(sesion, plataforma, registro_producto, normalizada, ahora())
             urls_guardadas.add(normalizada.url)
             ejecucion.ofertas_capturadas += 1
+        sesion.commit()
 
     ejecucion.errores += productos_fallidos
     nota = conector.nota_envio()

@@ -177,3 +177,30 @@ def test_plataformas_inactivas_no_se_capturan(sesion: Session) -> None:
     conectores = {"Tienda falsa": ConectorFalso({"celular": [oferta("https://t.example/1", "1")]})}
 
     assert ejecutar_capturas(sesion, conectores, [CELULAR], ProveedorTasaFalso(None)) == []
+
+
+class ConectorQueSeRompeDespues(ConectorFalso):
+    """Responde el primer producto y falla con un error inesperado en el segundo."""
+
+    def buscar(self, producto):  # noqa: ANN001, ANN201
+        if producto.nombre == "tablet":
+            raise RuntimeError("se cayó a mitad de la pasada")
+        return super().buscar(producto)
+
+
+def test_un_error_a_mitad_de_pasada_conserva_lo_capturado_y_cierra_la_ejecucion(sesion: Session) -> None:
+    # Cada producto se confirma por separado (ninguna transacción espera a la tienda), así que lo
+    # capturado antes del error se conserva y la ejecución en curso queda marcada como fallida.
+    tienda = plataforma(sesion, nombre="Tienda falsa")
+    sesion.commit()
+    conector = ConectorQueSeRompeDespues({"celular": [oferta("https://t.example/1", "100000")]})
+
+    [ejecucion] = ejecutar_capturas(
+        sesion, {"Tienda falsa": conector}, [CELULAR, producto("tablet")], ProveedorTasaFalso(None)
+    )
+
+    assert ejecucion.estado == "fallida"
+    assert "se cayó a mitad de la pasada" in ejecucion.mensaje_error
+    assert contar(sesion, Captura) == 1
+    ejecuciones = sesion.scalars(select(EjecucionCaptura).where(EjecucionCaptura.plataforma_id == tienda.id)).all()
+    assert [e.estado for e in ejecuciones] == ["fallida"]

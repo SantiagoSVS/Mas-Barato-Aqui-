@@ -60,17 +60,21 @@ def ejecutar_capturas(
 def _registrar_falla(
     sesion: Session, plataforma: Plataforma, error: Exception, ahora: Callable[[], datetime]
 ) -> EjecucionCaptura:
-    """Guarda una ejecución fallida cuando el error ocurrió fuera del manejo normal."""
+    """Marca como fallida la ejecución en curso de la plataforma cuando el error ocurrió fuera del
+    manejo normal; si no alcanzó a crearse, crea una. Lo ya capturado en la pasada se conserva."""
     momento = ahora()
-    ejecucion = EjecucionCaptura(
-        plataforma=plataforma,
-        iniciada_en=momento,
-        terminada_en=momento,
-        estado="fallida",
-        ofertas_capturadas=0,
-        errores=1,
-        mensaje_error=f"{type(error).__name__}: {error}"[:LARGO_MAXIMO_MENSAJE],
+    ejecucion = sesion.scalar(
+        select(EjecucionCaptura)
+        .where(EjecucionCaptura.plataforma_id == plataforma.id, EjecucionCaptura.estado == "en_curso")
+        .order_by(EjecucionCaptura.id.desc())
+        .limit(1)
     )
-    sesion.add(ejecucion)
+    if ejecucion is None:
+        ejecucion = EjecucionCaptura(plataforma=plataforma, iniciada_en=momento, ofertas_capturadas=0, errores=0)
+        sesion.add(ejecucion)
+    ejecucion.terminada_en = momento
+    ejecucion.estado = "fallida"
+    ejecucion.errores += 1
+    ejecucion.mensaje_error = f"{type(error).__name__}: {error}"[:LARGO_MAXIMO_MENSAJE]
     sesion.commit()
     return ejecucion

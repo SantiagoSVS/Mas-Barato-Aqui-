@@ -117,7 +117,8 @@ def comparar_producto(
 ) -> tuple[Comparacion, list[OfertaCalculada]]:
     """Ranking de las ofertas de un producto. También lo usa GET /productos/{id}/ofertas."""
     w, avisos = peso_para(prioridad, configuracion)
-    ranking = ordenar(ofertas_vigentes(sesion, producto.id, configuracion.oferta_vigencia_dias), w, presupuesto_cop)
+    vigentes = ofertas_vigentes(sesion, producto.id, configuracion.oferta_vigencia_dias)
+    ranking = ordenar(vigentes, w, presupuesto_cop)
     activas = plataformas_activas(sesion)
     con_resultados = sorted({c.oferta.plataforma for c in [*ranking.ordenadas, *ranking.incompletas]})
 
@@ -127,7 +128,11 @@ def comparar_producto(
             "El envío se suma al pagar en la tienda."
         )
     if not con_resultados:
-        avisos.append("Aún no tenemos precios recientes de este producto. Intenta de nuevo más tarde.")
+        agotado_en = sorted({o.plataforma for o in vigentes if not o.disponible})
+        if agotado_en:
+            avisos.append(f"Está agotado en {' y '.join(agotado_en)} según la última captura. Intenta de nuevo más tarde.")
+        else:
+            avisos.append("Aún no tenemos precios recientes de este producto. Intenta de nuevo más tarde.")
 
     comparacion = Comparacion(
         producto=ProductoResumen(id=producto.id, nombre=producto.nombre_canonico),

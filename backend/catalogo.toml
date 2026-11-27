@@ -10,6 +10,9 @@
 #
 # Falabella: el identificador es el número de la dirección /falabella-co/product/73447854/...
 # Homecenter: igual, el número de /homecenter-co/product/733184/...
+# Falabella (27 de noviembre de 2026): se agregaron los productos que antes solo tenían Mercado Libre
+# y que Falabella vende con el mismo modelo, buscados en su sitemap de productos y verificados con el
+# conector; se omitieron precios atípicos, otras capacidades y ediciones especiales.
 # Alkosto: el código de la dirección /p/711719574293 (es el código de barras del producto). Solo
 # productos nuevos del mismo modelo y capacidad; se omiten combos, reacondicionados y otras
 # capacidades. Verificados el 27 de noviembre de 2026 con el conector.
@@ -134,6 +137,7 @@ marca = "Samsung"
 modelo = "Galaxy A36"
 [producto.ids]
 mercadolibre = ["MCO47111905", "MCO47106610", "MCO47111011"]
+falabella = ["73268337"]
 alkosto = ["8806097477334", "8806097477341"]
 
 [[producto]]
@@ -152,6 +156,7 @@ marca = "Apple"
 modelo = "iPhone 16"
 [producto.ids]
 mercadolibre = ["MCO40287808", "MCO40287802", "MCO40287791"]
+falabella = ["73059824"]
 
 # Tablets
 alkosto = ["195949821813", "195949821998", "195949822179", "195949822353", "195949822537"]
@@ -265,6 +270,7 @@ categoria = "consolas"
 modelo = "Microsoft Xbox Series S videojuegos"
 [producto.ids]
 mercadolibre = ["MCO16650345"]
+falabella = ["73222873"]
 
 [[producto]]
 nombre = "Consola Xbox Series X 1 TB"
@@ -272,6 +278,7 @@ categoria = "consolas"
 modelo = "Microsoft Xbox Series X videojuegos"
 [producto.ids]
 mercadolibre = ["MCO29577429", "MCO59169520"]
+falabella = ["9390605"]
 
 [[producto]]
 nombre = "Consola Nintendo Switch 2"
@@ -342,6 +349,7 @@ categoria = "videojuegos"
 modelo = "videojuego"
 [producto.ids]
 mercadolibre = ["MCO6334852"]
+falabella = ["135062150"]
 alkosto = ["045496590420"]
 
 [[producto]]
@@ -412,6 +420,7 @@ marca = "Samsung"
 modelo = "Essential S3"
 [producto.ids]
 mercadolibre = ["MCO53270548"]
+falabella = ["143084857"]
 
 [[producto]]
 nombre = "Monitor Samsung 27 pulgadas Odyssey G3"
@@ -439,6 +448,7 @@ marca = "Apple"
 modelo = "AirPods 4 auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO40520107"]
+falabella = ["73060682"]
 alkosto = ["195949688454"]
 
 [[producto]]
@@ -448,6 +458,7 @@ marca = "Soundcore"
 modelo = "Q20i auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO40406967", "MCO66559644"]
+falabella = ["73236296"]
 
 [[producto]]
 nombre = "Audífonos Samsung Galaxy Buds FE"
@@ -456,6 +467,7 @@ marca = "Samsung"
 modelo = "Galaxy Buds FE auriculares inalámbricos"
 [producto.ids]
 mercadolibre = ["MCO39016606", "MCO29595951"]
+falabella = ["139275969", "139275837"]
 alkosto = ["8806095221595"]
 
 [[producto]]
@@ -497,6 +509,7 @@ categoria = "controles"
 modelo = "DualSense Edge PlayStation 5 inalámbrico mando joystick"
 [producto.ids]
 mercadolibre = ["MCO41152829"]
+falabella = ["120319324", "63224809"]
 alkosto = ["711719559337"]
 
 [[producto]]

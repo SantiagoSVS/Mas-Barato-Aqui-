@@ -129,7 +129,9 @@ def test_un_modelo_escrito_distinto_sigue_encontrando_su_producto(
     assert nombres(catalogo, c)[0] == esperado
 
 
-def capturar(sesion: Session, nombre: str, precio: int, tienda: str = "Mercado Libre", envio: int | None = 0) -> None:
+def capturar(
+    sesion: Session, nombre: str, precio: int, tienda: str = "Mercado Libre", envio: int | None = 0, disponible: bool = True
+) -> None:
     plataforma = sesion.scalar(select(Plataforma).where(Plataforma.nombre == tienda))
     producto = sesion.scalar(select(Producto).where(Producto.nombre_canonico == nombre))
     oferta = Oferta(plataforma=plataforma, producto=producto, titulo_original=nombre, url_origen=f"https://ejemplo/{nombre}")
@@ -137,7 +139,7 @@ def capturar(sesion: Session, nombre: str, precio: int, tienda: str = "Mercado L
     sesion.add(
         Captura(
             oferta=oferta, capturado_en=datetime(2026, 11, 5, tzinfo=UTC), precio_cop=precio, envio_cop=envio,
-            dias_entrega=2 if envio is not None else None, disponible=True,
+            dias_entrega=2 if envio is not None else None, disponible=disponible,
         )
     )
     sesion.flush()
@@ -196,3 +198,16 @@ def test_sin_costo_total_conocido_muestra_primero_el_de_menor_precio(catalogo: S
     assert comparacion.recomendada_por_precio is True
     assert comparacion.recomendada.precio_cop == 149_900 and comparacion.recomendada.costo_total_cop is None
     assert any("recomendamos la de menor precio" in aviso for aviso in comparacion.avisos)
+
+
+def test_un_producto_agotado_lo_dice_en_vez_de_decir_que_no_hay_precios(catalogo: Session) -> None:
+    capturar(catalogo, "Audífonos Sony WH-1000XM5", 949_900, tienda="Falabella", envio=None, disponible=False)
+
+    respuesta = resolver_consulta(
+        catalogo, Interprete(ProveedorFalso(), 0.5), "audífonos sony wh-1000xm5", None,
+        Configuracion(database_url="postgresql+psycopg://x@localhost/x"),
+        criterios("audífonos", "Sony", "WH-1000XM5"),
+    )
+
+    assert respuesta.comparacion.recomendada is None
+    assert "Está agotado en Falabella según la última captura. Intenta de nuevo más tarde." in respuesta.comparacion.avisos
